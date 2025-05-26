@@ -1,0 +1,26 @@
+﻿@page
+@model MatrixWebApp.Pages.ProductenModel
+@{
+}
+
+<h2>Producten</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th>Naam</th>
+			<th>Beschrijving</th>
+			<th>Prijs</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var product in Model.Producten)
+		{
+			<tr>
+				<td>@product.Naam</td>
+				<td>@product.Beschrijving</td>
+				<td>@product.Prijs</td>
+			</tr>
+		}
+	</tbody>
+</table>

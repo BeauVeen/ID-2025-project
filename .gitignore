@@ -1,0 +1,69 @@
+# Visual Studio / .NET standaard ignores
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+*.dll
+*.exe
+*.pdb
+*.app
+
+# Rider IDE
+.idea/
+
+# NuGet packages
+*.nupkg
+packages/
+
+# ASP.NET Core runtime files
+*.db
+*.log
+
+# User-specific files
+*.rsuser
+*.psess
+*.vsp
+
+# Publish output
+publish/
+
+# Dotnet watch temp files
+.dotnetwatch/
+
+# npm packages & build
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Logs
+*.log
+
+# Ignore wwwroot/lib except custom files if any
+**/wwwroot/lib/
+
+# Ignore appsettings secrets, if any
+appsettings.*.json
+
+# Ignore JetBrains Rider files
+.idea/
+
+# Ignore Resharper files
+_ReSharper*/
+
+# Ignore coverage reports
+coverage/
+*.coverage
+*.coveragexml
+
+# Ignore other system files
+.DS_Store
+Thumbs.db
+
+# Negeer SQLite DB-bestanden (bijv. tijdens testen)
+*.db
+!DataAccessLayer/Migrations/

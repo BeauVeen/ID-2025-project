@@ -1,0 +1,6 @@
+@MatrixApi_HostAddress = http://localhost:5190
+
+GET {{MatrixApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
