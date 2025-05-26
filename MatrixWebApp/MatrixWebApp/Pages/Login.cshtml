@@ -5,3 +5,19 @@
 }
 
 <h2>Login</h2>
+
+<form method="post">
+	<div>
+		<label for="username">Gebruikersnaam</label>
+		<input type="text" id="username" name="Username" required />
+	</div>
+	<div>
+		<label for="password">Wachtwoord</label>
+		<input type="password" id="password" name="Password" required />
+	</div>
+	<button type="submit">Inloggen</button>
+</form>
+
+<form method="get" asp-page="/Registreren">
+	<button type="submit">Nieuwe gebruiker aanmaken.</button>
+</form>
