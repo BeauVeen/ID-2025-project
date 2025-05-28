@@ -1,31 +1,28 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using MatrixApi.Data;
-using MatrixApi.Exceptions;
+﻿using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using MatrixApi.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace MatrixApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    public class RoleController : ControllerBase
     {
-        private readonly ProductService _productService;
+        private readonly RoleService _roleService;
 
-        public ProductController(ProductService productService)
+        public RoleController(RoleService roleService)
         {
-            _productService = productService;
+            _roleService = roleService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Role>>> GetAll()
         {
             try
             {
-                var products = await _productService.GetAllAsync();
-                return Ok(products);
+                var roles = await _roleService.GetAllAsync();
+                return Ok(roles);
             }
             catch (Exception ex)
             {
@@ -34,12 +31,12 @@ namespace MatrixApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<Role>> GetById(int id)
         {
             try
             {
-                var product = await _productService.GetByIdAsync(id);
-                return Ok(product);
+                var role = await _roleService.GetByIdAsync(id);
+                return Ok(role);
 
             }
             catch (NotFoundException)
@@ -54,12 +51,12 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> Create(Product product)
+        public async Task<ActionResult<Role>> Create(Role role)
         {
             try
             {
-                var created = await _productService.AddAsync(product);
-                return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, created);
+                var created = await _roleService.AddAsync(role);
+                return CreatedAtAction(nameof(GetById), new { id = created.RoleId }, created);
             }
             catch (Exception ex)
             {
@@ -68,13 +65,13 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, Product product)
+        public async Task<ActionResult> Update(int id, Role role)
         {
-            if (id != product.ProductId) return BadRequest();
+            if (id != role.RoleId) return BadRequest();
 
             try
             {
-                var updated = await _productService.UpdateAsync(product);
+                var updated = await _roleService.UpdateAsync(role);
                 if (!updated)
                 {
                     return NotFound();
@@ -96,7 +93,7 @@ namespace MatrixApi.Controllers
         {
             try
             {
-                var deleted = await _productService.DeleteAsync(id);
+                var deleted = await _roleService.DeleteAsync(id);
                 if (!deleted)
                 {
                     return NotFound();

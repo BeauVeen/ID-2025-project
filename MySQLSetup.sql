@@ -1,47 +1,84 @@
 USE matrixdb;
 
-CREATE TABLE Gebruiker (
+CREATE TABLE Roles (
+    RoleId INT AUTO_INCREMENT PRIMARY KEY,
+    RoleName VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE Users (
     UserId INT AUTO_INCREMENT PRIMARY KEY,
-    Wachtwoord CHAR(60) NOT NULL,
-    Rol VARCHAR(20),
-    Naam VARCHAR(100) NOT NULL,
-    Adres VARCHAR(255),
-    Postcode VARCHAR(20),
-    Woonplaats VARCHAR(100),
-    Telefoon VARCHAR(20),
-    Email VARCHAR(100) UNIQUE
+    Password VARCHAR(100) NOT NULL,
+    RoleId INT DEFAULT 1,
+    Name VARCHAR(100) NOT NULL,
+    Address VARCHAR(255),
+    Zipcode VARCHAR(10),
+    City VARCHAR(100),
+    PhoneNumber VARCHAR(20),
+    Email VARCHAR(100) UNIQUE,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (RoleId) REFERENCES Roles(RoleId)
 );
 
-CREATE TABLE Categorie (
-    CategorieId INT AUTO_INCREMENT PRIMARY KEY,
-    CategorieNaam VARCHAR(100) NOT NULL
+CREATE TABLE Categories (
+    CategoryId INT AUTO_INCREMENT PRIMARY KEY,
+    CategoryName VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE Producten (
+CREATE TABLE Products (
     ProductId INT AUTO_INCREMENT PRIMARY KEY,
-    CategorieId INT,
-    Naam VARCHAR(100) NOT NULL,
-    Beschrijving VARCHAR(255),
-    Prijs DECIMAL(10,2) NOT NULL,
-    Voorraad INT NOT NULL DEFAULT 0,
-    Afbeelding BLOB,
-    FOREIGN KEY (CategorieId) REFERENCES Categorie(CategorieId)
+    CategoryId INT NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+    Description VARCHAR(255),
+    Price DECIMAL(10,2) NOT NULL,
+    Stock INT NOT NULL DEFAULT 0,
+    Picture BLOB,
+    FOREIGN KEY (CategoryId) REFERENCES Categories(CategoryId)
 );
 
-CREATE TABLE Bestelling (
-    BestelId INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE Orders (
+    OrderId INT AUTO_INCREMENT PRIMARY KEY,
     UserId INT NOT NULL,
-    Datum DATE NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Status VARCHAR(50) NOT NULL,
-    FOREIGN KEY (UserId) REFERENCES Gebruiker(UserId)
+    FOREIGN KEY (UserId) REFERENCES Users(UserId)
 );
 
-CREATE TABLE Bestelregel (
-    BestelregelId INT AUTO_INCREMENT PRIMARY KEY,
-    BestelId INT NOT NULL,
+CREATE TABLE Orderlines (
+    OrderlineId INT AUTO_INCREMENT PRIMARY KEY,
+    OrderId INT NOT NULL,
     ProductId INT NOT NULL,
-    Aantal INT NOT NULL DEFAULT 1,
-    Prijs DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (BestelId) REFERENCES Bestelling(BestelId),
-    FOREIGN KEY (ProductId) REFERENCES Producten(ProductId)
+    Amount INT NOT NULL DEFAULT 1,
+    Price DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
+    FOREIGN KEY (ProductId) REFERENCES Products(ProductId)
+);
+
+INSERT INTO Roles (RoleName) VALUES
+    ("Klant"),
+    ("Bezorger"),
+    ("Administrator");
+
+INSERT INTO Users (Password, RoleId, Name, Address, Zipcode, City, PhoneNumber, Email)
+VALUES (
+    '$2y$10$WJ.SVMhzHDUMvIAZR4hQc..DrWtl.KtnzBFsmOQgAhGjCC3OHbs8K',
+    3,
+    'Admin',
+    'Admin street',
+    '1234AB',
+    'Admin city',
+    '0612345678',
+    'admin@example.com'
+);
+
+INSERT INTO Categories (CategoryName)
+VALUES ('Test Categorie');
+
+INSERT INTO Products (CategoryId, Name, Description, Price, Stock, Picture)
+VALUES(
+    1,
+    'Test product',
+    'Dit is een test product voor de website',
+    '19.99',
+    50,
+    NULL
 );

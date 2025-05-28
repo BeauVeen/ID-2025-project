@@ -3,14 +3,14 @@
     public class Product
     {
         public int ProductId { get; set; }
-        public int? CategorieId { get; set; }
-        public string Naam { get; set; } = null!;
-        public string? Beschrijving { get; set; }
-        public decimal Prijs { get; set; }
-        public int Voorraad {  get; set; }
-        public byte[]? Afbeelding { get; set; }
+        public int CategoryId { get; set; }
+        public string Name { get; set; } = null!;
+        public string? Description { get; set; }
+        public decimal Price { get; set; }
+        public int Stock {  get; set; }
+        public byte[]? Picture { get; set; }
 
-        public Categorie? Categorie { get; set; }
-        public ICollection<Bestelregel> Bestelregels { get; set; } = new List<Bestelregel>();
+        public Category? Category { get; set; }
+        public ICollection<Orderline> Orderlines { get; set; } = new List<Orderline>();
     }
 }

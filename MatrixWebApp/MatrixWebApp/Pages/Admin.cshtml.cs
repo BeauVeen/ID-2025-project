@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MatrixWebApp.Pages
 {
-    public class WinkelmandModel : PageModel
+    public class AdminModel : PageModel
     {
         public void OnGet()
         {

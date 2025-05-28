@@ -1,45 +1,45 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using MatrixApi.Data;
-using MatrixApi.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MatrixApi.Models;
 using MatrixApi.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
+using MatrixApi.Data;
+using MatrixApi.Exceptions;
 
 namespace MatrixApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    public class CategoryController : ControllerBase
     {
-        private readonly ProductService _productService;
+        private readonly CategoryService _categoryService;
 
-        public ProductController(ProductService productService)
+        public CategoryController(CategoryService categoryService)
         {
-            _productService = productService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Category>>> GetAll()
         {
             try
             {
-                var products = await _productService.GetAllAsync();
-                return Ok(products);
+                var categories = await _categoryService.GetAllAsync();
+                return Ok(categories);
             }
             catch (Exception ex)
-            {
+            { 
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<Category>> GetById(int id)
         {
             try
             {
-                var product = await _productService.GetByIdAsync(id);
-                return Ok(product);
+                var category = await _categoryService.GetByIdAsync(id);
+                return Ok(category);
 
             }
             catch (NotFoundException)
@@ -54,12 +54,12 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> Create(Product product)
+        public async Task<ActionResult<Category>> Create(Category category)
         {
             try
             {
-                var created = await _productService.AddAsync(product);
-                return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, created);
+                var created = await _categoryService.AddAsync(category);
+                return CreatedAtAction(nameof(GetById), new { id = created.CategoryId }, created);
             }
             catch (Exception ex)
             {
@@ -68,13 +68,13 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, Product product)
+        public async Task<ActionResult> Update(int id, Category category)
         {
-            if (id != product.ProductId) return BadRequest();
+            if (id != category.CategoryId) return BadRequest();
 
             try
             {
-                var updated = await _productService.UpdateAsync(product);
+                var updated = await _categoryService.UpdateAsync(category);
                 if (!updated)
                 {
                     return NotFound();
@@ -96,7 +96,7 @@ namespace MatrixApi.Controllers
         {
             try
             {
-                var deleted = await _productService.DeleteAsync(id);
+                var deleted = await _categoryService.DeleteAsync(id);
                 if (!deleted)
                 {
                     return NotFound();
