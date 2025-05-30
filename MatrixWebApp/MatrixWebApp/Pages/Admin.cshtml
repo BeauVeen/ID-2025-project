@@ -1,0 +1,53 @@
+﻿@page
+@model MatrixWebApp.Pages.AdminModel
+@{
+	ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<nav class="col-md-2 d-none d-md-block bg-light sidebar vh-100 p-3 border-end">
+			<h5 class="text-center">Admin</h5>
+			<ul class="nav flex-column">
+				<li class="nav-item">
+					<a class="nav-link d-flex justify-content-between align-items-center" 
+						data-bs-toggle="collapse" href="#collapseProducts" role="button"
+						aria-expanded="false" aria-controls="collapseProducts">
+						Producten
+						<span class="arrow">&gt;</span>
+					</a>
+						<div class="collapse" id="collapseProducts">
+							<ul class="nav flex-column ms-3">
+								<li class="nav-item">
+									<a class="nav-link active" asp-page="/Admin/AddProducts">Producten toevoegen</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link active" asp-page="/Admin/AdminProducts">Producten lijst</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link active" asp-page="/Admin/AdminCategories">Categorieën</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link active" asp-page="/Admin/DelProducts">Verwijderde producten</a>
+								</li>
+							</ul>
+						</div>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link active" asp-page="/Admin/AdminOrders">Bestellingen</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link active" asp-page="/Admin/Users">Klanten</a>
+				</li>
+			</ul>
+		</nav>
+
+		<main class="col-md-10 ms-sm-auto px-4 py-4">
+			<h2>Welkom, op de admin pagina</h2>
+			<p>Selecteer een onderdeel in het menu links.</p>
+		</main>
+	</div>
+</div>
+

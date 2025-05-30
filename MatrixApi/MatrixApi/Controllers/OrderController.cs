@@ -10,22 +10,22 @@ namespace MatrixApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    public class OrderController : ControllerBase
     {
-        private readonly ProductService _productService;
+        private readonly OrderService _orderService;
 
-        public ProductController(ProductService productService)
+        public OrderController(OrderService orderService)
         {
-            _productService = productService;
+            _orderService = orderService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Order>>> GetAll()
         {
             try
             {
-                var products = await _productService.GetAllAsync();
-                return Ok(products);
+                var orders = await _orderService.GetAllAsync();
+                return Ok(orders);
             }
             catch (Exception ex)
             {
@@ -34,12 +34,12 @@ namespace MatrixApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<Order>> GetById(int id)
         {
             try
             {
-                var product = await _productService.GetByIdAsync(id);
-                return Ok(product);
+                var order = await _orderService.GetByIdAsync(id);
+                return Ok(order);
 
             }
             catch (NotFoundException)
@@ -54,12 +54,12 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> Create(Product product)
+        public async Task<ActionResult<Order>> Create(Order order)
         {
             try
             {
-                var created = await _productService.AddAsync(product);
-                return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, created);
+                var created = await _orderService.AddAsync(order);
+                return CreatedAtAction(nameof(GetById), new { id = created.OrderId }, created);
             }
             catch (Exception ex)
             {
@@ -68,13 +68,13 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, Product product)
+        public async Task<ActionResult> Update(int id, Order order)
         {
-            if (id != product.ProductId) return BadRequest();
+            if (id != order.OrderId) return BadRequest();
 
             try
             {
-                var updated = await _productService.UpdateAsync(product);
+                var updated = await _orderService.UpdateAsync(order);
                 if (!updated)
                 {
                     return NotFound();
@@ -96,7 +96,7 @@ namespace MatrixApi.Controllers
         {
             try
             {
-                var deleted = await _productService.DeleteAsync(id);
+                var deleted = await _orderService.DeleteAsync(id);
                 if (!deleted)
                 {
                     return NotFound();

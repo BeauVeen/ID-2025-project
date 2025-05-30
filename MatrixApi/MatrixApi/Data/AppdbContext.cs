@@ -8,45 +8,53 @@ namespace MatrixApi.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
 
-        public DbSet<Gebruiker> Gebruikers {  get; set; }
-        public DbSet<Categorie> Categories { get; set; }
-        public DbSet<Product> Producten { get; set; }
-        public DbSet<Bestelling> Bestellingen { get; set; }
-        public DbSet<Bestelregel> Bestelregels {  get; set; }
+        public DbSet<User> Users {  get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Orderline> Orderlines {  get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Gebruiker>().ToTable("Gebruiker");
-            modelBuilder.Entity<Categorie>().ToTable("Categorie");
-            modelBuilder.Entity<Product>().ToTable("Producten");
-            modelBuilder.Entity<Bestelling>().ToTable("Bestelling");
-            modelBuilder.Entity<Bestelregel>().ToTable("Bestelregel");
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Category>().ToTable("Categories");
+            modelBuilder.Entity<Product>().ToTable("Products");
+            modelBuilder.Entity<Order>().ToTable("Orders");
+            modelBuilder.Entity<Orderline>().ToTable("Orderlines");
+            modelBuilder.Entity<Role>().ToTable("Roles");
 
-            modelBuilder.Entity<Bestelling>()
-                .HasOne(b => b.Gebruiker)
-                .WithMany(g => g.Bestellingen)
+            modelBuilder.Entity<Order>()
+                .HasOne(b => b.User)
+                .WithMany(g => g.Orders)
                 .HasForeignKey(b => b.UserId);
 
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.Categorie)
-                .WithMany(c => c.Producten)
-                .HasForeignKey(p => p.CategorieId);
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId);
 
-            modelBuilder.Entity<Bestelregel>()
-                .HasOne(br => br.Bestelling)
-                .WithMany(b => b.Bestelregels)
-                .HasForeignKey(br => br.BestelId);
+            modelBuilder.Entity<Orderline>()
+                .HasOne(br => br.Order)
+                .WithMany(b => b.Orderlines)
+                .HasForeignKey(br => br.OrderId);
 
-            modelBuilder.Entity<Bestelregel>()
+            modelBuilder.Entity<Orderline>()
                 .HasOne(br => br.Product)
-                .WithMany(p => p.Bestelregels)
+                .WithMany(p => p.Orderlines)
                 .HasForeignKey(br => br.ProductId);
 
-            modelBuilder.Entity<Bestelling>().HasKey(b => b.BestelId);
-            modelBuilder.Entity<Gebruiker>().HasKey(g => g.UserId);
-            modelBuilder.Entity<Categorie>().HasKey(c => c.CategorieId);
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId);
+
+            modelBuilder.Entity<Order>().HasKey(b => b.OrderId);
+            modelBuilder.Entity<User>().HasKey(g => g.UserId);
+            modelBuilder.Entity<Category>().HasKey(c => c.CategoryId);
             modelBuilder.Entity<Product>().HasKey(p => p.ProductId);
-            modelBuilder.Entity<Bestelregel>().HasKey(br => br.BestelregelId);
+            modelBuilder.Entity<Orderline>().HasKey(br => br.OrderlineId);
+            modelBuilder.Entity<Role>().HasKey(r => r.RoleId);
         }
     }
 }
