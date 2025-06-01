@@ -31,7 +31,8 @@ CREATE TABLE Products (
     Description VARCHAR(255),
     Price DECIMAL(10,2) NOT NULL,
     Stock INT NOT NULL DEFAULT 0,
-    Picture BLOB,
+    Picture MEDIUMBLOB,
+    IsDeleted BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (CategoryId) REFERENCES Categories(CategoryId)
 );
 
