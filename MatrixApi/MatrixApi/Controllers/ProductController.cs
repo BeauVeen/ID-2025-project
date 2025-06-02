@@ -68,17 +68,27 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, Product product)
+        public async Task<ActionResult> Update(int id, [FromBody] ProductDto dto)
         {
-            if (id != product.ProductId) return BadRequest();
+            if (id != dto.ProductId) return BadRequest();
 
             try
             {
-                var updated = await _productService.UpdateAsync(product);
-                if (!updated)
+                var entity = new Product
                 {
-                    return NotFound();
-                }
+                    ProductId = dto.ProductId,
+                    CategoryId = dto.CategoryId,
+                    Name = dto.Name,
+                    Description = dto.Description,
+                    Price = dto.Price,
+                    Stock = dto.Stock,
+                    Picture = dto.Picture
+                };
+
+                var updated = await _productService.UpdateAsync(entity);
+
+                if (!updated) return NotFound();
+
                 return NoContent();
             }
             catch (NotFoundException)
@@ -111,6 +121,17 @@ namespace MatrixApi.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+        public class ProductDto
+        {
+            public int ProductId { get; set; }
+            public int CategoryId { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public decimal Price { get; set; }
+            public int Stock { get; set; }
+            public byte[]? Picture { get; set; }
         }
     }
 }

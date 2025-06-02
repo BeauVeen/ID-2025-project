@@ -64,10 +64,10 @@ namespace MatrixApi.Services
         {
             try
             {
-                var existing = await _context.Products.FindAsync(product.CategoryId);
+                var existing = await _context.Products.FindAsync(product.ProductId);
                 if (existing == null)
                 {
-                    throw new NotFoundException($"Product with id {product.CategoryId} not found.");
+                    throw new NotFoundException($"Product with id {product.ProductId} not found.");
                 }
 
                 existing.CategoryId = product.CategoryId;
@@ -83,7 +83,7 @@ namespace MatrixApi.Services
             }
             catch (Exception ex) when (!(ex is NotFoundException))
             {
-                Console.WriteLine($"Error updating product {product.CategoryId}: {ex.Message}");
+                Console.WriteLine($"Error updating product {product.ProductId}: {ex.Message}");
                 throw;
             }
         }
