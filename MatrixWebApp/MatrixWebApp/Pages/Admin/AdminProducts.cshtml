@@ -22,7 +22,9 @@
 <div class="d-flex flex-column gap-3">
 	@foreach (var product in Model.Products)
 	{
-		<div class="d-flex border rounded p-3 align-items-center">
+		var category = Model.Categories.FirstOrDefault(c => c.CategoryId == product.CategoryId);
+
+		<div class="d-flex border rounded p-3 align-items-center justify-content-between">
 			<div style="width: 100px; height: 100px; overflow: hidden;" class="mb-3">
 				@if (product.Picture != null && product.Picture.Length > 0)
 				{
@@ -41,7 +43,7 @@
 
 			<div class="flex-grow-1 d-flex flex-column justify-content-between ms-3">
 				<h5 class="mb-1">@product.Name</h5>
-				<small class="text-muted">Serienummer: @product.ProductId</small>
+				<small class="text-muted">@category.CategoryName | Serienummer: @product.ProductId</small>
 				<p class="mb-0">@product.Description</p>
 			</div>
 
@@ -49,18 +51,22 @@
 				<div><strong>Voorraad:</strong> @product.Stock</div>
 			</div>
 
-			<div class="d-flex flex-column justify-content-center align-items-end" style="min-width: 120px;">
-				<div><strong>@product.Price.ToString("C")</strong></div>
-				<div class="text-muted"><small>Incl. btw: @((product.Price * 1.21M).ToString("C"))</small></div>
+			<div class="d-flex flex-column flex-md-row align-items-end gap-3" style="min-width: 120px;">
+				<div class="text-end">
+					<div><strong>@product.Price.ToString("C")</strong></div>
+					<div class="text-muted"><small>Incl. btw: @((product.Price * 1.21M).ToString("C"))</small></div>
+				</div>
+
+				<div class="text-end">
+					<a href="/Admin/EditProducts/@product.ProductId" class="btn btn-sm btn-warning me-1">Aanpassen</a>
+					<form method="post" asp-page-handler="Delete" asp-route-id="@product.ProductId" class="class-d-inline">
+						<button type="submit" class="btn btn-sm btn-danger"
+							onclick="return confirm('Weet je zeker dat je dit product wilt verwijderen?');">
+							Verwijderen
+						</button>
+					</form>
+				</div>
 			</div>
 		</div>
-
-		<div class="d-flex border rounded p-3 align-items-center">
-			<form method="post" asp-page-handler="Delete" asp-route-id="@product.ProductId" class="me-3">
-				<button type="submit" class="btn btn-sm btn-danger">Verwijderen</button>
-			</form>
-			<a href="/Admin/EditProducts/@product.ProductId" class="btn btn-sm btn-primary me-2">Edit</a>
-		</div>
-
 	}
 </div>
