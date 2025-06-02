@@ -70,16 +70,3 @@ VALUES (
     '0612345678',
     'admin@example.com'
 );
-
-INSERT INTO Categories (CategoryName)
-VALUES ('Test Categorie');
-
-INSERT INTO Products (CategoryId, Name, Description, Price, Stock, Picture)
-VALUES(
-    1,
-    'Test product',
-    'Dit is een test product voor de website',
-    '19.99',
-    50,
-    NULL
-);

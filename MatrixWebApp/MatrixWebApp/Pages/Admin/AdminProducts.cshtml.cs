@@ -9,6 +9,7 @@ namespace MatrixWebApp.Pages.Admin
         private readonly ILogger<ProductsModel> _logger;
 
         public List<ProductDto> Products { get; set; } = new();
+        public List<CategoryDto> Categories { get; set; } = new();
         public List<ProductDto> FilteredProducts { get; set; } = new();
 
         [BindProperty(SupportsGet = true)]
@@ -36,6 +37,12 @@ namespace MatrixWebApp.Pages.Admin
                     Products = products;
                     FilteredProducts = products;
                 }
+
+                var categories = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("api/Category");
+                if (categories != null)
+                {
+                    Categories = categories;
+                }
             }
             catch (HttpRequestException ex)
             {
@@ -57,7 +64,8 @@ namespace MatrixWebApp.Pages.Admin
                 ModelState.AddModelError(string.Empty, "Fout bij verwijderen van het product.");
             }
 
-            Products = await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/Product");
+            Products = await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/Product") ?? new List<ProductDto>();
+            Categories = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("api/Category") ?? new List<CategoryDto>();
             return Page();
         }
 
@@ -70,6 +78,12 @@ namespace MatrixWebApp.Pages.Admin
             public decimal Price { get; set; }
             public int Stock { get; set; }
             public byte[] Picture { get; set; }
+        }
+
+        public class CategoryDto
+        {
+            public int CategoryId { get; set; }
+            public string CategoryName { get; set; }
         }
     }
 }
