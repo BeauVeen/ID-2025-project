@@ -1,26 +1,140 @@
 ﻿@page
 @model MatrixWebApp.Pages.ProductenModel
 @{
+    ViewData["Title"] = "Onze Producten";
 }
 
-<h2>Producten</h2>
+<style>
+    .product-background {
+        background-color: #f0f0f0;
+        padding: 25px;
+        margin-bottom: 25px;
+        border-radius: 8px;
+    }
 
-<table>
-	<thead>
-		<tr>
-			<th>Naam</th>
-			<th>Beschrijving</th>
-			<th>Prijs</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var product in Model.Producten)
-		{
-			<tr>
-				<td>@product.Naam</td>
-				<td>@product.Beschrijving</td>
-				<td>@product.Prijs</td>
-			</tr>
-		}
-	</tbody>
-</table>
+    body {
+        background-color: #f0f0f0;
+        background-image: linear-gradient(to bottom, white 0%, white 45px, #f0f0f0 120px, #f0f0f0 100%);
+        background-attachment: fixed;
+    }
+
+    .product-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .card-img-container {
+        width: 100%;
+        height: 200px;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .card-img-top {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .no-image {
+        color: #666;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .price-text {
+        font-family: 'DIN Next LT Pro Bold', 'FF DIN Bold', 'DIN Bold', 'Roboto', sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #ba2828;
+        margin: 10px 0;
+    }
+
+    .add-to-cart {
+        margin-top: auto;
+    }
+</style>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>@ViewData["Title"]</h1>
+
+        <div class="search-container" style="width: 40%; min-width: 300px;">
+            <input type="text" id="search" class="form-control" placeholder="Zoek een product...">
+        </div>
+    </div>
+
+    <div class="product-background">
+        <div class="row">
+            @foreach (var product in Model.Producten)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card product-card h-100">
+                        <div class="card-img-container">
+                            @if (product.Afbeelding != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(product.Afbeelding)"
+                                     class="card-img-top" alt="@product.Naam">
+                            }
+                            else
+                            {
+                                <div class="no-image">Geen afbeelding beschikbaar</div>
+                            }
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Naam</h5>
+                            <p class="price-text">€@product.Prijs.ToString("0.00")</p>
+
+                            <div class="add-to-cart">
+                                <form method="post" asp-page-handler="AddToCart">
+                                    <input type="hidden" name="productId" value="@product.ProductId" />
+                                    <div class="d-flex align-items-center gap-2">
+                                        <select name="quantity" class="form-select form-select-sm" style="width: 60px;">
+                                            @for (int i = 1; i <= Math.Min(10, product.Voorraad); i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                        <button type="submit" class="btn btn-warning" @(product.Voorraad == 0 ? "disabled" : "")>
+                                            <i class="bi bi-cart-plus"></i>
+                                        </button>
+                                    </div>
+                                    @Html.AntiForgeryToken()
+                                </form>
+                                @if (product.Voorraad == 0)
+                                {
+                                    <small class="text-danger">Niet op voorraad</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function searchProducts() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.col-lg-3').forEach(col => {
+                const title = col.querySelector('.card-title').textContent.toLowerCase();
+                col.style.display = title.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        document.getElementById('search').addEventListener('input', searchProducts);
+    </script>
+}

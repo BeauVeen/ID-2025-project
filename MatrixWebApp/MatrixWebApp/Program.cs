@@ -11,7 +11,7 @@ namespace MatrixWebApp
 
             builder.Services.AddHttpClient("MatrixApi", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7113/");
+                client.BaseAddress = new Uri("https://localhost:44349/");
             });
 
             var app = builder.Build();
