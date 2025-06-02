@@ -7,6 +7,35 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <style>
+
+        .search-container {
+            position: relative;
+            width: 300px; /* Kleinere breedte voor in de navbar */
+            margin-right: 15px;
+        }
+
+            .search-container input {
+                width: 100%;
+                padding: 6px 30px 6px 10px;
+                font-size: 14px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+                height: 34px; /* Vaste hoogte om consistent te zijn met andere navbar elementen */
+            }
+
+            .search-container svg {
+                position: absolute;
+                right: 8px;
+                top: 50%;
+                transform: translateY(-50%);
+                pointer-events: auto;
+                cursor: pointer;
+                width: 18px;
+                height: 18px;
+            }
+    </style>
 </head>
 
 <body>
@@ -23,10 +52,13 @@
         </nav>
         <div class="header-actions">
             <div class="search-container">
-                <form class="search-form" method="get" action="/Zoek">
-                    <input type="text" name="query" placeholder="Zoeken..." />
-                    <button type="submit">Zoek</button>
-                </form>
+                <input type="text" id="navbarSearch" placeholder="Zoek producten..." />
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     onclick="searchProducts()"
+                     viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
             </div>
 
             <div class="cart-container">
@@ -75,5 +107,28 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function searchProducts() {
+            const searchTerm = document.getElementById('navbarSearch').value.toLowerCase();
+            // Als we op de productpagina zijn, filter dan de producten
+            if (document.querySelector('.product-card')) {
+                document.querySelectorAll('.col-lg-3').forEach(col => {
+                    const title = col.querySelector('.card-title').textContent.toLowerCase();
+                    col.style.display = title.includes(searchTerm) ? '' : 'none';
+                });
+            } else {
+                // Als we niet op de productpagina zijn, stuur naar productpagina met zoekterm
+                window.location.href = '/Producten?query=' + encodeURIComponent(searchTerm);
+            }
+        }
+
+        // Zoeken op Enter-toets
+        document.getElementById('navbarSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
+    </script>
 </body>
 </html>
