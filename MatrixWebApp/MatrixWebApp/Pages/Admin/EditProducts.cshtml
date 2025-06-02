@@ -1,8 +1,8 @@
-﻿@page
-@model MatrixWebApp.Pages.Admin.AddProductsModel
+﻿@page "{id:int}"
+@model MatrixWebApp.Pages.Admin.EditProductsModel
 @{
-	ViewData["Title"] = "Admin Dashboard";
-	ViewData["ShowSidebar"] = true;
+    ViewData["Title"] = "Admin Dashboard";
+    ViewData["ShowSidebar"] = true;
 }
 
 <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
@@ -42,17 +42,11 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Afbeelding (WERKT NIET, NIET GEBRUIKEN)</label>
+        <label class="form-label">Afbeelding</label>
         <input type="file" name="Picture" class="form-control" />
         <!-- Picture upload handler moet je server-side nog bouwen -->
     </div>
 
-    <button type="submit" class="btn btn-primary">Toevoegen</button>
+    <input type="hidden" asp-for="Product.ProductId" />
+    <button type="submit" class="btn btn-primary">Bijwerken</button>
 </form>
-
-@if (!string.IsNullOrEmpty(Model.SuccessMessage))
-{
-    <div class="alert alert-success">
-        @Model.SuccessMessage
-    </div>    
-}

@@ -14,6 +14,8 @@ namespace MatrixWebApp.Pages.Admin
         [BindProperty(SupportsGet = true)]
         public string SearchSerial { get; set; }
 
+        public string SuccessMessage { get; set; }
+
         public AdminProductsModel(IHttpClientFactory httpClientFactory, ILogger<ProductsModel> logger)
         {
             _httpClient = httpClientFactory.CreateClient("MatrixApi");
@@ -22,6 +24,10 @@ namespace MatrixWebApp.Pages.Admin
 
         public async Task OnGetAsync()
         {
+            if (TempData.ContainsKey("SuccessMessage"))
+            {
+                SuccessMessage = TempData["SuccessMessage"].ToString();
+            }
             try
             {
                 var products = await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/Product");
@@ -36,6 +42,23 @@ namespace MatrixWebApp.Pages.Admin
                 _logger.LogError(ex, "Error with retrieving products from API.");
                 FilteredProducts = new List<ProductDto>();
             }
+        }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/Product/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                SuccessMessage = "Product succesvol verwijderd";
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Fout bij verwijderen van het product.");
+            }
+
+            Products = await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/Product");
+            return Page();
         }
 
         public class ProductDto

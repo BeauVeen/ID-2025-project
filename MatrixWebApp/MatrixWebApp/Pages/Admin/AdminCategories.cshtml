@@ -1,0 +1,38 @@
+﻿@page
+@model MatrixWebApp.Pages.Admin.AdminCategoriesModel
+@{
+	ViewData["Title"] = "Admin Dashboard";
+	ViewData["ShowSidebar"] = true;
+}
+
+<div class="container mt-4">
+
+    <h1 class="mb-4">Categorieën beheren</h1>
+
+    <form method="post" asp-page-handler="Create" class="d-flex mb-3" style="gap: 0.5rem;">
+        <input type="text" asp-for="NewCategory.CategoryName" placeholder="Nieuwe categorie naam" required class="form-control" />
+        <button type="submit" class="btn btn-primary">Toevoegen</button>
+    </form>
+
+    <ul class="list-group">
+        @foreach (var category in Model.Categories)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <form method="post" asp-page-handler="Edit" asp-route-id="@category.CategoryId" class="d-flex align-items-center gap-2">
+                    <input type="text" name="CategoryName" value="@category.CategoryName" class="form-control form-control-sm" style="width: 200px;" />
+                    <button type="submit" class="btn btn-sm btn-warning">Opslaan</button>
+                </form>
+
+                <form method="post" asp-page-handler="Delete" asp-route-id="@category.CategoryId" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Weet je zeker dat je deze categorie wilt verwijderen?');">
+                        Verwijderen
+                    </button>
+                </form>
+            </li>
+        }
+    </ul>
+
+    <span asp-validation-summary="ModelOnly" class="text-danger mt-3"></span>
+
+</div>

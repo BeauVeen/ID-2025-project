@@ -12,11 +12,10 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
 </head>
-
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand text-white" asp-page="/Index">Matrix Inc.</a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -24,7 +23,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-page="/Index">Index</a>
@@ -41,10 +40,54 @@
         </nav>
     </header>
 
-    <div class="container mt-4">
-        <main>
-            @RenderBody()
-        </main>
+    <div class="container-fluid">
+        <div class="row">
+            @if (ViewData["ShowSidebar"] as bool? == true)
+            {
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar vh-100 p-3 border-end">
+                    <h5 class="text-center">Admin</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex justify-content-between align-items-center"
+                               data-bs-toggle="collapse" href="#collapseProducts" role="button"
+                               aria-expanded="false" aria-controls="collapseProducts" id="productsToggle">
+                                Producten
+                                <span class="arrow">&gt;</span>
+                            </a>
+                            <div class="collapse" id="collapseProducts">
+                                <ul class="nav flex-column ms-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/AddProducts">Producten toevoegen</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/AdminProducts">Producten lijst</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/AdminCategories">Categorieën</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/DelProducts">Verwijderde producten</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Admin/AdminOrders">Bestellingen</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Admin/Users">Klanten</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Admin/Beheerder">Beheerder</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+
+            <main class="@((ViewData["ShowSidebar"] as bool? == true) ? "col-md-10" : "col-12") mt-4">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
     <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
@@ -53,3 +96,23 @@
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const collapseId = 'collapseProducts';
+        const toggle = document.getElementById('productsToggle');
+        const collapse = document.getElementById(collapseId);
+
+        // Staat herstellen
+        const isExpanded = localStorage.getItem(collapseId) === 'true';
+        if (isExpanded) {
+            new bootstrap.Collapse(collapse, { toggle: false }).show();
+        }
+
+        // Staat opslaan bij klikken
+        toggle.addEventListener('click', function () {
+            const isNowExpanded = !collapse.classList.contains('show');
+            localStorage.setItem(collapseId, isNowExpanded);
+        });
+    });
+</script>
