@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/bootstrap.css" asp-append-version="true" /> 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
+
 </head>
 <body>
     <header>
@@ -22,6 +23,16 @@
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+                <div class="search-container search-container-position">
+                    <input type="text" id="navbarSearch" placeholder="Zoek producten..." />
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         onclick="searchProducts()"
+                         viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                </div>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -39,6 +50,7 @@
             </div>
         </nav>
     </header>
+
 
     <div class="container-fluid">
         <div class="row">
@@ -90,10 +102,12 @@
         </div>
     </div>
 
+
     <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
 
@@ -114,5 +128,38 @@
             const isNowExpanded = !collapse.classList.contains('show');
             localStorage.setItem(collapseId, isNowExpanded);
         });
+    });
+</script>
+
+<script>
+    function searchProducts() {
+        const searchTerm = document.getElementById('navbarSearch').value.toLowerCase();
+        // Altijd naar productpagina gaan met zoekterm
+        window.location.href = '/Products?query=' + encodeURIComponent(searchTerm);
+    }
+
+    // Filter direct bij het laden van de productenpagina
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('query');
+
+        if (query && window.location.pathname.toLowerCase().includes('products')) {
+            document.getElementById('navbarSearch').value = query;
+
+            // Kleine vertraging om zeker te zijn dat alle producten geladen zijn
+            setTimeout(() => {
+                document.querySelectorAll('.col-lg-3').forEach(col => {
+                    const title = col.querySelector('.card-title').textContent.toLowerCase();
+                    col.style.display = title.includes(query.toLowerCase()) ? '' : 'none';
+                });
+            }, 50);
+        }
+    });
+
+    // Zoeken op Enter-toets
+    document.getElementById('navbarSearch').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchProducts();
+        }
     });
 </script>
