@@ -1,5 +1,7 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using MatrixApi.Data;
+using MatrixApi.DTOs;
 using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using MatrixApi.Services;
@@ -54,11 +56,34 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> Create(Product product)
+        public async Task<ActionResult<Product>> Create([FromForm] ProductCreateDto dto)
         {
             try
             {
-                var created = await _productService.AddAsync(product);
+                byte[]? pictureBytes = null;
+                if (dto.Picture != null)
+                {
+                    using var ms = new MemoryStream();
+                    await dto.Picture.CopyToAsync(ms);
+                    pictureBytes = ms.ToArray();
+                    Console.WriteLine($"Picture bytes length: {pictureBytes.Length}");
+                }
+                else
+                {
+                    Console.WriteLine("Geen afbeelding ontvangen");
+                }
+
+                var productDto = new ProductDto
+                {
+                    CategoryId = dto.CategoryId,
+                    Name = dto.Name,
+                    Description = dto.Description,
+                    Price = dto.Price,
+                    Stock = dto.Stock,
+                    Picture = pictureBytes
+                };
+
+                var created = await _productService.AddAsync(productDto);
                 return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, created);
             }
             catch (Exception ex)
@@ -121,17 +146,6 @@ namespace MatrixApi.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-        }
-
-        public class ProductDto
-        {
-            public int ProductId { get; set; }
-            public int CategoryId { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public decimal Price { get; set; }
-            public int Stock { get; set; }
-            public byte[]? Picture { get; set; }
         }
     }
 }
