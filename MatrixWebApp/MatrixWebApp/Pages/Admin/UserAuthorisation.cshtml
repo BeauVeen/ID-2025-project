@@ -1,0 +1,28 @@
+@page
+@model UserAuthorisationModel
+
+<h2>Gebruikersbeheer</h2>
+<a asp-page="/Admin/CreateUser" class="btn btn-primary">Nieuwe gebruiker</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Naam</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Acties</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user.Name</td>
+            <td>@user.Email</td>
+            <td>@user.RoleName</td>
+            <td>
+                <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning">Bewerken</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
