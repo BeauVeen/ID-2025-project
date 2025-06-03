@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace MatrixWebApp
 {
     public class Program
@@ -5,6 +7,10 @@ namespace MatrixWebApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            var cultureInfo = new CultureInfo("nl-NL");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
             // Add services to the container.
             builder.Services.AddRazorPages();

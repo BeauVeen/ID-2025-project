@@ -10,22 +10,22 @@ namespace MatrixApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly ProductService _productService;
+        private readonly UserService _userService;
 
-        public ProductController(ProductService productService)
+        public UserController(UserService userService)
         {
-            _productService = productService;
+            _userService = userService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAll()
+        public async Task<ActionResult<IEnumerable<User>>> GetAll()
         {
             try
             {
-                var products = await _productService.GetAllAsync();
-                return Ok(products);
+                var users = await _userService.GetAllAsync();
+                return Ok(users);
             }
             catch (Exception ex)
             {
@@ -34,12 +34,12 @@ namespace MatrixApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<User>> GetById(int id)
         {
             try
             {
-                var product = await _productService.GetByIdAsync(id);
-                return Ok(product);
+                var user = await _userService.GetByIdAsync(id);
+                return Ok(user);
 
             }
             catch (NotFoundException)
@@ -54,12 +54,12 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> Create(Product product)
+        public async Task<ActionResult<User>> Create(User user)
         {
             try
             {
-                var created = await _productService.AddAsync(product);
-                return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, created);
+                var created = await _userService.AddAsync(user);
+                return CreatedAtAction(nameof(GetById), new { id = created.UserId }, created);
             }
             catch (Exception ex)
             {
@@ -68,27 +68,17 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] ProductDto dto)
+        public async Task<ActionResult> Update(int id, User user)
         {
-            if (id != dto.ProductId) return BadRequest();
+            if (id != user.UserId) return BadRequest();
 
             try
             {
-                var entity = new Product
+                var updated = await _userService.UpdateAsync(user);
+                if (!updated)
                 {
-                    ProductId = dto.ProductId,
-                    CategoryId = dto.CategoryId,
-                    Name = dto.Name,
-                    Description = dto.Description,
-                    Price = dto.Price,
-                    Stock = dto.Stock,
-                    Picture = dto.Picture
-                };
-
-                var updated = await _productService.UpdateAsync(entity);
-
-                if (!updated) return NotFound();
-
+                    return NotFound();
+                }
                 return NoContent();
             }
             catch (NotFoundException)
@@ -106,7 +96,7 @@ namespace MatrixApi.Controllers
         {
             try
             {
-                var deleted = await _productService.DeleteAsync(id);
+                var deleted = await _userService.DeleteAsync(id);
                 if (!deleted)
                 {
                     return NotFound();
@@ -121,17 +111,6 @@ namespace MatrixApi.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-        }
-
-        public class ProductDto
-        {
-            public int ProductId { get; set; }
-            public int CategoryId { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public decimal Price { get; set; }
-            public int Stock { get; set; }
-            public byte[]? Picture { get; set; }
         }
     }
 }

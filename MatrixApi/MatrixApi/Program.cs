@@ -1,6 +1,9 @@
 using MatrixApi.Data;
 using MatrixApi.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MatrixApi
 {
@@ -35,12 +38,15 @@ namespace MatrixApi
 
             // Add services to the container.
             builder.Services.AddScoped<ProductService>();
-            builder.Services.AddScoped<GebruikerService>();
-            builder.Services.AddScoped<CategorieService>();
-            builder.Services.AddScoped<BestellingService>();
-            builder.Services.AddScoped<BestelregelService>();
+            builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<CategoryService>();
+            builder.Services.AddScoped<OrderService>();
+            builder.Services.AddScoped<OrderlineService>();
+            builder.Services.AddScoped<RoleService>();
 
             builder.Services.AddControllers();
+
+            builder.Services.AddAuthorization();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -55,6 +61,7 @@ namespace MatrixApi
             app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
+
             app.UseAuthorization();
             app.MapControllers();
             app.Run();

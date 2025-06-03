@@ -1,0 +1,58 @@
+﻿@page
+@model MatrixWebApp.Pages.Admin.AddProductsModel
+@{
+	ViewData["Title"] = "Admin Dashboard";
+	ViewData["ShowSidebar"] = true;
+}
+
+<form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label asp-for="Product.CategoryId" class="form-label">Categorie</label>
+        <select asp-for="Product.CategoryId" class="form-select" required>
+            <option value="">Selecteer een categorie</option>
+            @foreach (var cat in Model.Categories)
+            {
+                <option value="@cat.CategoryId">@cat.CategoryName</option>
+            }
+        </select>
+        <div class="invalid-feedback">Categorie is verplicht.</div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Product.Name" class="form-label">Naam</label>
+        <input asp-for="Product.Name" class="form-control" required />
+        <div class="invalid-feedback">Naam is verplicht.</div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Product.Description" class="form-label">Beschrijving</label>
+        <textarea asp-for="Product.Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Product.Price" class="form-label">Prijs</label>
+        <input asp-for="Product.Price" class="form-control" type="number" step="0.01" min="0" required />
+        <div class="invalid-feedback">Voer een geldige prijs in.</div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Product.Stock" class="form-label">Voorraad</label>
+        <input asp-for="Product.Stock" class="form-control" type="number" min="0" required />
+        <div class="invalid-feedback">Voorraad is verplicht.</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Afbeelding (WERKT NIET, NIET GEBRUIKEN)</label>
+        <input type="file" name="Picture" class="form-control" />
+        <!-- Picture upload handler moet je server-side nog bouwen -->
+    </div>
+
+    <button type="submit" class="btn btn-primary">Toevoegen</button>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">
+        @Model.SuccessMessage
+    </div>    
+}
