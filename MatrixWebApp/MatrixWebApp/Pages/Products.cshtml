@@ -2,14 +2,10 @@
 @model MatrixWebApp.Pages.ProductsModel
 @{
     ViewData["Title"] = "Onze Producten";
-    ViewData["ShowProductsSideBar"] = true;
+    ViewData["showProductSidebar"] = true;
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-<div class="text-center" style="margin-top: 50px; margin-bottom: 20px;">
-    <h1>@ViewData["Title"]</h1>
-</div>
 
 <div class="filter-container">
     <i class="bi bi-filter fs-1 filter" id="filterIcon"></i>
