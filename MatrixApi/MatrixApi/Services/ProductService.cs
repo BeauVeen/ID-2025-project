@@ -2,6 +2,7 @@
 using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using Microsoft.EntityFrameworkCore;
+using MatrixApi.DTOs;
 
 namespace MatrixApi.Services
 {
@@ -45,10 +46,20 @@ namespace MatrixApi.Services
             }
         }
 
-        public async Task<Product> AddAsync(Product product)
+        public async Task<Product> AddAsync(ProductDto dto)
         {
             try
             {
+                var product = new Product
+                {
+                    CategoryId = dto.CategoryId,
+                    Name = dto.Name,
+                    Description = dto.Description,
+                    Price = dto.Price,
+                    Stock = dto.Stock,
+                    Picture = dto.Picture
+                };
+
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
                 return product;
