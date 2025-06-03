@@ -13,16 +13,16 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var user in Model.Users)
-    {
-        <tr>
-            <td>@user.Name</td>
-            <td>@user.Email</td>
-            <td>@user.RoleName</td>
-            <td>
-                <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning">Bewerken</a>
-            </td>
-        </tr>
-    }
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+                <td>@Model.GetRoleName(user.RoleId)</td>
+                <td>
+                    <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning">Bewerken</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
