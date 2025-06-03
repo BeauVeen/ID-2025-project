@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net.Http.Headers;
 
 namespace MatrixWebApp.Pages.Admin
 {
@@ -34,17 +36,22 @@ namespace MatrixWebApp.Pages.Admin
                 return Page();
             }
 
-            var productPayload = new
-            {
-                CategoryId = Product.CategoryId,
-                Name = Product.Name,
-                Description = Product.Description,
-                Price = Product.Price,
-                Stock = Product.Stock,
-                Picture = (byte[])null //Tijdelijk NULL, aangezien moeite crashes.
-            };
+            using var content = new MultipartFormDataContent();
 
-            var response = await _httpClient.PostAsJsonAsync("api/Product", productPayload);
+            content.Add(new StringContent(Product.CategoryId.ToString()), "CategoryId");
+            content.Add(new StringContent(Product.Name ?? ""), "Name");
+            content.Add(new StringContent(Product.Description ?? ""), "Description");
+            content.Add(new StringContent(Product.Price.ToString(CultureInfo.InvariantCulture)), "Price");
+            content.Add(new StringContent(Product.Stock.ToString()), "Stock");
+
+            if (Product.Picture != null && Product.Picture.Length > 0)
+            {
+                var streamContent = new StreamContent(Product.Picture.OpenReadStream());
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue(Product.Picture.ContentType);
+                content.Add(streamContent, "Picture", Product.Picture.FileName);
+            }
+
+            var response = await _httpClient.PostAsync("api/Product", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -66,6 +73,7 @@ namespace MatrixWebApp.Pages.Admin
             public string Description { get; set; }
             public decimal Price { get; set; }
             public int Stock { get; set; }
+            public IFormFile? Picture { get; set;}
         }
 
         public class CategoryDto

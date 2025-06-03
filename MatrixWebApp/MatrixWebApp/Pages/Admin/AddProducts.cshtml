@@ -5,6 +5,8 @@
 	ViewData["ShowSidebar"] = true;
 }
 
+@using Microsoft.AspNetCore.Html
+
 <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
     <div class="mb-3">
         <label asp-for="Product.CategoryId" class="form-label">Categorie</label>
@@ -42,9 +44,8 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Afbeelding (WERKT NIET, NIET GEBRUIKEN)</label>
-        <input type="file" name="Picture" class="form-control" />
-        <!-- Picture upload handler moet je server-side nog bouwen -->
+        <label asp-for="Product.Picture" class="form-label">Afbeelding</label>
+        <input asp-for="Product.Picture" type="file" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-primary">Toevoegen</button>
