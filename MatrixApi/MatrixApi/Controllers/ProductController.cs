@@ -93,13 +93,21 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] ProductDto dto)
+        public async Task<ActionResult> Update(int id, [FromForm] ProductCreateDto dto)
         {
             if (id != dto.ProductId) return BadRequest();
 
             try
             {
-                var entity = new Product
+                byte[]? pictureBytes = null;
+                if (dto.Picture != null)
+                {
+                    using var ms = new MemoryStream();
+                    await dto.Picture.CopyToAsync(ms);
+                    pictureBytes = ms.ToArray();
+                }
+
+                var product = new Product
                 {
                     ProductId = dto.ProductId,
                     CategoryId = dto.CategoryId,
@@ -107,10 +115,10 @@ namespace MatrixApi.Controllers
                     Description = dto.Description,
                     Price = dto.Price,
                     Stock = dto.Stock,
-                    Picture = dto.Picture
+                    Picture = pictureBytes
                 };
 
-                var updated = await _productService.UpdateAsync(entity);
+                var updated = await _productService.UpdateAsync(product);
 
                 if (!updated) return NotFound();
 
@@ -125,6 +133,20 @@ namespace MatrixApi.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("Image/{id}")]
+        public async Task<IActionResult> GetImage(int id)
+        {
+            var product = await _productService.GetByIdAsync(id);
+            if (product?.Picture == null)
+            {
+                return NotFound();
+            }
+
+            return File(product.Picture, "image/png");
+        }
+
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)

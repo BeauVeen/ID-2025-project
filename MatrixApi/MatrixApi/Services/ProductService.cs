@@ -86,7 +86,11 @@ namespace MatrixApi.Services
                 existing.Description = product.Description;
                 existing.Price = product.Price;
                 existing.Stock = product.Stock;
-                existing.Picture = product.Picture;
+
+                if (product.Picture != null)
+                {
+                    existing.Picture = product.Picture;
+                }
 
                 await _context.SaveChangesAsync();
 
@@ -98,6 +102,7 @@ namespace MatrixApi.Services
                 throw;
             }
         }
+
 
         public async Task<bool> DeleteAsync(int id)
         {
