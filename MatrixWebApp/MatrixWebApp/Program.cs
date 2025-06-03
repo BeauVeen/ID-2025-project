@@ -1,4 +1,5 @@
 using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace MatrixWebApp
 {
@@ -21,6 +22,13 @@ namespace MatrixWebApp
             });
 
             var app = builder.Build();
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("nl-NL"),
+                SupportedCultures = new[] { cultureInfo },
+                SupportedUICultures = new[] { cultureInfo }
+            });
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
