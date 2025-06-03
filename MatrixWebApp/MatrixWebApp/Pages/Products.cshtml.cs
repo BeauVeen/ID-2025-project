@@ -15,8 +15,9 @@ namespace MatrixWebApp.Pages
 
         public List<ProductDto> Products { get; set; } = new();
 
+
         public ProductsModel(IHttpClientFactory httpClientFactory, ILogger<ProductsModel> logger)
-        { 
+        {
             _httpClient = httpClientFactory.CreateClient("MatrixApi");
             _logger = logger;
         }
@@ -44,13 +45,13 @@ namespace MatrixWebApp.Pages
 
 
         public class ProductDto
-        { 
+        {
             public int ProductId { get; set; }
             public int CategoryId { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public decimal Price { get; set; }
-            public int Stock {  get; set; }
+            public int Stock { get; set; }
             public byte[] Picture { get; set; }
         }
     }

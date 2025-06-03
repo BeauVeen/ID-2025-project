@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/bootstrap.css" asp-append-version="true" /> 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
+
 </head>
 <body>
     <header>
@@ -22,6 +23,16 @@
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+                <div class="search-container search-container-position">
+                    <input type="text" id="navbarSearch" placeholder="Zoek producten..." />
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         onclick="searchProducts()"
+                         viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                </div>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -39,6 +50,35 @@
             </div>
         </nav>
     </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            @if (ViewData["ShowProductsSideBar"] as bool? == true)
+            {
+                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #d5d5d5;">
+                <h5 class="text-center">Categorieën</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link d-flex justify-content-between align-items-center"
+                           data-bs-toggle="collapse" href="#collapseCategories" role="button"
+                           aria-expanded="false" aria-controls="collapseCategories" id="categoriesToggle">
+                            Alle categorieën
+                            <span class="arrow">&gt;</span>
+                        </a>
+                        <div class="collapse show" id="collapseCategories">
+                            <ul class="nav flex-column ms-3">
+                                    <!--code voor categories in sidebar tonen moet hier-->
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            }
+            <main class="@((ViewData["ShowProductsSidebar"] as bool? == true) ? "col-md-10" : "col-12") mt-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
 
     <div class="container-fluid">
         <div class="row">
@@ -90,29 +130,13 @@
         </div>
     </div>
 
+
     <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/js/search.js"></script>
+
 </body>
 </html>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const collapseId = 'collapseProducts';
-        const toggle = document.getElementById('productsToggle');
-        const collapse = document.getElementById(collapseId);
-
-        // Staat herstellen
-        const isExpanded = localStorage.getItem(collapseId) === 'true';
-        if (isExpanded) {
-            new bootstrap.Collapse(collapse, { toggle: false }).show();
-        }
-
-        // Staat opslaan bij klikken
-        toggle.addEventListener('click', function () {
-            const isNowExpanded = !collapse.classList.contains('show');
-            localStorage.setItem(collapseId, isNowExpanded);
-        });
-    });
-</script>
