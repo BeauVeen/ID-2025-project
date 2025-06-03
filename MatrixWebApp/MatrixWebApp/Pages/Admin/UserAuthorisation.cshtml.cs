@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Net.Http;
-using System.Net.Http.Json;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 public class UserAuthorisationModel : PageModel
@@ -13,12 +14,26 @@ public class UserAuthorisationModel : PageModel
     public List<UserViewModel> Users { get; set; } = new();
     public List<RoleDto> Roles { get; set; } = new();
 
+    [BindProperty(SupportsGet = true)]
+    public int BezorgersToShow { get; set; } = 5;
+
+    [BindProperty(SupportsGet = true)]
+    public int AdminsToShow { get; set; } = 5;
     public UserAuthorisationModel(IHttpClientFactory httpClientFactory, ILogger<UserAuthorisationModel> logger)
     {
         _httpClient = httpClientFactory.CreateClient("MatrixApi");
         _logger = logger;
     }
 
+    public async Task<IActionResult> OnPostDeleteAsync(int id)
+    {
+        var response = await _httpClient.DeleteAsync($"api/User/{id}");
+        if (!response.IsSuccessStatusCode)
+        {
+            ModelState.AddModelError(string.Empty, "Fout bij verwijderen van de gebruiker.");
+        }
+        return RedirectToPage();
+    }
     public async Task OnGetAsync()
     {
         ViewData["ShowSidebar"] = true;

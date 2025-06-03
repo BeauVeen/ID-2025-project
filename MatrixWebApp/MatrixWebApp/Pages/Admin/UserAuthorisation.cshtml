@@ -1,28 +1,82 @@
 @page
 @model UserAuthorisationModel
 
+@{
+    var bezorgers = Model.Users.Where(u => Model.GetRoleName(u.RoleId) == "Bezorger").ToList();
+    var admins = Model.Users.Where(u => Model.GetRoleName(u.RoleId) == "Administrator").ToList();
+    var bezorgersToShow = bezorgers.Take(Model.BezorgersToShow).ToList();
+    var adminsToShow = admins.Take(Model.AdminsToShow).ToList();
+}
+
 <h2>Gebruikersbeheer</h2>
-<a asp-page="/Admin/CreateUser" class="btn btn-primary">Nieuwe gebruiker</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Naam</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Acties</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model.Users)
-        {
-            <tr>
-                <td>@user.Name</td>
-                <td>@user.Email</td>
-                <td>@Model.GetRoleName(user.RoleId)</td>
-                <td>
-                    <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning">Bewerken</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<a asp-page="/Admin/CreateUser" class="btn btn-primary mb-3">Nieuwe gebruiker</a>
+
+<h4>Bezorgers</h4>
+<div class="list-group mb-4">
+    <div class="list-group-item d-flex fw-bold bg-light">
+        <div class="col-3">Naam</div>
+        <div class="col-3">Email</div>
+        <div class="col-3">Rol</div>
+        <div class="col-3">Acties</div>
+    </div>
+    @foreach (var user in bezorgersToShow)
+    {
+        <div class="list-group-item d-flex align-items-center">
+            <div class="col-3">@user.Name</div>
+            <div class="col-3">@user.Email</div>
+            <div class="col-3">@Model.GetRoleName(user.RoleId)</div>
+            <div class="col-3">
+                <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning me-2">Bewerken</a>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@user.UserId" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
+                        Verwijderen
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+    @if (bezorgers.Count > Model.BezorgersToShow)
+    {
+        <form method="get">
+            <input type="hidden" name="BezorgersToShow" value="@(Model.BezorgersToShow + 5)" />
+            <input type="hidden" name="AdminsToShow" value="@Model.AdminsToShow" />
+            <button type="submit" class="btn btn-link">Laad meer</button>
+        </form>
+    }
+</div>
+
+<h4>Administrators</h4>
+<div class="list-group mb-4">
+    <div class="list-group-item d-flex fw-bold bg-light">
+        <div class="col-3">Naam</div>
+        <div class="col-3">Email</div>
+        <div class="col-3">Rol</div>
+        <div class="col-3">Acties</div>
+    </div>
+    @foreach (var user in adminsToShow)
+    {
+        <div class="list-group-item d-flex align-items-center">
+            <div class="col-3">@user.Name</div>
+            <div class="col-3">@user.Email</div>
+            <div class="col-3">@Model.GetRoleName(user.RoleId)</div>
+            <div class="col-3">
+                <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning me-2">Bewerken</a>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@user.UserId" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
+                        Verwijderen
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+    @if (admins.Count > Model.AdminsToShow)
+    {
+        <form method="get">
+            <input type="hidden" name="AdminsToShow" value="@(Model.AdminsToShow + 5)" />
+            <input type="hidden" name="BezorgersToShow" value="@Model.BezorgersToShow" />
+            <button type="submit" class="btn btn-link">Laad meer</button>
+        </form>
+    }
+</div>
