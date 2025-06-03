@@ -17,6 +17,6 @@ namespace MatrixApi.Models
         public DateTime CreatedAt { get; set; }
 
         public ICollection<Order> Orders { get; set; } = new List<Order>();
-        public Role Role { get; set; } = null!;
+        public Role? Role { get; set; }
     }
 }
