@@ -1,10 +1,12 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using MatrixApi.Data;
+using MatrixApi.DTOs;
 using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using MatrixApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MatrixApi.DTOs;
 
 namespace MatrixApi.Controllers
 {
@@ -54,8 +56,21 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> Create(User user)
+        public async Task<ActionResult<User>> Create([FromBody] CreateUserDto dto)
         {
+            var user = new User
+            {
+                Password = dto.Password,
+                RoleId = dto.RoleId,
+                Name = dto.Name,
+                Address = dto.Address,
+                Zipcode = dto.Zipcode,
+                City = dto.City,
+                PhoneNumber = dto.PhoneNumber,
+                Email = dto.Email,
+                CreatedAt = DateTime.UtcNow
+            };
+
             try
             {
                 var created = await _userService.AddAsync(user);
