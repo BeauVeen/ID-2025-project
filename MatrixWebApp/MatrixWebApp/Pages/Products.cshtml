@@ -2,6 +2,7 @@
 @model MatrixWebApp.Pages.ProductsModel
 @{
     ViewData["Title"] = "Onze Producten";
+    ViewData["ShowProductsSideBar"] = true;
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -78,14 +79,14 @@
     .filter-container {
         position: relative;
         display: inline-block;
-        margin-left: 1225px;
+        margin-left: 1275px;
     }
 
     .filter-dropdown {
         display: none;
         position: absolute;
-        margin-top: -25px;
-        margin-right: -210px;
+        margin-top: -5px;
+        margin-right: 25px;
         right: 0;
         background-color: white;
         min-width: 200px;
@@ -136,10 +137,6 @@
         </button>
         <button class="filter-option" onclick="sortProducts('price-desc')">
             <i class="bi bi-arrow-down"></i> Prijs hoog - laag
-        </button>
-
-        <button class="filter-option" onclick="filterByCategory()">
-            <i class="bi bi-tags"></i> Op categorie
         </button>
     </div>
 </div>
@@ -217,7 +214,7 @@
 
         // Sorteerfuncties
         function sortProducts(sortType) {
-            const container = document.querySelector('.row');
+            const container = document.querySelector('.product-background .row');
             const products = Array.from(document.querySelectorAll('.col-lg-3'));
 
             products.sort((a, b) => {
@@ -240,8 +237,5 @@
             document.getElementById('filterDropdown').classList.remove('show');
         }
 
-        function filterByCategory() {
-
-        }
     </script>
 }

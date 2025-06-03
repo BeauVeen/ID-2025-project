@@ -51,6 +51,43 @@
         </nav>
     </header>
 
+    <div class="container-fluid">
+        <div class="row">
+            @if (ViewData["ShowProductsSideBar"] as bool? == true)
+            {
+                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #d5d5d5;">
+                <h5 class="text-center">Categorieën</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link d-flex justify-content-between align-items-center"
+                           data-bs-toggle="collapse" href="#collapseCategories" role="button"
+                           aria-expanded="false" aria-controls="collapseCategories" id="categoriesToggle">
+                            Alle categorieën
+                            <span class="arrow">&gt;</span>
+                        </a>
+                        <div class="collapse show" id="collapseCategories">
+                            <ul class="nav flex-column ms-3">
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link category-filter"
+                                           data-category="@category.CategoryId"
+                                           href="javascript:void(0)">
+                                            @category.Name
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            }
+            <main class="@((ViewData["ShowProductsSidebar"] as bool? == true) ? "col-md-10" : "col-12") mt-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
 
     <div class="container-fluid">
         <div class="row">
