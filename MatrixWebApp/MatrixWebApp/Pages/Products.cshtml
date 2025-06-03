@@ -7,124 +7,6 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<style>
-    .product-background {
-        background-color: #f0f0f0;
-        padding: 25px;
-        margin-bottom: 25px;
-        border-radius: 8px;
-    }
-
-    body {
-        background-color: #f0f0f0;
-        background-image: linear-gradient(to bottom, white 0%, white 45px, #f0f0f0 120px, #f0f0f0 100%);
-        background-attachment: fixed;
-    }
-
-    .product-card {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 20px;
-    }
-
-    .card-img-container {
-        width: 100%;
-        height: 200px;
-        background-color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-    }
-
-    .card-img-top {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
-
-    .no-image {
-        color: #666;
-        padding: 20px;
-        text-align: center;
-    }
-
-    .card-body {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .price-text {
-        font-family: 'DIN Next LT Pro Bold', 'FF DIN Bold', 'DIN Bold', 'Roboto', sans-serif;
-        font-size: 18px;
-        font-weight: 700;
-        color: #ba2828;
-        margin: 10px 0;
-    }
-
-    .add-to-cart {
-        margin-top: auto;
-    }
-
-    .searchbar {
-        margin-bottom: 20px;
-    }
-
-    .filter {
-        margin-left: 10px;
-    }
-
-    .filter-container {
-        position: relative;
-        display: inline-block;
-        margin-left: 1275px;
-    }
-
-    .filter-dropdown {
-        display: none;
-        position: absolute;
-        margin-top: -5px;
-        margin-right: 25px;
-        right: 0;
-        background-color: white;
-        min-width: 200px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-        border-radius: 4px;
-        padding: 10px;
-    }
-
-        .filter-dropdown.show {
-            display: block;
-        }
-
-    .filter-option {
-        padding: 8px 12px;
-        cursor: pointer;
-        display: block;
-        width: 100%;
-        text-align: left;
-        border: none;
-        background: none;
-    }
-
-        .filter-option:hover {
-            background-color: #f8f9fa;
-        }
-
-    .filter-icon {
-        cursor: pointer;
-        font-size: 1.5rem;
-    }
-
-        .filter-icon:hover {
-            opacity: 0.8;
-        }
-
-</style>
-
 <div class="text-center" style="margin-top: 50px; margin-bottom: 20px;">
     <h1>@ViewData["Title"]</h1>
 </div>
@@ -140,8 +22,6 @@
         </button>
     </div>
 </div>
-
-
 
 <div class="product-background">
     <div class="row">
@@ -192,50 +72,4 @@
     </div>
 </div>
 
-
-@section Scripts {
-    <script>
-        // Toon/verberg dropdown wanneer op filter-icoon wordt geklikt
-        document.getElementById('filterIcon').addEventListener('click', function(e) {
-            e.stopPropagation(); // Voorkom dat het klikevent direct wordt afgehandeld
-            const dropdown = document.getElementById('filterDropdown');
-            dropdown.classList.toggle('show');
-        });
-
-        // Sluit dropdown wanneer er buiten wordt geklikt
-        window.addEventListener('click', function() {
-            document.getElementById('filterDropdown').classList.remove('show');
-        });
-
-        // Voorkom dat dropdown sluit wanneer er in de dropdown wordt geklikt
-        document.getElementById('filterDropdown').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        // Sorteerfuncties
-        function sortProducts(sortType) {
-            const container = document.querySelector('.product-background .row');
-            const products = Array.from(document.querySelectorAll('.col-lg-3'));
-
-            products.sort((a, b) => {
-                const priceA = parseFloat(a.querySelector('.price-text').textContent.replace('€', ''));
-                const priceB = parseFloat(b.querySelector('.price-text').textContent.replace('€', ''));
-
-                if (sortType === 'price-asc') {
-                    return priceA - priceB;
-                } else {
-                    return priceB - priceA;
-                }
-            });
-
-            // Herlaad de producten in de nieuwe volgorde
-            products.forEach(product => {
-                container.appendChild(product);
-            });
-
-            // Sluit de dropdown
-            document.getElementById('filterDropdown').classList.remove('show');
-        }
-
-    </script>
-}
+<script src="~/js/productsfilter.js" asp-append-version="true"></script>
