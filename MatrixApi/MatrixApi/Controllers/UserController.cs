@@ -83,18 +83,21 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, User user)
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateUserDto dto)
         {
-            if (id != user.UserId) return BadRequest();
-
             try
             {
-                var updated = await _userService.UpdateAsync(user);
-                if (!updated)
+                var success = await _userService.UpdateAsync(id, dto);
+
+                if (!success)
                 {
                     return NotFound();
                 }
                 return NoContent();
+            }
+            catch (EmailAlreadyInUseException e)
+            {
+                return BadRequest(e.Message);
             }
             catch (NotFoundException)
             {
