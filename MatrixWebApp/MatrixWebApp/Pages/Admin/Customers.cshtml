@@ -1,0 +1,50 @@
+﻿@page
+@model MatrixWebApp.Pages.Admin.CustomersModel
+@{
+    ViewData["Title"] = "Klanten";
+    var klanten = Model.Users.Where(u => Model.GetRoleName(u.RoleId) == "Klant").ToList();
+}
+
+<h2>Klanten</h2>
+<a asp-page="/Admin/CreateUser" asp-route-ReturnUrl="/Admin/Customers" class="btn btn-primary mb-3">Nieuwe klant</a>
+
+<div class="d-flex align-items-center gap-2 mb-1">
+    <h4 class="mb-0">Klanten</h4>
+    <input type="text" id="search-klanten" class="form-control form-control-sm" style="max-width: 220px;" placeholder="Zoek klant..." />
+</div>
+<div class="list-group mb-2" id="klanten-list">
+    <div class="list-group-item d-flex fw-bold bg-light">
+        <div class="col-3">Naam</div>
+        <div class="col-3">Email</div>
+        <div class="col-3">Rol</div>
+        <div class="col-3">Acties</div>
+    </div>
+    @for (int i = 0; i < klanten.Count; i++)
+    {
+        var user = klanten[i];
+        <div class="list-group-item d-flex align-items-center klant-row @(i >= 5 ? "d-none" : "")">
+            <div class="col-3">@user.Name</div>
+            <div class="col-3">@user.Email</div>
+            <div class="col-3">@Model.GetRoleName(user.RoleId)</div>
+            <div class="col-3">
+                <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" asp-route-ReturnUrl="/Admin/Customers" class="btn btn-sm btn-warning me-2">Bewerken</a>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@user.UserId" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Weet je zeker dat je deze klant wilt verwijderen?');">
+                        Verwijderen
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+@if (klanten.Count > 5)
+{
+    <div class="d-flex justify-content-start my-1">
+        <button id="load-more-klanten" class="btn btn-outline-primary">Laad meer</button>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/user-authorisation.js"></script>
+}
