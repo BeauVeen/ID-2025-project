@@ -1,75 +1,137 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var showProductSidebar = ViewData["showProductSidebar"] as bool? == true;
+    var showAdminSidebar = ViewData["showSidebar"] as bool? == true;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="/Images/icon-v3.ico" type="image/x-icon" />
+    <link rel="icon" href="/Images/icon.png" type="image/png" />
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Matric inc.</title>
+    <title>Matric inc. | @ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="~/css/bootstrap.css" asp-append-version="true" /> 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
+
 </head>
-
 <body>
-    <header class="header">
-        <h1 class="title">
-            <a href="/Index" style="color: inherit; text-decoration: none;">
-                Matrix Inc.
-            </a>
-        </h1>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" asp-page="/Index">Matrix Inc.</a>
 
-        <nav class="nav-links">
-            <a asp-page="/Producten">Producten</a>
-            <a asp-page="/OverOns">Over Ons</a>
-        </nav>
-        <div class="header-actions">
-            <div class="search-container">
-                <form class="search-form" method="get" action="/Zoek">
-                    <input type="text" name="query" placeholder="Zoeken..." />
-                    <button type="submit">Zoek</button>
-                </form>
-            </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="cart-container">
-                <a href="/Winkelmand" class="btn-winkelmand">Winkelmand</a>
-            </div>
+                <div class="search-container search-container-position">
+                    <input type="text" id="navbarSearch" placeholder="Zoek producten..." />
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         onclick="searchProducts()"
+                         viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                </div>
 
-            <div class="user-container">
-                @if (User.Identity != null && User.Identity.IsAuthenticated)
-                {
-                    <button type="button" class="btn-user" onclick="toggleUserDropdown()">
-                        @await Component.InvokeAsync("Username")
-                    </button>
-                }
-                else
-                {
-                    <button type="button" class="btn-login" onclick="toggleUserDropdown()">
-                        Log in here!
-                    </button>
-                }
-
-                <div id="userDropdown" class="user-dropdown hidden">
-                    <a href="/Account">Account</a>
-                    <a href="/Bestellingen">Bestellingen</a>
-
-                    @if (User.Identity != null && User.Identity.IsAuthenticated)
-                    {
-                        <form method="post" asp-page="/Logout" class="logout-form">
-                            <button type="submit">Log uit</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <a href="/Login">Log in</a>
-                    }
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-page="/Index">Index</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-page="/Products">Producten</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-page="/Admin">Admin</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="container-fluid">
+        <div class="row">
+            @if (ViewData["showProductSideBar"] as bool? == true)
+            {
+                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #d5d5d5;">
+                    <h5 class="text-center">Categorieën</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex justify-content-between align-items-center"
+                            data-bs-toggle="collapse" href="#collapseCategories" role="button"
+                            aria-expanded="false" aria-controls="collapseCategories" id="categoriesToggle">
+                                Alle categorieën
+                                <span class="arrow">&gt;</span>
+                            </a>
+                            <div class="collapse show" id="collapseCategories">
+                                <ul class="nav flex-column ms-3">
+                                    @await Component.InvokeAsync("CategorySidebar")
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            }
+            else if (showAdminSidebar)
+            {
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar vh-100 p-3 border-end">
+                    <h5 class="text-center">Admin</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex justify-content-between align-items-center"
+                               data-bs-toggle="collapse" href="#collapseProducts" role="button"
+                               aria-expanded="false" aria-controls="collapseProducts" id="productsToggle">
+                                Producten
+                                <span class="arrow">&gt;</span>
+                            </a>
+                            <div class="collapse" id="collapseProducts">
+                                <ul class="nav flex-column ms-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/AddProducts">Producten toevoegen</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/AdminProducts">Producten lijst</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/AdminCategories">Categorieën</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/DelProducts">Verwijderde producten</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Admin/AdminOrders">Bestellingen</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Admin/Customers">Klanten</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Admin/UserAuthorisation">Gebruikers-Beheerder</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+
+            <main class="@((ViewData["ShowSidebar"] as bool? == true) ? "col-md-10" : "col-12") mt-4">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
+

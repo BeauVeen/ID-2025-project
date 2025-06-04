@@ -1,0 +1,62 @@
+﻿@page "{id:int}"
+@model MatrixWebApp.Pages.Admin.EditUserModel
+@{
+    ViewData["Title"] = "Gebruiker bewerken";
+    ViewData["ShowSidebar"] = true;
+}
+
+<h2>Gebruiker bewerken</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Input.Name" class="form-label"></label>
+        <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.Email" class="form-label"></label>
+        <input asp-for="Input.Email" class="form-control" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.Password" class="form-label">Nieuw wachtwoord (optioneel)</label>
+        <input asp-for="Input.Password" class="form-control" type="password" placeholder="Laat leeg om niet te wijzigen" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.RoleId" class="form-label"></label>
+        <select asp-for="Input.RoleId" class="form-select">
+            <option value="">Selecteer een rol</option>
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role.RoleId">@role.RoleName</option>
+            }
+        </select>
+        <span asp-validation-for="Input.RoleId" class="text-danger"></span>
+    </div>
+    <!-- Optional fields -->
+    <div class="mb-3">
+        <label asp-for="Input.Address" class="form-label"></label>
+        <input asp-for="Input.Address" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.Zipcode" class="form-label"></label>
+        <input asp-for="Input.Zipcode" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.City" class="form-label"></label>
+        <input asp-for="Input.City" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.PhoneNumber" class="form-label"></label>
+        <input asp-for="Input.PhoneNumber" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Opslaan</button>
+    <a href="@(Model.ReturnUrl ?? "/Admin/UserAuthorisation")" class="btn btn-secondary">Annuleren</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
