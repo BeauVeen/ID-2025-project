@@ -1,7 +1,9 @@
 ﻿using MatrixApi.Data;
+using MatrixApi.DTOs;
 using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 
 namespace MatrixApi.Services
 {
@@ -60,36 +62,53 @@ namespace MatrixApi.Services
             }
         }
 
-        public async Task<bool> UpdateAsync(User user)
+        public async Task<bool> UpdateAsync(int id, UpdateUserDto dto)
         {
             try
             {
-                var existing = await _context.Users.FindAsync(user.UserId);
+                var existing = await _context.Users.FindAsync(id);
+
                 if (existing == null)
                 {
-                    throw new NotFoundException($"User with id {user.UserId} not found.");
+                    throw new NotFoundException($"User with id {id} not found.");
                 }
 
-                existing.RoleId = user.RoleId;
-                existing.Name = user.Name;
-                existing.Address = user.Address;
-                existing.Zipcode = user.Zipcode;
-                existing.City = user.City;
-                existing.PhoneNumber = user.PhoneNumber;
-                existing.Email = user.Email;
+                var emailExists = await _context.Users
+                    .AnyAsync(u => u.Email == dto.Email && u.UserId != id);
 
-                if (!string.IsNullOrEmpty(user.Password))
+                if (emailExists)
                 {
-                    existing.Password = user.Password;
+                    throw new EmailAlreadyInUseException("Email already in use");
+                }
+
+                existing.RoleId = dto.RoleId;
+                existing.Name = dto.Name;
+                existing.Address = dto.Address;
+                existing.Zipcode = dto.Zipcode;
+                existing.City = dto.City;
+                existing.PhoneNumber = dto.PhoneNumber;
+                existing.Email = dto.Email;
+
+                if (!string.IsNullOrWhiteSpace(dto.Password))
+                {
+                    existing.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
                 }
 
                 await _context.SaveChangesAsync();
 
                 return true;
             }
-            catch (Exception ex) when (!(ex is NotFoundException))
+            catch (EmailAlreadyInUseException) 
             {
-                Console.WriteLine($"Error updating user {user.UserId}: {ex.Message}");
+                throw;
+            }
+            catch (NotFoundException) 
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating user {id}: {ex.Message}");
                 throw;
             }
         }
