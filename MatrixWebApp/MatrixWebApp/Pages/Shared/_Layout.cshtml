@@ -44,34 +44,40 @@
         margin-right: 20px;
     }
     .nav.flex-column.category-spacing a {
-        color: black !important; /* Of een andere gewenste kleur */
+        color: black !important;
     }
 
-    /* Om de turquoise kleur van prijsfilterknoppen te verwijderen */
     .btn-outline-primary {
-        color: black !important; /* Tekstkleur */
-        border-color: black !important; /* Randkleur */
+        color: black !important; 
+        border-color: black !important; 
     }
 
         .btn-outline-primary:hover {
-            color: white !important; /* Tekstkleur bij hover */
-            background-color: black !important; /* Achtergrondkleur bij hover */
+            color: white !important; 
+            background-color: black !important; 
         }
 
     .sidebar .nav.flex-column > li.nav-item > .nav-link {
         color: black !important;
     }
 
-    /* Admin sidebar - subknoppen (bijv. 'Producten toevoegen', 'Producten lijst') */
+
     .sidebar .nav.flex-column .collapse .nav-link {
         color: black !important;
     }
 
-    /* Hover-effect voor alle admin sidebar links */
+   
     .sidebar .nav-link:hover {
-        color: #333 !important; /* Donkergrijs bij hover */
-        background-color: #f0f0f0 !important; /* Lichtgrijze achtergrond */
+        color: #333 !important; 
+        background-color: #f0f0f0 !important; 
     }
+
+    .nav-link.active-category {
+        font-weight: bold;
+        text-decoration: underline;
+        color: #000 !important; 
+    }
+
 
 </style>
 
@@ -114,7 +120,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"> <!--shoppingcart icon op navbar-->
+                        <li class="nav-item"> 
                             <a class="nav-link text-white position-relative margin-right" asp-page="/ShoppingCart">
                                 <i class="bi bi-cart"></i> Winkelwagen
                                 @if (Context.Session.GetInt32("CartItemCount") > 0)

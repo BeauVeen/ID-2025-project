@@ -55,7 +55,7 @@ namespace MatrixWebApp.Pages
             TempData["SuccessMessage"] = $"{product.Name} is toegevoegd aan je winkelwagen!";
             return RedirectToPage();
         }
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? categoryId)
         {
             try
             {
@@ -63,7 +63,10 @@ namespace MatrixWebApp.Pages
 
                 if (products != null)
                 {
-                    Products = products;
+
+                    Products = categoryId.HasValue
+                        ? products.Where(p => p.CategoryId == categoryId.Value).ToList()
+                        : products;
                 }
                 else
                 {
