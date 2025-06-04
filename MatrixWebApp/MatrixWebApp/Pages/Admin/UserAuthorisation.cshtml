@@ -1,0 +1,90 @@
+@page
+@model UserAuthorisationModel
+
+@{
+    var bezorgers = Model.Users.Where(u => Model.GetRoleName(u.RoleId) == "Bezorger").ToList();
+    var admins = Model.Users.Where(u => Model.GetRoleName(u.RoleId) == "Administrator").ToList();
+    var bezorgersToShow = bezorgers.Take(Model.BezorgersToShow).ToList();
+    var adminsToShow = admins.Take(Model.AdminsToShow).ToList();
+}
+
+<h2>Gebruikersbeheer</h2>
+<a asp-page="/Admin/CreateUser" class="btn btn-primary mb-3">Nieuwe gebruiker</a>
+
+<div class="d-flex align-items-center gap-2 mb-1">
+    <h4 class="mb-0">Bezorgers</h4>
+    <input type="text" id="search-bezorgers" class="form-control form-control-sm" style="max-width: 220px;" placeholder="Zoek bezorger..." />
+</div>
+<div class="list-group mb-2" id="bezorgers-list">
+    <div class="list-group-item d-flex fw-bold bg-light">
+        <div class="col-3">Naam</div>
+        <div class="col-3">Email</div>
+        <div class="col-3">Rol</div>
+        <div class="col-3">Acties</div>
+    </div>
+    @for (int i = 0; i < bezorgers.Count; i++)
+    {
+        var user = bezorgers[i];
+        <div class="list-group-item d-flex align-items-center bezorger-row @(i >= 5 ? "d-none" : "")">
+            <div class="col-3">@user.Name</div>
+            <div class="col-3">@user.Email</div>
+            <div class="col-3">@Model.GetRoleName(user.RoleId)</div>
+            <div class="col-3">
+                <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning me-2">Bewerken</a>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@user.UserId" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
+                        Verwijderen
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+@if (bezorgers.Count > 5)
+{
+    <div class="d-flex justify-content-start my-1">
+        <button id="load-more-bezorgers" class="btn btn-outline-primary">Laad meer</button>
+    </div>
+}
+
+<div class="d-flex align-items-center gap-2 mb-1">
+    <h4 class="mb-0">Administrators</h4>
+    <input type="text" id="search-admins" class="form-control form-control-sm" style="max-width: 220px;" placeholder="Zoek admin..." />
+</div>
+<div class="list-group mb-2" id="admins-list">
+    <div class="list-group-item d-flex fw-bold bg-light">
+        <div class="col-3">Naam</div>
+        <div class="col-3">Email</div>
+        <div class="col-3">Rol</div>
+        <div class="col-3">Acties</div>
+    </div>
+    @for (int i = 0; i < admins.Count; i++)
+    {
+        var user = admins[i];
+        <div class="list-group-item d-flex align-items-center admin-row @(i >= 5 ? "d-none" : "")">
+            <div class="col-3">@user.Name</div>
+            <div class="col-3">@user.Email</div>
+            <div class="col-3">@Model.GetRoleName(user.RoleId)</div>
+            <div class="col-3">
+                <a asp-page="/Admin/EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning me-2">Bewerken</a>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@user.UserId" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?');">
+                        Verwijderen
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+@if (admins.Count > 5)
+{
+    <div class="d-flex justify-content-start my-1">
+        <button id="load-more-admins" class="btn btn-outline-primary">Laad meer</button>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/user-authorisation.js"></script>
+}
