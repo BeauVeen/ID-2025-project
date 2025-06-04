@@ -100,15 +100,19 @@ namespace MatrixApi.Controllers
                 Email = dto.Email
                 
             };
-
             try
             {
-                var updated = await _userService.UpdateAsync(user);
-                if (!updated)
+                var success = await _userService.UpdateAsync(id, dto);
+
+                if (!success)
                 {
                     return NotFound();
                 }
                 return NoContent();
+            }
+            catch (EmailAlreadyInUseException e)
+            {
+                return BadRequest(e.Message);
             }
             catch (NotFoundException)
             {
