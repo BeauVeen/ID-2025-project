@@ -1,12 +1,43 @@
 ﻿@page
 @model MatrixWebApp.Pages.AdminModel
 @{
-	ViewData["Title"] = "Admin Dashboard";
-	ViewData["ShowSidebar"] = true;
+    ViewData["Title"] = "Admin Dashboard";
+    ViewData["showSidebar"] = true;
 }
 
 <main>
-	<h2>Welkom, op de admin pagina</h2>
-	<p>Selecteer een onderdeel in het menu links.</p>
+    <h2>Meldingen</h2>
 </main>
 
+@if (Model.LageVoorraadProducten != null && Model.LageVoorraadProducten.Any())
+{
+    <div class="alert alert-success border border-success rounded p-3 mb-4" role="alert">
+        ⚠️ <strong>Let op:</strong> Er zijn @Model.LageVoorraadProducten.Count producten met lage voorraad!
+        <ul class="mt-2 mb-0">
+            @foreach (var product in Model.LageVoorraadProducten)
+            {
+                string kleur = "";
+
+                if (product.Stock <= 5)
+                {
+                    kleur = "text-danger"; // Bootstrap rood
+                }
+                else if (product.Stock <= 10)
+                {
+                    kleur = "text-warning"; // Bootstrap oranje
+                }
+
+                <li>
+                    @product.Naam – <span class="@kleur">@("Voorraad: " + product.Stock)</span>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@if (Model.Melding != null)
+{
+    <p>@Model.Melding</p>
+}
+
+<partial name="_ValidationScriptsPartial" />
