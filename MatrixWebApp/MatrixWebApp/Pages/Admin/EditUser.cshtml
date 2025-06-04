@@ -1,11 +1,11 @@
-﻿@page
-@model MatrixWebApp.Pages.Admin.CreateUserModel
+﻿@page "{id:int}"
+@model MatrixWebApp.Pages.Admin.EditUserModel
 @{
-    ViewData["Title"] = "Nieuwe gebruiker aanmaken";
+    ViewData["Title"] = "Gebruiker bewerken";
     ViewData["ShowSidebar"] = true;
 }
 
-<h2>Nieuwe gebruiker aanmaken</h2>
+<h2>Gebruiker bewerken</h2>
 
 <form method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -18,11 +18,6 @@
         <label asp-for="Input.Email" class="form-label"></label>
         <input asp-for="Input.Email" class="form-control" />
         <span asp-validation-for="Input.Email" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Input.Password" class="form-label"></label>
-        <input asp-for="Input.Password" class="form-control" type="password" />
-        <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="Input.RoleId" class="form-label"></label>
@@ -52,7 +47,7 @@
         <label asp-for="Input.PhoneNumber" class="form-label"></label>
         <input asp-for="Input.PhoneNumber" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary">Aanmaken</button>
+    <button type="submit" class="btn btn-primary">Opslaan</button>
     <a asp-page="/Admin/UserAuthorisation" class="btn btn-secondary">Annuleren</a>
 </form>
 
