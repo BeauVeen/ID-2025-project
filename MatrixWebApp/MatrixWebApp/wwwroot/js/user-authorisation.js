@@ -28,6 +28,27 @@
             .some(row => row.style.display !== 'none');
         header.style.display = anyVisible ? '' : 'none';
     }
+    document.getElementById('load-more-klanten')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        showMoreRows('.klant-row', 'load-more-klanten');
+    });
+    //Filter Klanten
+    const searchKlanten = document.getElementById('search-klanten');
+    if (searchKlanten) {
+        searchKlanten.addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            document.querySelectorAll('#klanten-list .klant-row').forEach(row => {
+                row.classList.remove('d-none');
+                const cols = row.querySelectorAll('.col-3');
+                const name = cols[0]?.textContent?.toLowerCase() ?? '';
+                const email = cols[1]?.textContent?.toLowerCase() ?? '';
+                const match = (name.includes(query) || email.includes(query));
+                row.style.setProperty('display', match ? '' : 'none', 'important');
+            });
+            const loadMoreBtn = document.getElementById('load-more-klanten');
+            if (loadMoreBtn) loadMoreBtn.style.display = query ? 'none' : '';
+        });
+    }
 
     // Filter Bezorgers
     const searchBezorgers = document.getElementById('search-bezorgers');
