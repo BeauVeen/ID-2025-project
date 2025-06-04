@@ -85,6 +85,21 @@ namespace MatrixApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UpdateUserDto dto)
         {
+            if (id != dto.UserId) return BadRequest();
+
+            var user = new User
+            {
+                UserId = dto.UserId,
+                Password = dto.Password, 
+                RoleId = dto.RoleId,
+                Name = dto.Name,
+                Address = dto.Address,
+                Zipcode = dto.Zipcode,
+                City = dto.City,
+                PhoneNumber = dto.PhoneNumber,
+                Email = dto.Email
+                
+            };
             try
             {
                 var success = await _userService.UpdateAsync(id, dto);

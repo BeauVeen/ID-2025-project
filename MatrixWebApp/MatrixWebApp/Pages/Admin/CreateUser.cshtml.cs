@@ -20,6 +20,9 @@ namespace MatrixWebApp.Pages.Admin
         [BindProperty]
         public InputModel Input { get; set; } = new();
 
+        [BindProperty(SupportsGet = true)]
+        public string? ReturnUrl { get; set; }
+
         public class RoleDto
         {
             public int RoleId { get; set; }
