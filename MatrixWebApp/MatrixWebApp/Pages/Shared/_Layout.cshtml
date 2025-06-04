@@ -25,6 +25,54 @@
     .badge {
         font-size: 0.6rem;
     }
+
+    .price-filter {
+        margin-top: 20px;
+    }
+
+    .category-spacing {
+        margin-left: 95px;
+        color: black 
+
+    }
+
+    .margin-top {
+        margin-top: 10px;
+    }
+
+    .margin-right {
+        margin-right: 20px;
+    }
+    .nav.flex-column.category-spacing a {
+        color: black !important; /* Of een andere gewenste kleur */
+    }
+
+    /* Om de turquoise kleur van prijsfilterknoppen te verwijderen */
+    .btn-outline-primary {
+        color: black !important; /* Tekstkleur */
+        border-color: black !important; /* Randkleur */
+    }
+
+        .btn-outline-primary:hover {
+            color: white !important; /* Tekstkleur bij hover */
+            background-color: black !important; /* Achtergrondkleur bij hover */
+        }
+
+    .sidebar .nav.flex-column > li.nav-item > .nav-link {
+        color: black !important;
+    }
+
+    /* Admin sidebar - subknoppen (bijv. 'Producten toevoegen', 'Producten lijst') */
+    .sidebar .nav.flex-column .collapse .nav-link {
+        color: black !important;
+    }
+
+    /* Hover-effect voor alle admin sidebar links */
+    .sidebar .nav-link:hover {
+        color: #333 !important; /* Donkergrijs bij hover */
+        background-color: #f0f0f0 !important; /* Lichtgrijze achtergrond */
+    }
+
 </style>
 
 <!DOCTYPE html>
@@ -45,7 +93,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand text-white" asp-page="/Index">Matrix Inc.</a>
 
@@ -67,11 +115,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"> <!--shoppingcart icon op navbar-->
-                            <a class="nav-link text-white position-relative" asp-page="/ShoppingCart">
+                            <a class="nav-link text-white position-relative margin-right" asp-page="/ShoppingCart">
                                 <i class="bi bi-cart"></i> Winkelwagen
                                 @if (Context.Session.GetInt32("CartItemCount") > 0)
                                 {
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger margin-top">
                                         @Context.Session.GetInt32("CartItemCount")
                                     </span>
                                 }
@@ -97,23 +145,21 @@
         <div class="row">
             @if (ViewData["showProductSidebar"] as bool? == true)
             {
-                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #d5d5d5;">
+                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #e1e1e1;">
                     <h5 class="text-center">Categorieën</h5>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link d-flex justify-content-between align-items-center"
-                            data-bs-toggle="collapse" href="#collapseCategories" role="button"
-                            aria-expanded="false" aria-controls="collapseCategories" id="categoriesToggle">
-                                Alle categorieën
-                                <span class="arrow">&gt;</span>
-                            </a>
-                            <div class="collapse show" id="collapseCategories">
-                                <ul class="nav flex-column ms-3">
-                                    @await Component.InvokeAsync("CategorySidebar")
-                                </ul>
-                            </div>
-                        </li>
+                    <ul class="nav flex-column category-spacing" id="collapseCategories" style="color: black;">
+                        @await Component.InvokeAsync("CategorySidebar")
                     </ul>
+                    <hr />
+                    <div class="price-filter">
+                        <h6 class="text-center mb-3">Prijs filteren</h6>
+                        <button class="btn btn-outline-primary w-100 mb-2" onclick="sortProducts('price-asc')">
+                            <i class="bi bi-arrow-up"></i> Prijs laag - hoog
+                        </button>
+                        <button class="btn btn-outline-primary w-100" onclick="sortProducts('price-desc')">
+                            <i class="bi bi-arrow-down"></i> Prijs hoog - laag
+                        </button>
+                    </div>
                 </nav>
             }
             else if (showAdminSidebar)
@@ -169,6 +215,8 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/js/productsfilter.js" asp-append-version="true"></script>
+    <script src="~/js/search.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -16,18 +16,6 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<div class="filter-container">
-    <i class="bi bi-filter fs-1 filter" id="filterIcon"></i>
-    <div class="filter-dropdown" id="filterDropdown">
-        <button class="filter-option" onclick="sortProducts('price-asc')">
-            <i class="bi bi-arrow-up"></i> Prijs laag - hoog
-        </button>
-        <button class="filter-option" onclick="sortProducts('price-desc')">
-            <i class="bi bi-arrow-down"></i> Prijs hoog - laag
-        </button>
-    </div>
-</div>
-
 <div class="product-background">
     <div class="row">
         @foreach (var product in Model.Products)
@@ -54,7 +42,7 @@
                                 <input type="hidden" name="productId" value="@product.ProductId" />
                                 <div class="d-flex align-items-center gap-2">
                                     <select name="quantity" class="form-select form-select-sm" style="width: 60px;">
-                                        @for (int i = 1; i <= Math.Min(10, product.Stock); i++)
+                                        @for (int i = 1; i <= Math.Max(1, product.Stock); i++)
                                         {
                                             <option value="@i">@i</option>
                                         }
@@ -77,4 +65,4 @@
     </div>
 </div>
 
-<script src="~/js/productsfilter.js" asp-append-version="true"></script>
+
