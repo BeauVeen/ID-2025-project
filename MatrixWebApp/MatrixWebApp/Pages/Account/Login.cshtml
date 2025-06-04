@@ -1,0 +1,25 @@
+﻿@page
+@model MatrixWebApp.Pages.Account.LoginModel
+@{
+}
+
+<form id="loginForm">
+    <div class="mb-2">
+        <input type="email" id="email" class="form-control" placeholder="E-mail" required />
+    </div>
+    <div class="mb-2">
+        <input type="password" id="password" class="form-control" placeholder="Wachtwoord" required />
+    </div>
+    <button type="submit" class="btn btn-light w-100">Inloggen</button>
+</form>
+
+<div id="loginMessage" class="mt-2"></div>
+
+<script type="module" src="/js/loginForm.js"></script>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert @(Model.Message.Contains("Succes") ? "alert-success" : "alert-danger") mt-3" role="alert">
+        @Model.Message
+    </div>
+}

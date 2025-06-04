@@ -46,26 +46,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-page="/Products">Producten</a>
                         </li>
-                        <li class="nav-item">
-                            <div class="dropdown" id="loginDropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
-                                    Inloggen
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 250px;">
-                                    <form id="loginForm">
-                                        <div class="mb-2">
-                                            <input type="email" class="form-control" id="email" placeholder="E-mail" required />
-                                        </div>
-                                        <div class="mb-2">
-                                            <input type="password" class="form-control" id="password" placeholder="Wachtwoord" required />
-                                        </div>
-                                        <button type="submit" class="btn btn-light w-100">Inloggen</button>
-                                    </form>
-                                    <div id="loginError" class="text-danger mt-2" style="display: none;">
-                                        Ongeldige inloggegevens
-                                    </div>
-                                </div>
+                        <li class="nav-item dropdown" id="loginDropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" id="loginDropdownToggle">
+                                Inloggen
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-3" id="loginDropdownMenu" style="min-width: 250px;">
+                                <a class="dropdown-item" href="/Account/Login">Ga naar inlogpagina</a>
                             </div>
+                        </li>
+
+                        <li class="nav-item">
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-page="/Admin">Admin</a>
@@ -152,7 +142,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="@Url.Content("~/js/loginform.js")"></script>
+    <script type="module" src="/js/loginForm.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
