@@ -1,0 +1,37 @@
+﻿document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('/api/User/authenticate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // data bevat bijvoorbeeld een JWT token of gebruikersinfo
+            // Opslaan in localStorage/sessionStorage, of cookies
+            sessionStorage.setItem('token', data.token);
+
+            // Verberg login error als die zichtbaar is
+            document.getElementById('loginError').style.display = 'none';
+
+            // Sluit dropdown of refresh pagina
+            alert('Succesvol ingelogd!');
+            location.reload();
+
+        } else {
+            // Ongeldige login
+            document.getElementById('loginError').style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        document.getElementById('loginError').style.display = 'block';
+    }
+});
