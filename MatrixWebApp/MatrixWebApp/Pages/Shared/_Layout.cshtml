@@ -16,6 +16,29 @@
     .margin-left2 {
         margin-left: 400px;
     }
+
+    .matrix-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+        background-color: #000; /* Voeg dit toe */
+    }
+
+    #matrix-rain {
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #000; /* Voeg dit toe voor zekerheid */
+    }
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +58,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
 </head>
 <body>
+    <div class="matrix-container" id="matrixContainer" style="display: none;">
+        <canvas id="matrix-rain"></canvas>
+    </div>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-dark">
             <div class="container-fluid d-flex justify-content-between align-items-center">
@@ -108,7 +134,7 @@
         <div class="row">
             @if (ViewData["showProductSidebar"] as bool? == true)
             {
-                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #e1e1e1;">
+                <nav class="col-md-2 d-none d-md-block sidebar p-3 border-end position-sticky top-0" style="background-color: #e1e1e1; height: 100vh; overflow-y: auto;">
                     <h5 class="text-center category-header">Categorieën</h5>
                     <ul class="nav flex-column category-spacing" id="collapseCategories" style="color: black;">
                         @await Component.InvokeAsync("CategorySidebar")
@@ -151,16 +177,13 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Admin/AdminDashboard">Admin-Dashboard</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link d-flex justify-content-between align-items-center"
-                               data-bs-toggle="collapse" href="#collapseProducts" role="button"
-                               aria-expanded="false" aria-controls="collapseProducts" id="productsToggle">
-                                Producten
-                                <span class="arrow">&gt;</span>
-                            </a>
-
-                            <div class="collapse" id="collapseProducts">
+                        <a class="nav-link d-flex justify-content-between align-items-center text-black"
+                           data-bs-toggle="collapse" href="#collapseProducts" role="button"
+                           aria-expanded="false" aria-controls="collapseProducts" id="productsToggle">
+                            Producten
+                            <span class="arrow">&gt;</span>
+                        </a>
+                        <div class="collapse" id="collapseProducts">
                                 <ul class="nav flex-column ms-3">
                                     <li class="nav-item">
                                         <a class="nav-link" asp-page="/Admin/AddProducts">Producten toevoegen</a>
@@ -202,6 +225,15 @@
         <p>@claim.Type : @claim.Value</p>
     }
 
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    @if (ViewData["ShowMatrixRain"] as bool? == true)
+    {
+        @: document.getElementById('matrixContainer').style.display = 'block';
+    }
+    });
+    </script>
+
     <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
@@ -210,6 +242,7 @@
     <script src="~/js/productsfilter.js" asp-append-version="true"></script>
     <script src="~/js/search.js" asp-append-version="true"></script>
     <script src="~/js/rangeslider.js" asp-append-version="true"></script>
+    <script src="~/js/matrixrain.js" asp-append-version="true"></script>
 
 
     @RenderSection("Scripts", required: false)

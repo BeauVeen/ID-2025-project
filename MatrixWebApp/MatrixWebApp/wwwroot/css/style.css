@@ -53,11 +53,11 @@
     border-color: black !important;
 }
 
-    .btn-outline-primary:hover {
+    .btn-outline-primary:hover,
+    .btn-outline-primary.active { 
         color: white !important;
         background-color: black !important;
     }
-
 .sidebar .nav.flex-column > li.nav-item > .nav-link {
     color: black !important;
 }
