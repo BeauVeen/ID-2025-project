@@ -30,8 +30,11 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="Product.Price" class="form-label">Prijs</label>
-        <input asp-for="Product.Price" class="form-control" type="number" step="0.01" min="0" required />
+        <label asp-for="Product.Price" class="form-label">Prijs </label>
+        <input asp-for="Product.Price" class="form-control" type="text" required
+               value="@(Model.Product.Price.ToString("N2", System.Globalization.CultureInfo.CurrentCulture))"
+               placeholder="Bijv. 12,50" />
+        <small class="text-muted">Gebruik een komma als decimaalteken, bijv. 12,50</small>
         <div class="invalid-feedback">Voer een geldige prijs in.</div>
     </div>
 
@@ -59,3 +62,4 @@
     <input type="hidden" asp-for="Product.ProductId" />
     <button type="submit" class="btn btn-primary">Bijwerken</button>
 </form>
+

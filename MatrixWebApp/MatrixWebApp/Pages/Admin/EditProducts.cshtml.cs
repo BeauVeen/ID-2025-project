@@ -71,7 +71,7 @@ namespace MatrixWebApp.Pages.Admin
             content.Add(new StringContent(Product.CategoryId.ToString()), "CategoryId");
             content.Add(new StringContent(Product.Name ?? ""), "Name");
             content.Add(new StringContent(Product.Description ?? ""), "Description");
-            content.Add(new StringContent(Product.Price.ToString(CultureInfo.InvariantCulture)), "Price");
+            content.Add(new StringContent(Product.Price.ToString("0.00", new System.Globalization.CultureInfo("nl-NL"))), "Price");
             content.Add(new StringContent(Product.Stock.ToString()), "Stock");
 
             if (Product.Picture != null && Product.Picture.Length > 0)
