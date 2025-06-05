@@ -7,7 +7,7 @@ CREATE TABLE Roles (
 
 CREATE TABLE Users (
     UserId INT AUTO_INCREMENT PRIMARY KEY,
-    Password VARCHAR(100) NOT NULL,
+    PasswordHash VARCHAR(100) NOT NULL,
     RoleId INT DEFAULT 1,
     Name VARCHAR(100) NOT NULL,
     Address VARCHAR(255),
@@ -70,3 +70,5 @@ VALUES (
     '0612345678',
     'admin@example.com'
 );
+
+ALTER TABLE Users CHANGE COLUMN Password PasswordHash VARCHAR(255);

@@ -1,0 +1,74 @@
+﻿@page
+@model MatrixWebApp.Pages.Account.CreateUserModel
+@{
+    ViewData["Title"] = "Gebruiker Aanmaken";
+    ViewData["ShowSidebar"] = false;
+}
+
+<h2>Regristreren</h2>
+
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @Model.StatusMessage
+    </div>
+}
+
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.SelectMany(v => v.Errors).Any())
+{
+    <div class="alert alert-danger" role="alert">
+        <strong>Fouten gevonden:</strong>
+        <ul class="mb-0">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form method="post" class="mt-4">
+    <div class="form-group mb-3">
+        <label asp-for="Input.Name" class="form-label"></label>
+        <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Email" class="form-label"></label>
+        <input asp-for="Input.Email" type="email" class="form-control" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Password" class="form-label"></label>
+        <input asp-for="Input.Password" type="password" class="form-control" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Address" class="form-label"></label>
+        <input asp-for="Input.Address" class="form-control" />
+        <span asp-validation-for="Input.Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Zipcode" class="form-label"></label>
+        <input asp-for="Input.Zipcode" class="form-control" />
+        <span asp-validation-for="Input.Zipcode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.City" class="form-label"></label>
+        <input asp-for="Input.City" class="form-control" />
+        <span asp-validation-for="Input.City" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.PhoneNumber" class="form-label"></label>
+        <input asp-for="Input.PhoneNumber" class="form-control" />
+        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Gebruiker aanmaken</button>
+</form>

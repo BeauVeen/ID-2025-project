@@ -46,6 +46,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-page="/Products">Producten</a>
                         </li>
+                        <li class="nav-item dropdown" id="loginDropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" id="loginDropdownToggle">
+                                Inloggen
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-3" id="loginDropdownMenu" style="min-width: 250px;">
+                                <a class="dropdown-item" href="/Account/Login">Ga naar inlogpagina</a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-page="/Admin/AdminDashboard">Admin</a>
                         </li>
@@ -135,6 +146,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+    <script type="module" src="/js/loginForm.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
