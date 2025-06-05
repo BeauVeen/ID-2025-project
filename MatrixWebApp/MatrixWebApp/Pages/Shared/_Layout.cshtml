@@ -1,10 +1,19 @@
 ﻿@{
     var showProductSidebar = ViewData["showProductSidebar"] as bool? == true;
     var showAdminSidebar = ViewData["showSidebar"] as bool? == true;
+    var maxPrice = (decimal?)ViewData["MaxPrice"];
 }
+
+<style>
+    .margin-left2 {
+        margin-left: 400px;
+    }
+</style>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="icon" href="/Images/icon-v3.ico" type="image/x-icon" />
     <link rel="icon" href="/Images/icon.png" type="image/png" />
 
@@ -12,23 +21,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Matric inc. | @ViewData["Title"]</title>
 
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/bootstrap.css" asp-append-version="true" /> 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
-
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand text-white" asp-page="/Index">Matrix Inc.</a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <!-- Linkerzijde: Merk + Producten -->
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand text-white" asp-page="/Index">Matrix Inc.</a>
+                    <a class="nav-link text-white ms-3 d-none d-lg-inline" asp-page="/Products">Producten</a>
+                    <a class="nav-link text-white ms-3 d-none d-lg-inline" asp-page="/Products">Over Ons</a>
+                </div>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="search-container search-container-position">
+                <!-- Midden: Zoekbalk -->
+                <div class="search-container position-absolute start-50 translate-middle-x">
                     <input type="text" id="navbarSearch" placeholder="Zoek producten..." />
                     <svg xmlns="http://www.w3.org/2000/svg"
                          onclick="searchProducts()"
@@ -38,29 +48,28 @@
                     </svg>
                 </div>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-page="/Index">Index</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-page="/Products">Producten</a>
-                        </li>
-                        <li class="nav-item dropdown" id="loginDropdown">
-                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" id="loginDropdownToggle">
-                                Inloggen
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end p-3" id="loginDropdownMenu" style="min-width: 250px;">
-                                <a class="dropdown-item" href="/Account/Login">Ga naar inlogpagina</a>
-                            </div>
-                        </li>
-
-                        <li class="nav-item">
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-page="/Admin/AdminDashboard">Admin</a>
-                        </li>
-                    </ul>
+                <!-- Rechterzijde: Winkelwagen + Inloggen -->
+                <div class="d-flex align-items-center">
+                    <div class="nav-item me-3 position-relative">
+                        <a class="nav-link text-white" asp-page="/ShoppingCart">
+                            <i class="bi bi-cart"></i> Winkelwagen
+                            @if (Context.Session.GetInt32("CartItemCount") > 0)
+                            {
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    @Context.Session.GetInt32("CartItemCount")
+                                </span>
+                            }
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" id="loginDropdownToggle">
+                            Inloggen
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end p-3" id="loginDropdownMenu" style="min-width: 250px;">
+                            <a class="dropdown-item" href="/Account/Login">Ga naar inlogpagina</a>
+                            <a class="nav-link" asp-page="/Admin/AdminDashboard">Admin</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -68,25 +77,41 @@
 
     <div class="container-fluid">
         <div class="row">
-            @if (ViewData["showProductSideBar"] as bool? == true)
+            @if (ViewData["showProductSidebar"] as bool? == true)
             {
-                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #d5d5d5;">
-                    <h5 class="text-center">Categorieën</h5>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link d-flex justify-content-between align-items-center"
-                            data-bs-toggle="collapse" href="#collapseCategories" role="button"
-                            aria-expanded="false" aria-controls="collapseCategories" id="categoriesToggle">
-                                Alle categorieën
-                                <span class="arrow">&gt;</span>
-                            </a>
-                            <div class="collapse show" id="collapseCategories">
-                                <ul class="nav flex-column ms-3">
-                                    @await Component.InvokeAsync("CategorySidebar")
-                                </ul>
-                            </div>
-                        </li>
+                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #e1e1e1;">
+                    <h5 class="text-center category-header">Categorieën</h5>
+                    <ul class="nav flex-column category-spacing" id="collapseCategories" style="color: black;">
+                        @await Component.InvokeAsync("CategorySidebar")
                     </ul>
+                    <hr />
+                    <div class="price-filter">
+                        <h6 class="text-center mb-3">Prijs filteren</h6>
+                        <button class="btn btn-outline-primary w-100 mb-2" onclick="sortProducts('price-asc')">
+                            <i class="bi bi-arrow-up"></i> Prijs laag - hoog
+                        </button>
+                        <button class="btn btn-outline-primary w-100" onclick="sortProducts('price-desc')">
+                            <i class="bi bi-arrow-down"></i> Prijs hoog - laag
+                        </button>
+                        <div class="price-input price-slider">
+                            <div class="field">
+                                <span class="price-label">Vanaf (€)</span>
+                                <input type="number" class="input-min" value="0">
+                            </div>
+                            <div class="separator">-</div>
+                            <div class="field">
+                                <span class="price-label">Tot (€)</span>
+                                <input type="number" class="input-max" max="@maxPrice" value="@maxPrice">
+                            </div>
+                        </div>
+                        <div class="slider">
+                            <div class="progress"></div>
+                        </div>
+                        <div class="range-input" data-max-price="@maxPrice">
+                            <input type="range" class="range-min" min="0" max="@maxPrice" value="0" step="10">
+                            <input type="range" class="range-max" min="0" max="@maxPrice" value="@(maxPrice /2)" step="10">
+                        </div>
+                    </div>
                 </nav>
             }
             else if (showAdminSidebar)
@@ -135,7 +160,7 @@
                 </nav>
             }
 
-            <main class="@((ViewData["ShowSidebar"] as bool? == true) ? "col-md-10" : "col-12") mt-4">
+            <main class="@((ViewData["showProductSidebar"] as bool? == true || ViewData["ShowSidebar"] as bool? == true) ? "col-md-10" : "col-12") py-3">
                 @RenderBody()
             </main>
         </div>
@@ -146,8 +171,16 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
-    <script type="module" src="/js/loginForm.js"></script>
+
+    <script src="~/js/productsfilter.js" asp-append-version="true"></script>
+    <script src="~/js/search.js" asp-append-version="true"></script>
+    <script src="~/js/rangeslider.js" asp-append-version="true"></script>
+
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+
+
 
