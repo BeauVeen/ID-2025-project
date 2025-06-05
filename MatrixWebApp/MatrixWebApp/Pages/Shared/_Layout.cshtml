@@ -1,12 +1,43 @@
-﻿@{
-    var showProductSidebar = ViewData["showProductSidebar"] as bool? == true;
-    var showAdminSidebar = ViewData["showSidebar"] as bool? == true;
-    var maxPrice = (decimal?)ViewData["MaxPrice"];
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var showProductSidebar = ViewData["showProductSidebar"] as bool? ?? false;
+    var showAdminSidebar = ViewData["showSidebar"] as bool? ?? false;
+    var maxPrice = ViewData["MaxPrice"] as decimal? ?? 1000000m;
+    var user = HttpContextAccessor.HttpContext?.User;
+    var isLoggedIn = user?.Identity?.IsAuthenticated ?? false;
+    var isAdmin = user?.IsInRole("Administrator") ?? false;
 }
 
 <style>
     .margin-left2 {
         margin-left: 400px;
+    }
+
+    .matrix-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+        background-color: #000; /* Voeg dit toe */
+    }
+
+    #matrix-rain {
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #000; /* Voeg dit toe voor zekerheid */
     }
 </style>
 <!DOCTYPE html>
@@ -27,6 +58,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
 </head>
 <body>
+    <div class="matrix-container" id="matrixContainer" style="display: none;">
+        <canvas id="matrix-rain"></canvas>
+    </div>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-dark">
             <div class="container-fluid d-flex justify-content-between align-items-center">
@@ -53,23 +87,44 @@
                     <div class="nav-item me-3 position-relative">
                         <a class="nav-link text-white" asp-page="/ShoppingCart">
                             <i class="bi bi-cart"></i> Winkelwagen
-                            @if (Context.Session.GetInt32("CartItemCount") > 0)
+                            @{
+                                var cartItemCount = Context.Session.GetInt32("CartItemCount") ?? 0;
+                            }
+                            @if (cartItemCount > 0)
                             {
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    @Context.Session.GetInt32("CartItemCount")
+                                    @cartItemCount
                                 </span>
                             }
                         </a>
                     </div>
-                    <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" id="loginDropdownToggle">
-                            Inloggen
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end p-3" id="loginDropdownMenu" style="min-width: 250px;">
-                            <a class="dropdown-item" href="/Account/Login">Ga naar inlogpagina</a>
-                            <a class="nav-link" asp-page="/Admin/AdminDashboard">Admin</a>
+                    @if (isLoggedIn)
+                    {
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                Ingelogd
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-3">
+                                <a class="dropdown-item" href="/Account/Logout">Uitloggen</a>
+                                @if (isAdmin)
+                                {
+                                    <a class="dropdown-item" href="/Admin/AdminDashboard">Admin</a>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                Inloggen
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-3">
+                                <a class="dropdown-item" href="/Account/Login">Ga naar inlogpagina</a>
+                            </div>
+                        </div>
+                    }
+
                 </div>
             </div>
         </nav>
@@ -79,7 +134,7 @@
         <div class="row">
             @if (ViewData["showProductSidebar"] as bool? == true)
             {
-                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #e1e1e1;">
+                <nav class="col-md-2 d-none d-md-block sidebar p-3 border-end position-sticky top-0" style="background-color: #e1e1e1; height: 100vh; overflow-y: auto;">
                     <h5 class="text-center category-header">Categorieën</h5>
                     <ul class="nav flex-column category-spacing" id="collapseCategories" style="color: black;">
                         @await Component.InvokeAsync("CategorySidebar")
@@ -120,17 +175,15 @@
                     <h5 class="text-center">Admin</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                        <li class="nav-item">
                             <a class="nav-link" asp-page="/Admin/AdminDashboard">Admin-Dashboard</a>
                         </li>
-                            <a class="nav-link d-flex justify-content-between align-items-center"
-                               data-bs-toggle="collapse" href="#collapseProducts" role="button"
-                               aria-expanded="false" aria-controls="collapseProducts" id="productsToggle">
-                                Producten
-                                <span class="arrow">&gt;</span>
-                            </a>
-                          
-                            <div class="collapse" id="collapseProducts">
+                        <a class="nav-link d-flex justify-content-between align-items-center text-black"
+                           data-bs-toggle="collapse" href="#collapseProducts" role="button"
+                           aria-expanded="false" aria-controls="collapseProducts" id="productsToggle">
+                            Producten
+                            <span class="arrow">&gt;</span>
+                        </a>
+                        <div class="collapse" id="collapseProducts">
                                 <ul class="nav flex-column ms-3">
                                     <li class="nav-item">
                                         <a class="nav-link" asp-page="/Admin/AddProducts">Producten toevoegen</a>
@@ -147,6 +200,7 @@
                                 </ul>
                             </div>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Admin/AdminOrders">Bestellingen</a>
                         </li>
@@ -160,12 +214,25 @@
                 </nav>
             }
 
-            <main class="@((ViewData["showProductSidebar"] as bool? == true || ViewData["ShowSidebar"] as bool? == true) ? "col-md-10" : "col-12") py-3">
+            <main class="@((ViewData["showProductSidebar"] as bool? == true || ViewData["showSidebar"] as bool? == true) ? "col-md-10" : "col-12") py-3">
                 @RenderBody()
             </main>
         </div>
     </div>
 
+    @foreach (var claim in user.Claims)
+    {
+        <p>@claim.Type : @claim.Value</p>
+    }
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    @if (ViewData["ShowMatrixRain"] as bool? == true)
+    {
+        @: document.getElementById('matrixContainer').style.display = 'block';
+    }
+    });
+    </script>
 
     <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -175,12 +242,9 @@
     <script src="~/js/productsfilter.js" asp-append-version="true"></script>
     <script src="~/js/search.js" asp-append-version="true"></script>
     <script src="~/js/rangeslider.js" asp-append-version="true"></script>
+    <script src="~/js/matrixrain.js" asp-append-version="true"></script>
 
 
     @RenderSection("Scripts", required: false)
 </body>
 </html>
-
-
-
-
