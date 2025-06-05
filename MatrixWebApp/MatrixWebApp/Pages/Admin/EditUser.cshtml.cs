@@ -127,7 +127,7 @@ namespace MatrixWebApp.Pages.Admin
             }
 
             TempData["SuccessMessage"] = "Gebruiker succesvol bijgewerkt";
-            return RedirectToPage("/Admin/UserAuthorisation");
+            return Redirect(!string.IsNullOrEmpty(ReturnUrl) ? ReturnUrl : "/Admin/UserAuthorisation");
         }
     }
 }
