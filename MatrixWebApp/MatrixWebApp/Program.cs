@@ -9,12 +9,20 @@ namespace MatrixWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Session configuratie voor de shoppingcart 
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             var cultureInfo = new CultureInfo("nl-NL");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-            // Add services to the container.
             builder.Services.AddRazorPages();
+
 
             builder.Services.AddHttpClient("MatrixApi", client =>
             {
@@ -44,6 +52,8 @@ namespace MatrixWebApp
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapRazorPages();
 
