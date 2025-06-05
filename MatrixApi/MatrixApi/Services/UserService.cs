@@ -98,9 +98,9 @@ namespace MatrixApi.Services
                 existing.PhoneNumber = dto.PhoneNumber;
                 existing.Email = dto.Email;
 
-                if (!string.IsNullOrWhiteSpace(dto.Password))
+                if (!string.IsNullOrWhiteSpace(dto.PasswordHash))
                 {
-                    existing.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+                    existing.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash);
                 }
 
                 await _context.SaveChangesAsync();

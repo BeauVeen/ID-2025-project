@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MatrixWebApp.Pages.Admin
@@ -41,6 +42,15 @@ namespace MatrixWebApp.Pages.Admin
         public string GetRoleName(int roleId)
         {
             return Roles.FirstOrDefault(r => r.RoleId == roleId)?.RoleName ?? "";
+        }
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/User/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, "Fout bij verwijderen van de gebruiker.");
+            }
+            return RedirectToPage();
         }
     }
 }

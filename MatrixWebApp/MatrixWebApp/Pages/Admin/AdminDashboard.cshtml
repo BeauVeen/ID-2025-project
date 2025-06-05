@@ -26,40 +26,7 @@
             </div>
         </div>
 
-        <!-- LAGE VOORRAAD HOKJE TOEGEVOEGD -->
-        @if (Model.LageVoorraadProducten != null && Model.LageVoorraadProducten.Any())
-        {
-            <div class="alert alert-success border border-success rounded-3 shadow-sm mb-4">
-                <h5 class="alert-heading">
-                    ⚠️ Let op: Er zijn @Model.LageVoorraadProducten.Count producten met lage voorraad!
-                </h5>
-                <ul class="list-group list-group-flush">
-                    @foreach (var product in Model.LageVoorraadProducten)
-                    {
-                        string kleur = "";
-
-                        if (product.Stock <= 5)
-                        {
-                            kleur = "text-danger";     // rood
-                        }
-                        else if (product.Stock <= 10)
-                        {
-                            kleur = "text-warning";    // oranje/geel
-                        }
-
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>@product.Name</strong>
-                            </div>
-                            <div class="text-center">
-                                <div class="@kleur fw-bold">@("Voorraad: " + product.Stock)</div>
-                                <div class="text-muted">Price: @product.Price.ToString("C")</div>
-                            </div>
-                        </li>
-                    }
-                </ul>
-            </div>
-        }
+       
 
 
         <div class="row">
@@ -82,6 +49,41 @@
         </div>
     </div>
 </div>
+
+<!-- LAGE VOORRAAD HOKJE TOEGEVOEGD -->
+@if (Model.LageVoorraadProducten != null && Model.LageVoorraadProducten.Any())
+{
+    <div class="alert alert-success border border-success rounded-3 shadow-sm mb-4">
+        <h5 class="alert-heading">
+            ⚠️ Let op: Er zijn @Model.LageVoorraadProducten.Count producten met lage voorraad!
+        </h5>
+        <ul class="list-group list-group-flush">
+            @foreach (var product in Model.LageVoorraadProducten)
+            {
+                string kleur = "";
+
+                if (product.Stock <= 5)
+                {
+                    kleur = "text-danger";     // rood
+                }
+                else if (product.Stock <= 10)
+                {
+                    kleur = "text-warning";    // oranje/geel
+                }
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>@product.Name</strong>
+                    </div>
+                    <div class="text-center">
+                        <div class="@kleur fw-bold">@("Voorraad: " + product.Stock)</div>
+                        <div class="text-muted">Price: @product.Price.ToString("C")</div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

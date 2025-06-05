@@ -38,7 +38,7 @@ namespace MatrixWebApp.Pages.Admin
             public string Email { get; set; }
 
             [Display(Name = "Wachtwoord")]
-            public string? Password { get; set; }
+            public string? PasswordHash { get; set; }
 
             [Required(ErrorMessage = "Rol is verplicht")]
             public int? RoleId { get; set; }
@@ -67,7 +67,7 @@ namespace MatrixWebApp.Pages.Admin
             public string? Zipcode { get; set; }
             public string? City { get; set; }
             public string? PhoneNumber { get; set; }
-            public string? Password { get; set; }
+            public string? PasswordHash { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -111,11 +111,12 @@ namespace MatrixWebApp.Pages.Admin
                 ["phoneNumber"] = Input.PhoneNumber
             };
 
-           
-            if (!string.IsNullOrWhiteSpace(Input.Password))
+
+            if (!string.IsNullOrWhiteSpace(Input.PasswordHash))
             {
-                updatePayload["password"] = Input.Password;
+                updatePayload["passwordHash"] = Input.PasswordHash;
             }
+
 
             var response = await _httpClient.PutAsJsonAsync($"api/User/{Id}", updatePayload);
 

@@ -7,17 +7,17 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <h2 class="text-center mb-4">Inloggen</h2>
-            <form id="loginForm">
+            <form method="post" asp-page-handler="Async">
                 <div class="mb-2">
-                    <input type="email" id="email" class="form-control" placeholder="E-mail" required />
+                    <input asp-for="Email" type="email" class="form-control" placeholder="E-mail" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="mb-2">
-                    <input type="password" id="password" class="form-control" placeholder="Wachtwoord" required />
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Wachtwoord" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <button type="submit" class="btn btn-light w-100">Inloggen</button>
             </form>
-
-            <div id="loginMessage" class="mt-2"></div>
 
             @if (!string.IsNullOrEmpty(Model.Message))
             {
@@ -32,14 +32,3 @@
         </div>
     </div>
 </div>
-
-<div id="loginMessage" class="mt-2"></div>
-
-<script type="module" src="/js/loginForm.js"></script>
-
-@if (!string.IsNullOrEmpty(Model.Message))
-{
-    <div class="alert @(Model.Message.Contains("Succes") ? "alert-success" : "alert-danger") mt-3" role="alert">
-        @Model.Message
-    </div>
-}

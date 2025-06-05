@@ -87,21 +87,9 @@ namespace MatrixApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UpdateUserDto dto)
         {
-            if (id != dto.UserId) return BadRequest();
+            if (id != dto.UserId)
+                return BadRequest("Mismatch with id in URL and body.");
 
-            var user = new User
-            {
-                UserId = dto.UserId,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password), 
-                RoleId = dto.RoleId,
-                Name = dto.Name,
-                Address = dto.Address,
-                Zipcode = dto.Zipcode,
-                City = dto.City,
-                PhoneNumber = dto.PhoneNumber,
-                Email = dto.Email
-                
-            };
             try
             {
                 var success = await _userService.UpdateAsync(id, dto);
