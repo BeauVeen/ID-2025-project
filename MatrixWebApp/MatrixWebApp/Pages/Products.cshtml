@@ -1,23 +1,21 @@
 ﻿@page
 @model MatrixWebApp.Pages.ProductsModel
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 @{
+
     ViewData["Title"] = "Onze Producten";
     ViewData["showProductSidebar"] = true;
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-<div class="filter-container">
-    <i class="bi bi-filter fs-1 filter" id="filterIcon"></i>
-    <div class="filter-dropdown" id="filterDropdown">
-        <button class="filter-option" onclick="sortProducts('price-asc')">
-            <i class="bi bi-arrow-up"></i> Prijs laag - hoog
-        </button>
-        <button class="filter-option" onclick="sortProducts('price-desc')">
-            <i class="bi bi-arrow-down"></i> Prijs hoog - laag
-        </button>
-    </div>
-</div>
 
 <div class="product-background">
     <div class="row">
@@ -34,18 +32,24 @@
                         else
                         {
                             <div class="no-image">Geen afbeelding beschikbaar</div>
+
                         }
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
+                        @if (Model.CategoryNamesById.TryGetValue(product.CategoryId, out var categoryName))
+                        {
+                            <small class="text-muted">Categorie: @categoryName</small>
+                        }
+                        <small class="text-muted">Serienummer: @product.ProductId</small>
                         <p class="price-text">€@product.Price.ToString("0.00")</p>
 
                         <div class="add-to-cart">
                             <form method="post" asp-page-handler="AddToCart">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2">,
                                     <select name="quantity" class="form-select form-select-sm" style="width: 60px;">
-                                        @for (int i = 1; i <= Math.Min(10, product.Stock); i++)
+                                        @for (int i = 1; i <= Math.Max(1, product.Stock); i++)
                                         {
                                             <option value="@i">@i</option>
                                         }
@@ -68,4 +72,3 @@
     </div>
 </div>
 
-<script src="~/js/productsfilter.js" asp-append-version="true"></script>

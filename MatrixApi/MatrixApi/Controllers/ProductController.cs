@@ -15,6 +15,7 @@ namespace MatrixApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ProductService _productService;
+        
 
         public ProductController(ProductService productService)
         {

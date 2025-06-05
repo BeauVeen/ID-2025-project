@@ -59,7 +59,7 @@ INSERT INTO Roles (RoleName) VALUES
     ("Bezorger"),
     ("Administrator");
 
-INSERT INTO Users (Password, RoleId, Name, Address, Zipcode, City, PhoneNumber, Email)
+INSERT INTO Users (PasswordHash, RoleId, Name, Address, Zipcode, City, PhoneNumber, Email)
 VALUES (
     '$2y$10$WJ.SVMhzHDUMvIAZR4hQc..DrWtl.KtnzBFsmOQgAhGjCC3OHbs8K',
     3,

@@ -88,7 +88,7 @@ namespace MatrixApi.Controllers
         public async Task<ActionResult> Update(int id, [FromBody] UpdateUserDto dto)
         {
             if (id != dto.UserId)
-                return BadRequest("Mismatch with id in URL and body.");
+                    return BadRequest("Mismatch with id in URL and body.");
 
             try
             {

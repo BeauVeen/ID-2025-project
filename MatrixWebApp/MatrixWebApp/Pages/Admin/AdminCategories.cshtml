@@ -5,11 +5,17 @@
     ViewData["ShowSidebar"] = true;
 }
 
+<style>
+    .inputbox-formatting {
+        width: 560px !important;
+    }
+</style>
+
 <div class="mt-4">
 
     <h1 class="mb-4">Categorieën beheren</h1>
 
-    <form method="post" asp-page-handler="Create" class="row g-2 mb-3">
+    <form method="post" asp-page-handler="Create" class="row g-2 mb-3 inputbox-formatting">
         <div class="col">
             <input type="text" asp-for="NewCategory.CategoryName" placeholder="Nieuwe categorie naam"
                    required class="form-control" />

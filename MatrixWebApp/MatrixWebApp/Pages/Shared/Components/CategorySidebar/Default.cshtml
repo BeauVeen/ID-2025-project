@@ -1,10 +1,23 @@
 ﻿@model List<MatrixWebApp.ViewComponents.CategoryDto>
+@{
+
+    var currentCategoryId = Context.Request.Query["categoryId"].FirstOrDefault();
+    int.TryParse(currentCategoryId, out int activeCategoryId);
+}
 
 <ul class="nav flex-column ms-3">
+    <li class="nav-item">
+        <a class="nav-link @(string.IsNullOrEmpty(currentCategoryId) ? "active-category" : "")"
+           asp-page="/Products">
+            Alle categorieën
+        </a>
+    </li>
     @foreach (var cat in Model)
     {
         <li class="nav-item">
-            <a class="nav-link" asp-page="/Products/Index" asp-route-categoryId="@cat.CategoryId">
+            <a class="nav-link @(cat.CategoryId == activeCategoryId ? "active-category" : "")"
+               asp-page="/Products"
+               asp-route-categoryId="@cat.CategoryId">
                 @cat.CategoryName
             </a>
         </li>

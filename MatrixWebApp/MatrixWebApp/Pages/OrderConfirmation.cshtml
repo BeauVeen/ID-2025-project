@@ -1,0 +1,20 @@
+﻿@page "{orderId}"
+@model MatrixWebApp.Pages.OrderConfirmationModel
+@{
+    ViewData["Title"] = "Bestelling Bevestiging";
+}
+
+<div class="container">
+    <div class="alert alert-success">
+        <h4 class="alert-heading">Bedankt voor je bestelling!</h4>
+        <p>Je bestelling met nummer #@Model.Order.OrderId is succesvol ontvangen.</p>
+        <hr>
+        <p class="mb-0">
+            <strong>Besteldatum:</strong> @Model.Order.CreatedAt.ToString("dd-MM-yyyy HH:mm")<br>
+            <strong>Status:</strong> @Model.Order.Status<br>
+            <strong>Totaalbedrag:</strong> €@Model.Order.TotalPrice.ToString("0.00")
+        </p>
+    </div>
+
+    <a href="/Products" class="btn btn-primary">Verder winkelen</a>
+</div>
