@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MatrixWebApp.Pages.Admin
 {
+    [Authorize(Roles = "Administrator")]
     public class AdminProductsModel : PageModel
     {
         private readonly HttpClient _httpClient;

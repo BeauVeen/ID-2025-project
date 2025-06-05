@@ -3,7 +3,7 @@
     public class UpdateUserDto
     {
         public int UserId { get; set; }
-        public string? Password { get; set; } 
+        public string? PasswordHash { get; set; } 
         public int RoleId { get; set; }
         public string Name { get; set; } = null!;
         public string? Address { get; set; }
