@@ -148,24 +148,18 @@ namespace MatrixApi.Services
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<string> AuthenticateAsync(string email, string password)
+        public async Task<User?> AuthenticateUserAsync(string email, string password)
         {
             var user = await _context.Users
-                .Include(u => u.Role) // Zorg dat rol geladen is voor de token
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
-            if (user == null)
-            {
-                throw new NotFoundException("Gebruiker niet gevonden.");
-            }
+            if (user == null) return null;
 
             bool passwordMatch = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-            if (!passwordMatch)
-            {
-                throw new UnauthorizedAccessException("Wachtwoord klopt niet.");
-            }
+            if (!passwordMatch) return null;
 
-            return _jwtService.GenerateToken(user);
+            return user;
         }
     }
 }
