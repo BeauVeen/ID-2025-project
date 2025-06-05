@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -8,6 +9,7 @@ using System;
 
 namespace MatrixWebApp.Pages.Admin
 {
+    [Authorize(Roles = "Administrator")]
     public class AdminDashboardModel : PageModel
     {
         private readonly HttpClient _httpClient;

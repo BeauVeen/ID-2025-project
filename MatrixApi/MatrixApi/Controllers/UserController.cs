@@ -4,7 +4,6 @@ using MatrixApi.DTOs;
 using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using MatrixApi.Services;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -141,16 +140,24 @@ namespace MatrixApi.Controllers
         {
             try
             {
-                var token = await _userService.AuthenticateAsync(request.Email, request.Password);
-                return Ok(new { token, email = request.Email });
+                var user = await _userService.AuthenticateUserAsync(request.Email, request.Password);
+
+                if (user == null)
+                    return Unauthorized(new { message = "Ongeldige gebruikersnaam of wachtwoord." });
+
+                var token = _jwtService.GenerateToken(user);
+
+                return Ok(new
+                {
+                    token,
+                    email = user.Email,
+                    roleId = user.RoleId,
+                    roleName = user.Role?.RoleName
+                });
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
+                return StatusCode(500, new { message = ex.Message });
             }
         }
     }

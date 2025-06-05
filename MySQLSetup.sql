@@ -70,5 +70,3 @@ VALUES (
     '0612345678',
     'admin@example.com'
 );
-
-ALTER TABLE Users CHANGE COLUMN Password PasswordHash VARCHAR(255);

@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Net.Http.Headers;
 
 namespace MatrixWebApp.Pages.Admin
 {
+    [Authorize(Roles = "Administrator")]
     public class EditProductsModel : PageModel
     {
         private readonly HttpClient _httpClient;

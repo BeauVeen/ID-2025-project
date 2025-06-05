@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Collections.Generic;
 
 namespace MatrixWebApp.Pages.Account
 {
@@ -25,7 +29,7 @@ namespace MatrixWebApp.Pages.Account
 
         public void OnGet()
         {
-            //leeg
+            // leeg
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -41,7 +45,10 @@ namespace MatrixWebApp.Pages.Account
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<LoginResult>();
-                // Store the JWT token in a cookie (HttpOnly for security)
+
+                Console.WriteLine($"RoleName from API: {result.roleName}");
+
+                // JWT opslaan in HttpOnly cookie (voor API calls)
                 Response.Cookies.Append("jwt_token", result.token, new Microsoft.AspNetCore.Http.CookieOptions
                 {
                     HttpOnly = true,
@@ -49,7 +56,33 @@ namespace MatrixWebApp.Pages.Account
                     SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict
                 });
 
-                Message = "Succesvol ingelogd!";
+                // Rolnaam veilig en consistent maken
+                var roleName = (result.roleName ?? "User").Trim();
+
+                // Optioneel: maak roleName case-insensitive en valideer
+                if (!string.Equals(roleName, "Administrator", StringComparison.OrdinalIgnoreCase))
+                {
+                    roleName = "User";
+                }
+                else
+                {
+                    roleName = "Administrator";
+                }
+
+                // Claims maken voor cookie-authenticatie
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, result.email),
+                    new Claim(ClaimTypes.NameIdentifier, result.email),
+                    new Claim(ClaimTypes.Role, roleName)
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity));
+
                 return RedirectToPage("/Index");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound ||
@@ -70,7 +103,10 @@ namespace MatrixWebApp.Pages.Account
         {
             public string token { get; set; }
             public string email { get; set; }
+            public int roleId { get; set; }
+            public string roleName { get; set; }
         }
+
 
         public class ApiError
         {
