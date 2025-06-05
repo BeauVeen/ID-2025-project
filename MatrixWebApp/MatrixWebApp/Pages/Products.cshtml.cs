@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using MatrixWebApp.Models;
 using MatrixWebApp.Extensions;
 using MatrixWebApp.ViewComponents;
+using System.Linq;
 
 namespace MatrixWebApp.Pages
 {
@@ -18,6 +19,12 @@ namespace MatrixWebApp.Pages
 
         public List<ProductDto> Products { get; set; } = new();
 
+        public List<CategoryDto> Categories { get; set; } = new();
+
+        public Dictionary<int, string> CategoryNamesById { get; set; } = new();
+
+        // Nieuwe property voor hoogste prijs
+        public decimal MaxPrice { get; set; } = 0m;
 
         public ProductsModel(IHttpClientFactory httpClientFactory, ILogger<ProductsModel> logger)
         {
@@ -25,14 +32,15 @@ namespace MatrixWebApp.Pages
             _logger = logger;
         }
 
-        public async Task<string> GetCategoryName(int categoryId)
+        // Haal categorieën 1 keer op
+        private async Task<List<CategoryDto>> GetCategoriesAsync()
         {
             var categories = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("api/Category");
-            return categories?.FirstOrDefault(c => c.CategoryId == categoryId)?.CategoryName;
+            return categories ?? new List<CategoryDto>();
         }
+
         public async Task<IActionResult> OnPostAddToCart(int productId, int quantity)
         {
-            // Haal productdetails op van de API
             var product = await _httpClient.GetFromJsonAsync<ProductDto>($"api/Product/{productId}");
 
             if (product == null)
@@ -40,10 +48,8 @@ namespace MatrixWebApp.Pages
                 return NotFound();
             }
 
-            // Haal huidige winkelwagen op of maak nieuwe
             var cart = HttpContext.Session.Get<ShoppingCart>("Cart") ?? new ShoppingCart();
 
-            // Voeg item toe
             cart.AddItem(new CartItem
             {
                 ProductId = product.ProductId,
@@ -53,38 +59,37 @@ namespace MatrixWebApp.Pages
                 Quantity = quantity
             });
 
-            // Sla winkelwagen op in session
             HttpContext.Session.Set("Cart", cart);
             HttpContext.Session.SetInt32("CartItemCount", cart.TotalItems);
 
-            // Terug naar productpagina met succesmelding
             TempData["SuccessMessage"] = $"{product.Name} is toegevoegd aan je winkelwagen!";
             return RedirectToPage();
         }
+
         public async Task OnGetAsync(int? categoryId)
         {
-            try
+            var categories = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("api/Category");
+            if (categories != null)
             {
-                var products = await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/Product");
-
-                if (products != null)
-                {
-
-                    Products = categoryId.HasValue
-                        ? products.Where(p => p.CategoryId == categoryId.Value).ToList()
-                        : products;
-                }
-                else
-                {
-                    _logger.LogWarning("No products received from API.");
-                }
+                CategoryNamesById = categories.ToDictionary(c => c.CategoryId, c => c.CategoryName);
             }
-            catch (HttpRequestException ex)
+
+            var products = await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/Product");
+
+            if (products != null)
             {
-                _logger.LogError(ex, "Error with retrieving products from API.");
+                Products = categoryId.HasValue
+                    ? products.Where(p => p.CategoryId == categoryId.Value).ToList()
+                    : products;
+
+                MaxPrice = Products.Max(p => p.Price);
+                ViewData["MaxPrice"] = MaxPrice;
+            }
+            else
+            {
+                _logger.LogWarning("No products received from API.");
             }
         }
-
 
         public class ProductDto
         {

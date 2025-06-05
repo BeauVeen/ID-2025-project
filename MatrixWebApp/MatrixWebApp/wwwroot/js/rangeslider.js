@@ -1,22 +1,28 @@
 ﻿document.addEventListener('DOMContentLoaded', function() {
-    // Selecteer alle benodigde elementen
     const rangeInputs = document.querySelectorAll('.range-input input');
     const priceInputs = document.querySelectorAll('.price-input input');
     const progress = document.querySelector('.slider .progress');
-    const priceGap = 50; // Minimale verschil tussen min en max prijs
+    const priceGap = 10;
+    
+    // Haal maxPrice op uit het data-attribuut
+    const maxPriceValue = parseFloat(document.querySelector('.range-input').dataset.maxPrice);
 
-    // Initialiseer de slider
     if (rangeInputs.length === 2 && priceInputs.length === 2 && progress) {
         let minPrice = 0;
-        let maxPrice = 1000;
+        let currentMaxPrice = maxPriceValue;
+
+        // Zet de max waarden voor de range inputs
+        rangeInputs[0].max = maxPriceValue;
+        rangeInputs[1].max = maxPriceValue;
+        rangeInputs[1].value = maxPriceValue;
 
         // Update de progress bar en prijzen
         function updateSlider() {
             priceInputs[0].value = minPrice;
-            priceInputs[1].value = maxPrice;
-            progress.style.left = (minPrice / rangeInputs[0].max) * 100 + "%";
-            progress.style.right = 100 - (maxPrice / rangeInputs[1].max) * 100 + "%";
-            filterProductsByPrice(minPrice, maxPrice);
+            priceInputs[1].value = currentMaxPrice;
+            progress.style.left = (minPrice / maxPriceValue) * 100 + "%";
+            progress.style.right = 100 - (currentMaxPrice / maxPriceValue) * 100 + "%";
+            filterProductsByPrice(minPrice, currentMaxPrice);
         }
 
         // Event listeners voor range sliders
@@ -33,7 +39,7 @@
                     }
                 } else {
                     minPrice = currentMin;
-                    maxPrice = currentMax;
+                    currentMaxPrice = currentMax;
                     updateSlider();
                 }
             });
@@ -45,12 +51,12 @@
                 let value = parseInt(e.target.value) || 0;
                 
                 if (e.target === priceInputs[0]) { // Min prijs
-                    value = Math.min(value, maxPrice - priceGap);
+                    value = Math.min(value, currentMaxPrice - priceGap);
                     minPrice = value;
                     rangeInputs[0].value = value;
                 } else { // Max prijs
                     value = Math.max(value, minPrice + priceGap);
-                    maxPrice = value;
+                    currentMaxPrice = value;
                     rangeInputs[1].value = value;
                 }
                 
@@ -64,12 +70,12 @@
                 let value = parseInt(e.target.value) || 0;
                 
                 if (e.target === priceInputs[0]) {
-                    value = Math.min(value, maxPrice - priceGap);
+                    value = Math.min(value, currentMaxPrice - priceGap);
                     minPrice = value;
                     rangeInputs[0].value = value;
                 } else {
                     value = Math.max(value, minPrice + priceGap);
-                    maxPrice = value;
+                    currentMaxPrice = value;
                     rangeInputs[1].value = value;
                 }
                 
@@ -81,7 +87,7 @@
         function filterProductsByPrice(min, max) {
             document.querySelectorAll('.product-card').forEach(card => {
                 const priceText = card.querySelector('.price-text').textContent;
-                const price = parseFloat(priceText.replace('€', '').replace(',', '.'));
+                const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.'));
                 
                 if (price >= min && price <= max) {
                     card.closest('.col-lg-3').style.display = 'block';
@@ -105,4 +111,3 @@
         updateSlider();
     }
 });
-
