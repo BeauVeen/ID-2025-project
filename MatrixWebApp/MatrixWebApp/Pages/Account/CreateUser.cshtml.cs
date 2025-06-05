@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -45,12 +46,28 @@ namespace MatrixWebApp.Pages.Account
 
         public class CreateUserDto
         {
+            [Display(Name = "Naam")]
             public string Name { get; set; }
+
+            [Display(Name = "E-mailadres")]
+            [EmailAddress(ErrorMessage = "Ongeldig e-mailadres.")]
             public string Email { get; set; }
+
+            [Display(Name = "Wachtwoord")]
+            [DataType(DataType.Password)]
             public string Password { get; set; }
+
+            [Display(Name = "Adres")]
             public string Address { get; set; }
+
+            [Display(Name = "Postcode")]
             public string Zipcode { get; set; }
+
+            [Display(Name = "Woonplaats")]
             public string City { get; set; }
+
+            [Display(Name = "Telefoonnummer")]
+            [Phone(ErrorMessage = "Ongeldig telefoonnummer.")]
             public string PhoneNumber { get; set; }
         }
     }
