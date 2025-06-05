@@ -63,7 +63,7 @@ namespace MatrixApi.Controllers
             var user = new User
             {
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                RoleId = 1,
+                RoleId = dto.RoleId ?? 1,
                 Name = dto.Name,
                 Address = dto.Address,
                 Zipcode = dto.Zipcode,
