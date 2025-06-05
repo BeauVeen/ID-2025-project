@@ -21,6 +21,9 @@ namespace MatrixWebApp.Pages.Admin
         public int OrdersPlaced { get; set; }
         public int CustomersCount { get; set; }
 
+        // Nieuw: lijst lage voorraad producten
+        public List<ProductDto> LageVoorraadProducten { get; set; } = new();
+
         public AdminDashboardModel(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("MatrixApi");
@@ -28,7 +31,7 @@ namespace MatrixWebApp.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            // Customers by month
+            // Bestaande code om klanten te tellen en groeperen
             var users = await _httpClient.GetFromJsonAsync<List<UserDto>>("api/User") ?? new List<UserDto>();
             CustomersCount = users.Count;
 
@@ -38,14 +41,10 @@ namespace MatrixWebApp.Pages.Admin
                 .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month)
                 .ToList();
 
-            CustomerMonths = groupedUsers
-                .Select(g => $"{g.Key.Year}-{g.Key.Month:00}")
-                .ToList();
-            CustomerCounts = groupedUsers
-                .Select(g => g.Count())
-                .ToList();
+            CustomerMonths = groupedUsers.Select(g => $"{g.Key.Year}-{g.Key.Month:00}").ToList();
+            CustomerCounts = groupedUsers.Select(g => g.Count()).ToList();
 
-            // Orders placed by month (no status filter)
+            // Bestaande code om orders te tellen en groeperen
             var orders = await _httpClient.GetFromJsonAsync<List<OrderDto>>("api/Order") ?? new List<OrderDto>();
 
             var ordersByMonth = orders
@@ -63,6 +62,14 @@ namespace MatrixWebApp.Pages.Admin
             OrdersCounts = ordersByMonth.Select(x => x.Count).ToList();
 
             OrdersPlaced = orders.Count;
+
+            // Nieuw: producten ophalen en filteren op voorraad <= 10
+            var producten = await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/Product") ?? new List<ProductDto>();
+
+            LageVoorraadProducten = producten
+                .Where(p => p.Stock <= 10)
+                .OrderBy(p => p.Stock)
+                .ToList();
         }
 
         public class UserDto
@@ -76,6 +83,17 @@ namespace MatrixWebApp.Pages.Admin
             public int OrderId { get; set; }
             public DateTime? CreatedAt { get; set; }
             public string Status { get; set; }
+        }
+
+        public class ProductDto
+        {
+            public int ProductId { get; set; }
+            public int CategoryId { get; set; }
+            public string Name { get; set; }          
+            public string Description { get; set; }
+            public decimal Price { get; set; }        
+            public int Stock { get; set; }
+            public byte[]? Picture { get; set; }
         }
     }
 }
