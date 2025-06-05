@@ -4,9 +4,9 @@ using MatrixApi.DTOs;
 using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using MatrixApi.Services;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MatrixApi.DTOs;
 
 namespace MatrixApi.Controllers
 {
@@ -15,10 +15,12 @@ namespace MatrixApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly JwtService _jwtService;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, JwtService jwtService)
         {
             _userService = userService;
+            _jwtService = jwtService;
         }
 
         [HttpGet]
@@ -60,8 +62,8 @@ namespace MatrixApi.Controllers
         {
             var user = new User
             {
-                Password = dto.Password,
-                RoleId = dto.RoleId,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                RoleId = 1,
                 Name = dto.Name,
                 Address = dto.Address,
                 Zipcode = dto.Zipcode,
@@ -90,7 +92,7 @@ namespace MatrixApi.Controllers
             var user = new User
             {
                 UserId = dto.UserId,
-                Password = dto.Password, 
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password), 
                 RoleId = dto.RoleId,
                 Name = dto.Name,
                 Address = dto.Address,
@@ -143,6 +145,24 @@ namespace MatrixApi.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
+        {
+            try
+            {
+                var token = await _userService.AuthenticateAsync(request.Email, request.Password);
+                return Ok(new { token, email = request.Email });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
             }
         }
     }

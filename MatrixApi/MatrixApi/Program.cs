@@ -44,6 +44,8 @@ namespace MatrixApi
             builder.Services.AddScoped<OrderlineService>();
             builder.Services.AddScoped<RoleService>();
 
+            builder.Services.AddScoped<JwtService>();
+
             builder.Services.AddControllers();
 
             builder.Services.AddAuthorization();
