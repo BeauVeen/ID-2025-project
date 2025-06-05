@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MatrixWebApp.Models;
 using MatrixWebApp.Extensions;
+using MatrixWebApp.ViewComponents;
 
 namespace MatrixWebApp.Pages
 {
@@ -24,6 +25,11 @@ namespace MatrixWebApp.Pages
             _logger = logger;
         }
 
+        public async Task<string> GetCategoryName(int categoryId)
+        {
+            var categories = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("api/Category");
+            return categories?.FirstOrDefault(c => c.CategoryId == categoryId)?.CategoryName;
+        }
         public async Task<IActionResult> OnPostAddToCart(int productId, int quantity)
         {
             // Haal productdetails op van de API
@@ -89,6 +95,7 @@ namespace MatrixWebApp.Pages
             public decimal Price { get; set; }
             public int Stock { get; set; }
             public byte[] Picture { get; set; }
+            public string CategoryName { get; set; }
         }
     }
 }
