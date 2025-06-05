@@ -49,11 +49,20 @@ namespace MatrixWebApp.Pages
                 Cart.Items.Remove(item);
                 HttpContext.Session.Set("Cart", Cart);
                 HttpContext.Session.SetInt32("CartItemCount", Cart.TotalItems);
-                TempData["WarningMessage"] = $"{item.Name} is verwijderd uit je winkelwagen.";
+
+                if (item.Quantity > 1)
+                {
+                    TempData["WarningMessage"] = $"{item.Name} (x{item.Quantity}) is verwijderd uit je winkelwagen.";
+                }
+                else
+                {
+                    TempData["WarningMessage"] = $"{item.Name} is verwijderd uit je winkelwagen.";
+                }
             }
 
             return RedirectToPage();
         }
+
 
         public async Task<IActionResult> OnPostCheckoutAsync()
         {
@@ -67,7 +76,7 @@ namespace MatrixWebApp.Pages
             Cart = HttpContext.Session.Get<ShoppingCart>("Cart") ?? new ShoppingCart();
             if (!Cart.Items.Any())
             {
-                TempData["Message"] = "Je winkelwagen is leeg.";
+                TempData["WarningMessage"] = "Je winkelwagen is leeg.";
                 return RedirectToPage();
             }
 
@@ -92,7 +101,7 @@ namespace MatrixWebApp.Pages
                 HttpContext.Session.Remove("CartItemCount");
 
                 var createdOrder = await response.Content.ReadFromJsonAsync<OrderResponse>();
-                TempData["SuccessMessage"] = $"Bestelling #{createdOrder.OrderId} is geplaatst!";
+                TempData["Message"] = $"Bestelling #{createdOrder.OrderId} is geplaatst!";
                 return RedirectToPage("/OrderConfirmation", new { orderId = createdOrder.OrderId });
             }
             else
