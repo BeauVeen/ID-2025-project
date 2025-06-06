@@ -4,29 +4,6 @@
     ViewData["Title"] = "Winkelwagen";
 }
 
-<style>
-    .alert-formatting {
-        width: 600px !important;
-        margin: 1rem auto !important;
-    }
-</style>
-
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show alert-formatting" role="alert">
-        @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
-@if (TempData["WarningMessage"] != null)
-{
-    <div class="alert alert-warning alert-dismissible fade show alert-formatting" role="alert">
-        @TempData["WarningMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
 <div class="container">
     <h1>@ViewData["Title"]</h1>
 
@@ -113,3 +90,5 @@
         </div>
     }
 </div>
+
+<script src="~/js/notification.js" asp-append-version="true"></script>

@@ -181,3 +181,49 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 4px;
 }
 
+.notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: white;
+    z-index: 1000;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.5s ease-out;
+}
+
+    .notification.warning {
+        background-color: #FF9800; /* Oranje */
+    }
+
+    .notification.info {
+        background-color: #2196F3; /* Blauw */
+    }
+
+    .notification.success {
+        background-color: #28a745;
+    }
+
+    .notification.error {
+        background-color: #dc3545;
+    }
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.alert-info {
+    width: 200px;
+    margin-top: 45px;
+    margin-bottom: 25px;
+}

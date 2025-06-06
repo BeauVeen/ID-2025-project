@@ -62,7 +62,15 @@ namespace MatrixWebApp.Pages
             HttpContext.Session.Set("Cart", cart);
             HttpContext.Session.SetInt32("CartItemCount", cart.TotalItems);
 
-            TempData["SuccessMessage"] = $"{product.Name} is toegevoegd aan je winkelwagen!";
+            if (quantity > 1)
+            {
+                TempData["Message"] = $"{product.Name} (x{quantity}) is toegevoegd aan je winkelwagen.";
+            }
+            else
+            {
+                TempData["Message"] = $"{product.Name} is toegevoegd aan je winkelwagen.";
+            }
+
             return RedirectToPage();
         }
 
@@ -82,7 +90,8 @@ namespace MatrixWebApp.Pages
                     ? products.Where(p => p.CategoryId == categoryId.Value).ToList()
                     : products;
 
-                MaxPrice = Products.Max(p => p.Price);
+                // Enkel deze lijn aanpassen voor foutafhandeling:
+                MaxPrice = Products.Any() ? Products.Max(p => p.Price) : 0;
                 ViewData["MaxPrice"] = MaxPrice;
             }
             else
