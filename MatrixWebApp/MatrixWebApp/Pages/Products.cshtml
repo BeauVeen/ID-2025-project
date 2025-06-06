@@ -46,7 +46,6 @@
                                 <form method="post" asp-page-handler="AddToCart">
                                     <input type="hidden" name="productId" value="@product.ProductId" />
                                     <div class="d-flex align-items-center gap-2">
-                                        ,
                                         <select name="quantity" class="form-select form-select-sm" style="width: 60px;">
                                             @for (int i = 1; i <= Math.Min(product.Stock, 9); i++)
                                             {
