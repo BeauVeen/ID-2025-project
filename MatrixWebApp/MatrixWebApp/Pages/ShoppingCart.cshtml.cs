@@ -64,7 +64,7 @@ namespace MatrixWebApp.Pages
         }
 
 
-        public async Task<IActionResult> OnPostCheckoutAsync()
+        public async Task<IActionResult> OnPostCheckoutAsync() //werkt nog niet
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
