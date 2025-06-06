@@ -1,16 +1,7 @@
 ﻿@page
 @model MatrixWebApp.Pages.ProductsModel
 
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
 @{
-
     ViewData["Title"] = "Onze Producten";
     ViewData["showProductSidebar"] = true;
 }
@@ -18,59 +9,67 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <div class="product-background">
-    <div class="row">
-        @foreach (var product in Model.Products)
-        {
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card product-card h-100">
-                    <div class="card-img-container">
-                        @if (product.Picture != null)
-                        {
-                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(product.Picture)"
-                                 class="card-img-top" alt="@product.Name">
-                        }
-                        else
-                        {
-                            <div class="no-image">Geen afbeelding beschikbaar</div>
-
-                        }
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        @if (Model.CategoryNamesById.TryGetValue(product.CategoryId, out var categoryName))
-                        {
-                            <small class="text-muted">Categorie: @categoryName</small>
-                        }
-                        <small class="text-muted">Serienummer: @product.ProductId</small>
-                        <p class="price-text">€@product.Price.ToString("0.00")</p>
-
-                        <div class="add-to-cart">
-                            <form method="post" asp-page-handler="AddToCart">
-                                <input type="hidden" name="productId" value="@product.ProductId" />
-                                <div class="d-flex align-items-center gap-2">,
-                                    <select name="quantity" class="form-select form-select-sm" style="width: 60px;">
-                                        @for (int i = 1; i <= Math.Max(1, product.Stock); i++)
-                                        {
-                                            <option value="@i">@i</option>
-                                        }
-                                    </select>
-                                    <button type="submit" class="btn btn-warning" @(product.Stock == 0 ? "disabled" : "")>
-                                        <i class="bi bi-cart-plus"></i>
-                                    </button>
-                                </div>
-                                @Html.AntiForgeryToken()
-                            </form>
-                            @if (product.Stock == 0)
+    @if (Model.Products == null || !Model.Products.Any())
+    {
+        <div class="text-center py-5">
+            <h3 class="fw-bold">Geen producten gevonden in deze categorie</h3>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card product-card h-100">
+                        <div class="card-img-container">
+                            @if (product.Picture != null)
                             {
-                                <small class="text-danger">Niet op voorraad</small>
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(product.Picture)"
+                                     class="card-img-top" alt="@product.Name">
                             }
+                            else
+                            {
+                                <div class="no-image">Geen afbeelding beschikbaar</div>
+                            }
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            @if (Model.CategoryNamesById.TryGetValue(product.CategoryId, out var categoryName))
+                            {
+                                <small class="text-muted">Categorie: @categoryName</small>
+                            }
+                            <small class="text-muted">Serienummer: @product.ProductId</small>
+                            <p class="price-text">€@product.Price.ToString("0.00")</p>
+
+                            <div class="add-to-cart">
+                                <form method="post" asp-page-handler="AddToCart">
+                                    <input type="hidden" name="productId" value="@product.ProductId" />
+                                    <div class="d-flex align-items-center gap-2">
+                                        ,
+                                        <select name="quantity" class="form-select form-select-sm" style="width: 60px;">
+                                            @for (int i = 1; i <= Math.Min(product.Stock, 9); i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                        <button type="submit" class="btn btn-warning" @(product.Stock == 0 ? "disabled" : "")>
+                                            <i class="bi bi-cart-plus"></i>
+                                        </button>
+                                    </div>
+                                    @Html.AntiForgeryToken()
+                                </form>
+                                @if (product.Stock == 0)
+                                {
+                                    <small class="text-danger">Niet op voorraad</small>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
 </div>
 
 <script src="~/js/notification.js" asp-append-version="true"></script>
-

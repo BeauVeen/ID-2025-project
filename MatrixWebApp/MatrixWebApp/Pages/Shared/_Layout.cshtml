@@ -135,11 +135,6 @@
             @if (ViewData["showProductSidebar"] as bool? == true)
             {
                 <nav class="col-md-2 d-none d-md-block sidebar p-3 border-end position-sticky top-0" style="background-color: #e1e1e1; height: 100vh; overflow-y: auto;">
-                    <h5 class="text-center category-header">Categorieën</h5>
-                    <ul class="nav flex-column category-spacing" id="collapseCategories" style="color: black;">
-                        @await Component.InvokeAsync("CategorySidebar")
-                    </ul>
-                    <hr />
                     <div class="price-filter">
                         <h6 class="text-center mb-3">Prijs filteren</h6>
                         <button class="btn btn-outline-primary w-100 mb-2" onclick="sortProducts('price-asc')">
@@ -167,6 +162,11 @@
                             <input type="range" class="range-max" min="0" max="@maxPrice" value="@(maxPrice /2)" step="10">
                         </div>
                     </div>
+                    <hr />
+                    <h5 class="text-center category-header">Categorieën</h5>
+                    <ul class="nav flex-column category-spacing" id="collapseCategories" style="color: black;">
+                        @await Component.InvokeAsync("CategorySidebar")
+                    </ul>
                 </nav>
             }
             else if (showAdminSidebar)

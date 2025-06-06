@@ -64,13 +64,18 @@ namespace MatrixWebApp.Pages
         }
 
 
-        public async Task<IActionResult> OnPostCheckoutAsync() //werkt nog niet
+        public async Task<IActionResult> OnPostCheckoutAsync()
         {
+            // Debug logging
+            Console.WriteLine($"Session UserId: {HttpContext.Session.GetInt32("UserId")}");
+            Console.WriteLine($"Session Keys: {string.Join(", ", HttpContext.Session.Keys)}");
+
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
             {
+
                 TempData["ErrorMessage"] = "Je moet ingelogd zijn om een bestelling te plaatsen.";
-                return RedirectToPage();
+                return RedirectToPage("/Account/Login"); // Stuur door naar login pagina
             }
 
             Cart = HttpContext.Session.Get<ShoppingCart>("Cart") ?? new ShoppingCart();

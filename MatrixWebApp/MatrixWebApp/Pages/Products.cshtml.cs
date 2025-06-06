@@ -90,7 +90,8 @@ namespace MatrixWebApp.Pages
                     ? products.Where(p => p.CategoryId == categoryId.Value).ToList()
                     : products;
 
-                MaxPrice = Products.Max(p => p.Price);
+                // Enkel deze lijn aanpassen voor foutafhandeling:
+                MaxPrice = Products.Any() ? Products.Max(p => p.Price) : 0;
                 ViewData["MaxPrice"] = MaxPrice;
             }
             else
