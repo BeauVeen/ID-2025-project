@@ -6,8 +6,6 @@
     ViewData["ShowSidebar"] = true;
 }
 
-<h2>Admin Dashboard</h2>
-
 <div class="card shadow-sm mb-4">
     <div class="card-body">
         <h2 class="card-title mb-4">Klanten & Orderdata</h2>
@@ -26,8 +24,16 @@
             </div>
         </div>
 
-       
-
+        <div class="mb-3 d-flex align-items-center gap-2">
+            <label for="monthsSelect" class="form-label mb-0">Toon data van:</label>
+            <select id="monthsSelect" class="form-select form-select-sm" style="width: auto;">
+                <option value="3">Laatste 3 maanden</option>
+                <option value="6">Laatste 6 maanden</option>
+                <option value="12" selected>Laatste 12 maanden</option>
+            </select>
+            <button id="compareBtn" class="btn btn-outline-secondary btn-sm ms-2">Vergelijken</button>
+            <button id="splitBtn" class="btn btn-outline-secondary btn-sm ms-2 d-none">Splitsen</button>
+        </div>
 
         <div class="row">
             <div class="col-md-6 mb-4">
@@ -47,41 +53,80 @@
                 </div>
             </div>
         </div>
+
+        <div id="combinedChartContainer" class="mb-4" style="display:none;">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Vergelijking: Nieuwe klanten & Bestellingen</h5>
+                    <canvas id="combinedLineChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- LAGE VOORRAAD HOKJE TOEGEVOEGD -->
 @if (Model.LageVoorraadProducten != null && Model.LageVoorraadProducten.Any())
 {
-    <div class="alert alert-success border border-success rounded-3 shadow-sm mb-4">
-        <h5 class="alert-heading">
-            ⚠️ Let op: Er zijn @Model.LageVoorraadProducten.Count producten met lage voorraad!
-        </h5>
-        <ul class="list-group list-group-flush">
-            @foreach (var product in Model.LageVoorraadProducten)
+    <div class="card border-danger shadow-sm mb-4">
+        <div class="card-header bg-danger text-white d-flex align-items-center">
+            <span class="me-2" style="font-size:1.5rem;">&#9888;</span>
+            <span>
+                Let op: <strong>@Model.LageVoorraadProducten.Count</strong> producten met lage voorraad!
+            </span>
+        </div>
+        <div class="card-body p-0">
+            <table class="table mb-0 align-middle" id="low-stock-list">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 40px;"></th>
+                        <th>Product</th>
+                        <th>Voorraad</th>
+                        <th>Prijs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.LageVoorraadProducten.Count; i++)
+                    {
+                        var product = Model.LageVoorraadProducten[i];
+                        string kleur = "";
+                        string dot = "";
+
+                        if (product.Stock <= 5)
+                        {
+                            kleur = "text-danger";
+                            dot = "bg-danger";
+                        }
+                        else if (product.Stock <= 10)
+                        {
+                            kleur = "text-warning";
+                            dot = "bg-warning";
+                        }
+
+                        <tr class="low-stock-row @(i >= 5 ? "d-none" : "")">
+                            <td>
+                                <span class="d-inline-block rounded-circle @dot" style="width:16px; height:16px;"></span>
+                            </td>
+                            <td>
+                                <strong>@product.Name</strong>
+                            </td>
+                            <td class="@kleur fw-bold">
+                                @product.Stock
+                            </td>
+                            <td class="text-muted">
+                                @product.Price.ToString("C")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.LageVoorraadProducten.Count > 5)
             {
-                string kleur = "";
-
-                if (product.Stock <= 5)
-                {
-                    kleur = "text-danger";     // rood
-                }
-                else if (product.Stock <= 10)
-                {
-                    kleur = "text-warning";    // oranje/geel
-                }
-
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>@product.Name</strong>
-                    </div>
-                    <div class="text-center">
-                        <div class="@kleur fw-bold">@("Voorraad: " + product.Stock)</div>
-                        <div class="text-muted">Price: @product.Price.ToString("C")</div>
-                    </div>
-                </li>
+                <div class="d-flex justify-content-start my-2 ms-3">
+                    <button id="load-more-low-stock" class="btn btn-outline-primary btn-sm">Laad meer</button>
+                </div>
             }
-        </ul>
+        </div>
     </div>
 }
 
