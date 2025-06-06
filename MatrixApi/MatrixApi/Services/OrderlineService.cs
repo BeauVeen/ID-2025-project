@@ -18,7 +18,9 @@ namespace MatrixApi.Services
         {
             try
             {
-                return await _context.Orderlines.ToListAsync();
+                return await _context.Orderlines
+                           .Include(ol => ol.Product)
+                           .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -31,7 +33,10 @@ namespace MatrixApi.Services
         {
             try
             {
-                var orderline = await _context.Orderlines.FindAsync(id);
+                var orderline = await _context.Orderlines
+                    .Include(ol => ol.Product)
+                    .FirstOrDefaultAsync(ol => ol.OrderlineId == id);
+
                 if (orderline == null)
                 {
                     throw new NotFoundException($"Orderline with id {id} not found.");

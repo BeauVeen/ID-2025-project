@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
 namespace MatrixWebApp.Extensions
 {
@@ -11,8 +12,8 @@ namespace MatrixWebApp.Extensions
 
         public static T Get<T>(this ISession session, string key)
         {
-            var value = session.GetString(key);
-            return value == null ? default : JsonSerializer.Deserialize<T>(value);
+            var json = session.GetString(key);
+            return json == null ? default : JsonSerializer.Deserialize<T>(json);
         }
     }
 }

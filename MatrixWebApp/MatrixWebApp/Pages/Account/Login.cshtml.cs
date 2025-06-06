@@ -56,26 +56,28 @@ namespace MatrixWebApp.Pages.Account
                     SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict
                 });
 
-                // Rolnaam veilig en consistent maken
-                var roleName = (result.roleName ?? "User").Trim();
+                var allowedRoles = new[] { "administrator", "klant", "bezorger" };
 
-                // Optioneel: maak roleName case-insensitive en valideer
-                if (!string.Equals(roleName, "Administrator", StringComparison.OrdinalIgnoreCase))
+                // Rolnaam veilig en consistent maken
+                var roleNameLower = (result.roleName ?? "").Trim().ToLower();
+
+                if (!allowedRoles.Contains(roleNameLower))
                 {
-                    roleName = "User";
+                    Message = "Toegang geweigerd.";
+                    return Page();
                 }
-                else
-                {
-                    roleName = "Administrator";
-                }
+
+                string roleName = char.ToUpper(roleNameLower[0]).ToString() + roleNameLower.Substring(1);
 
                 // Claims maken voor cookie-authenticatie
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, result.email),
                     new Claim(ClaimTypes.NameIdentifier, result.email),
+                    new Claim("UserId", result.userId.ToString()),
                     new Claim(ClaimTypes.Role, roleName)
                 };
+
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -103,6 +105,7 @@ namespace MatrixWebApp.Pages.Account
         {
             public string token { get; set; }
             public string email { get; set; }
+            public int userId { get; set; }
             public int roleId { get; set; }
             public string roleName { get; set; }
         }

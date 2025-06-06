@@ -151,6 +151,7 @@ namespace MatrixApi.Controllers
                 {
                     token,
                     email = user.Email,
+                    userId = user.UserId,
                     roleId = user.RoleId,
                     roleName = user.Role?.RoleName
                 });

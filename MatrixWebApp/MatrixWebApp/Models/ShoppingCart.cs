@@ -1,49 +1,39 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace MatrixWebApp.Models
+﻿namespace MatrixWebApp.Models
 {
     public class ShoppingCart
     {
-        public List<CartItem> Items { get; set; } = new List<CartItem>();
+        public List<CartItem> Items { get; set; } = new();
 
-        public decimal TotalPrice => Items.Sum(i => i.Price * i.Quantity);
         public int TotalItems => Items.Sum(i => i.Quantity);
+        public decimal TotalPrice => Items.Sum(i => i.Quantity * i.Price);
 
         public void AddItem(CartItem item)
         {
-            var existingItem = Items.FirstOrDefault(i => i.ProductId == item.ProductId);
-            if (existingItem != null)
+            var existing = Items.FirstOrDefault(p => p.ProductId == item.ProductId);
+            if (existing != null)
             {
-                existingItem.Quantity += item.Quantity;
+                existing.Quantity = item.Quantity;
             }
             else
-            {
+            { 
                 Items.Add(item);
             }
         }
 
-        public void RemoveItem(int productId)
+        public void UpdateQuantity(int productId, int quantity)
         {
-            var item = Items.FirstOrDefault(i => i.ProductId == productId);
+            var item = Items.FirstOrDefault(p => p.ProductId == productId);
             if (item != null)
-            {
-                Items.Remove(item);
+            { 
+                item.Quantity = quantity;
             }
         }
 
-        public void Clear()
-        {
-            Items.Clear();
+        public void RemoveItem(int productId)
+        { 
+            Items.RemoveAll(p => p.ProductId == productId);
         }
-    }
 
-    public class CartItem
-    {
-        public int ProductId { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
-        public byte[]? Picture { get; set; }
+        public void Clear() => Items.Clear();
     }
 }
