@@ -40,7 +40,8 @@ namespace MatrixWebApp.Pages.Admin
             public string Email { get; set; }
 
             [Display(Name = "Wachtwoord")]
-            public string? PasswordHash { get; set; }
+            [DataType(DataType.Password)]
+            public string? Password { get; set; }
 
             [Required(ErrorMessage = "Rol is verplicht")]
             public int? RoleId { get; set; }
@@ -114,9 +115,9 @@ namespace MatrixWebApp.Pages.Admin
             };
 
 
-            if (!string.IsNullOrWhiteSpace(Input.PasswordHash))
+            if (!string.IsNullOrWhiteSpace(Input.Password))
             {
-                updatePayload["passwordHash"] = Input.PasswordHash;
+                updatePayload["passwordHash"] = Input.Password;
             }
 
 

@@ -1,20 +1,29 @@
-﻿@page "{orderId}"
+﻿@page
 @model MatrixWebApp.Pages.OrderConfirmationModel
 @{
-    ViewData["Title"] = "Bestelling Bevestiging";
+    ViewData["Title"] = "Bestelling bevestigd";
 }
 
-<div class="container">
-    <div class="alert alert-success">
-        <h4 class="alert-heading">Bedankt voor je bestelling!</h4>
-        <p>Je bestelling met nummer #@Model.Order.OrderId is succesvol ontvangen.</p>
-        <hr>
-        <p class="mb-0">
-            <strong>Besteldatum:</strong> @Model.Order.CreatedAt.ToString("dd-MM-yyyy HH:mm")<br>
-            <strong>Status:</strong> @Model.Order.Status<br>
-            <strong>Totaalbedrag:</strong> €@Model.Order.TotalPrice.ToString("0.00")
-        </p>
-    </div>
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4" style="max-width: 600px; width: 100%;">
+        <h1 class="display-4 text-success mb-4 text-center">Bestelling bevestigd</h1>
 
-    <a href="/Products" class="btn btn-primary">Verder winkelen</a>
+        @if (Model.SuccessMessage != null)
+        {
+            <div class="alert alert-success fs-5 text-center" role="alert">
+                @Model.SuccessMessage
+            </div>
+        }
+        else
+        {
+            <p class="lead text-center">Je bestelling is succesvol geplaatst. Bedankt voor je vertrouwen!</p>
+        }
+
+        <hr />
+
+        <div class="text-center">
+            <a href="/Products" class="btn btn-primary btn-lg mt-3">Terug naar homepage</a>
+            <a href="/Account/UserOrders" class="btn btn-outline-secondary btn-lg mt-3 ms-3">Bekijk je bestellingen</a>
+        </div>
+    </div>
 </div>

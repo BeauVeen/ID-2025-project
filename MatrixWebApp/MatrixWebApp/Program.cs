@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MatrixWebApp.Services;
 
 namespace MatrixWebApp
 {
@@ -54,6 +55,8 @@ namespace MatrixWebApp
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("EenLangSterkeSecretKey1234567890!"))
                 };
             });
+
+            builder.Services.AddScoped<ShoppingCartService>();
 
             builder.Services.AddHttpContextAccessor();
 

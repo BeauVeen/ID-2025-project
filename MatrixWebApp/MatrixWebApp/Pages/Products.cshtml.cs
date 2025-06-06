@@ -5,10 +5,11 @@ using System.Net.Http.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MatrixWebApp.Models;
 using MatrixWebApp.Extensions;
 using MatrixWebApp.ViewComponents;
 using System.Linq;
+using MatrixWebApp.Services;
+using MatrixWebApp.Models;
 
 namespace MatrixWebApp.Pages
 {
@@ -16,6 +17,8 @@ namespace MatrixWebApp.Pages
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<ProductsModel> _logger;
+
+        private readonly ShoppingCartService _cartService;
 
         public List<ProductDto> Products { get; set; } = new();
 
@@ -26,10 +29,11 @@ namespace MatrixWebApp.Pages
         // Nieuwe property voor hoogste prijs
         public decimal MaxPrice { get; set; } = 0m;
 
-        public ProductsModel(IHttpClientFactory httpClientFactory, ILogger<ProductsModel> logger)
+        public ProductsModel(IHttpClientFactory httpClientFactory, ILogger<ProductsModel> logger, ShoppingCartService cartService)
         {
             _httpClient = httpClientFactory.CreateClient("MatrixApi");
             _logger = logger;
+            _cartService = cartService;
         }
 
         // Haal categorieën 1 keer op
@@ -48,28 +52,20 @@ namespace MatrixWebApp.Pages
                 return NotFound();
             }
 
-            var cart = HttpContext.Session.Get<ShoppingCart>("Cart") ?? new ShoppingCart();
-
-            cart.AddItem(new CartItem
+            var item = new CartItem
             {
                 ProductId = product.ProductId,
                 Name = product.Name,
                 Price = product.Price,
-                Picture = product.Picture,
-                Quantity = quantity
-            });
+                Quantity = quantity,
+                Picture = product.Picture
+            };
 
-            HttpContext.Session.Set("Cart", cart);
-            HttpContext.Session.SetInt32("CartItemCount", cart.TotalItems);
+            _cartService.AddProducts(item);
 
-            if (quantity > 1)
-            {
-                TempData["Message"] = $"{product.Name} (x{quantity}) is toegevoegd aan je winkelwagen.";
-            }
-            else
-            {
-                TempData["Message"] = $"{product.Name} is toegevoegd aan je winkelwagen.";
-            }
+            TempData["Message"] = quantity > 1
+            ? $"{product.Name} (x{quantity}) is toegevoegd aan je winkelwagen."
+            : $"{product.Name} is toegevoegd aan je winkelwagen.";
 
             return RedirectToPage();
         }
