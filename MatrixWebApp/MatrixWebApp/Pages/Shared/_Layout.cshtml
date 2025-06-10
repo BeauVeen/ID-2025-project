@@ -59,7 +59,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
 </head>
 <body>
-    <div class="matrix-container" id="matrixContainer" style="display: none;">
+    <div class="matrix-container" id="matrixContainer"
+         style="display: none;"
+         data-show="@((ViewData["ShowMatrixRain"] as bool? == true).ToString().ToLower())">
         <canvas id="matrix-rain"></canvas>
     </div>
     <header>
@@ -230,16 +232,6 @@
     <div id="notification-error"
          data-message="@TempData["ErrorMessage"]"
          style="display: none;"></div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    @if (ViewData["ShowMatrixRain"] as bool? == true)
-    {
-        @: document.getElementById('matrixContainer').style.display = 'block';
-    }
-    });
-    </script>
-
 
 
     <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
