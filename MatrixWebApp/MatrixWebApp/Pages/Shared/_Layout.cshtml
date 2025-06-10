@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
+
 @{
     var showProductSidebar = ViewData["showProductSidebar"] as bool? ?? false;
     var showAdminSidebar = ViewData["showSidebar"] as bool? ?? false;
@@ -25,7 +26,7 @@
         height: 100%;
         z-index: -1;
         pointer-events: none;
-        background-color: #000; /* Voeg dit toe */
+        background-color: #000;
     }
 
     #matrix-rain {
@@ -37,7 +38,7 @@
     body {
         margin: 0;
         padding: 0;
-        background-color: #000; /* Voeg dit toe voor zekerheid */
+        background-color: #000; 
     }
 </style>
 <!DOCTYPE html>
@@ -219,11 +220,6 @@
             </main>
         </div>
     </div>
-
-    @foreach (var claim in user.Claims)
-    {
-        <p>@claim.Type : @claim.Value</p>
-    }
 
     <div id="notification-data"
          data-message="@TempData["Message"]"
