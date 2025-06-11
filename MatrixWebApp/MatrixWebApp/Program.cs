@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MatrixWebApp.Services;
 
 namespace MatrixWebApp
 {
@@ -55,12 +56,15 @@ namespace MatrixWebApp
                 };
             });
 
+            builder.Services.AddScoped<ShoppingCartService>();
+
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddHttpClient("MatrixApi", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7113/");
+                client.BaseAddress = new Uri("http://20.86.128.95");
             });
+            //https://localhost:7113/
 
             var app = builder.Build();
 

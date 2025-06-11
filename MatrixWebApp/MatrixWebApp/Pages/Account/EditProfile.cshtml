@@ -1,0 +1,68 @@
+﻿@page
+@model MatrixWebApp.Pages.Account.EditProfileModel
+@{
+    ViewData["Title"] = "Profiel bewerken";
+}
+
+<h2 class="text-center mt-4">Profiel bewerken</h2>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<form method="post" class="needs-validation mx-auto" style="max-width: 500px;" novalidate>
+    <div class="mb-3 mt-4">
+        <label asp-for="Input.Name" class="form-label"></label>
+        <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Email" class="form-label"></label>
+        <input asp-for="Input.Email" class="form-control" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Password" class="form-label"></label>
+        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" />
+        <small class="form-text text-muted"></small>
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Address" class="form-label"></label>
+        <input asp-for="Input.Address" class="form-control" />
+        <span asp-validation-for="Input.Address" class="text-danger"></span>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label asp-for="Input.Zipcode" class="form-label"></label>
+            <input asp-for="Input.Zipcode" class="form-control" />
+            <span asp-validation-for="Input.Zipcode" class="text-danger"></span>
+        </div>
+        <div class="col-md-8">
+            <label asp-for="Input.City" class="form-label"></label>
+            <input asp-for="Input.City" class="form-control" />
+            <span asp-validation-for="Input.City" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.PhoneNumber" class="form-label"></label>
+        <input asp-for="Input.PhoneNumber" class="form-control" />
+        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 mt-5">
+        <label asp-for="Input.CurrentPassword" class="form-label">Huidig wachtwoord</label>
+        <small class="form-text text-muted mb-1">Vul je huidige wachtwoord in ter bevestiging.</small>
+        <input asp-for="Input.CurrentPassword" class="form-control" type="password" autocomplete="current-password" />
+        <span asp-validation-for="Input.CurrentPassword" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Opslaan</button>
+</form>

@@ -27,7 +27,14 @@ namespace MatrixApi.Services
         {
             try
             {
-                return await _context.Users.ToListAsync();
+                var users = await _context.Users
+                    .Include(u => u.Orders)
+                        .ThenInclude(o => o.Orderlines)
+                            .ThenInclude(ol => ol.Product)
+                    .ToListAsync();
+
+                return users;
+
             }
             catch (Exception ex)
             {
@@ -40,7 +47,12 @@ namespace MatrixApi.Services
         {
             try
             {
-                var user = await _context.Users.FindAsync(id);
+                var user = await _context.Users
+                    .Include(u => u.Orders)
+                        .ThenInclude(o => o.Orderlines)
+                            .ThenInclude(ol => ol.Product)
+                    .FirstOrDefaultAsync(u => u.UserId == id);
+
                 if (user == null)
                 {
                     throw new NotFoundException($"User with id {id} not found.");

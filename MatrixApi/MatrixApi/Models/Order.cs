@@ -1,4 +1,6 @@
-﻿namespace MatrixApi.Models
+﻿using System.Text.Json.Serialization;
+
+namespace MatrixApi.Models
 {
     public class Order
     {
@@ -7,6 +9,7 @@
         public DateTime CreatedAt { get; set; }
         public string Status { get; set; } = null!;
 
+        [JsonIgnore]
         public User User { get; set; } = null!;
         public ICollection<Orderline> Orderlines { get; set; } = new List<Orderline>();
     }
