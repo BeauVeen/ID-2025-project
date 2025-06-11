@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
+
 @{
     var showProductSidebar = ViewData["showProductSidebar"] as bool? ?? false;
     var showAdminSidebar = ViewData["showSidebar"] as bool? ?? false;
@@ -25,7 +26,7 @@
         height: 100%;
         z-index: -1;
         pointer-events: none;
-        background-color: #000; /* Voeg dit toe */
+        background-color: #000;
     }
 
     #matrix-rain {
@@ -37,7 +38,7 @@
     body {
         margin: 0;
         padding: 0;
-        background-color: #000; /* Voeg dit toe voor zekerheid */
+        background-color: #000; 
     }
 </style>
 <!DOCTYPE html>
@@ -58,7 +59,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
 </head>
 <body>
-    <div class="matrix-container" id="matrixContainer" style="display: none;">
+    <div class="matrix-container" id="matrixContainer"
+         style="display: none;"
+         data-show="@((ViewData["ShowMatrixRain"] as bool? == true).ToString().ToLower())">
         <canvas id="matrix-rain"></canvas>
     </div>
     <header>
@@ -102,7 +105,7 @@
                     {
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
-                                Ingelogd
+                                Mijn Account
                             </a>
                             <div class="dropdown-menu dropdown-menu-end p-3">
                                 <a class="dropdown-item" href="/Account/UserProfile">Profiel</a>
@@ -220,11 +223,6 @@
         </div>
     </div>
 
-    @foreach (var claim in user.Claims)
-    {
-        <p>@claim.Type : @claim.Value</p>
-    }
-
     <div id="notification-data"
          data-message="@TempData["Message"]"
          style="display: none;"></div>
@@ -234,16 +232,6 @@
     <div id="notification-error"
          data-message="@TempData["ErrorMessage"]"
          style="display: none;"></div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    @if (ViewData["ShowMatrixRain"] as bool? == true)
-    {
-        @: document.getElementById('matrixContainer').style.display = 'block';
-    }
-    });
-    </script>
-
 
 
     <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>

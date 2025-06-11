@@ -28,7 +28,15 @@ namespace MatrixWebApp.Pages
 
         public IActionResult OnPostRemoveItem(int productId)
         {
-            _cartService.RemoveProduct(productId);
+            var (removedItem, _) = _cartService.RemoveProduct(productId);
+
+            if (removedItem != null)
+            {
+                TempData["WarningMessage"] = removedItem.Quantity > 1
+                    ? $"{removedItem.Name} (x{removedItem.Quantity}) is verwijderd uit je winkelwagen."
+                    : $"{removedItem.Name} is verwijderd uit je winkelwagen.";
+            }
+
             return RedirectToPage();
         }
 
@@ -38,3 +46,4 @@ namespace MatrixWebApp.Pages
         }
     }
 }
+
