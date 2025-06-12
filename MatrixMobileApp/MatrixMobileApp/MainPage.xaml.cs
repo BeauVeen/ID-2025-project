@@ -25,6 +25,11 @@
         {
             await Navigation.PushAsync(new ProductsPage());
         }
+
+        private async void OnViewOrdersClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ActiveOrdersPage());
+        }
     }
 
 }

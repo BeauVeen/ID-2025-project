@@ -1,0 +1,26 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.ActiveOrdersPage"
+             Title="Actieve Bestellingen">
+    <StackLayout>
+        <ListView x:Name="ActiveOrdersList"
+                  HasUnevenRows="True"
+                  ItemSelected="ActiveOrdersList_ItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="10">
+                            <Label Text="{Binding OrderId}" FontAttributes="Bold" />
+                            <Label Text="{Binding CreatedAt, StringFormat='Besteld op: {0:dd-MM-yyyy HH:mm}'}" />
+                            <Label Text="{Binding Status}" />
+
+                            <Button Text="View"
+                                    Clicked="OnViewOrderClicked"
+                                    CommandParameter="{Binding .}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>
