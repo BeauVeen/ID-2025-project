@@ -4,17 +4,18 @@
     ViewData["Title"] = $"{Model.UserName}'s profiel";
 }
 
-
 <div class="profile-container">
     <div class="greeting-banner">
         <div class="greeting-title">Hallo @Model.UserName</div>
-        <div class="greeting-subtitle">Hier vind je jouw profielinstellingen, bestelgeschiedenis en meer.</div>
+        <div class="greeting-subtitle">
+            Hier vind je jouw profielinstellingen, bestelgeschiedenis en meer.
+        </div>
     </div>
 
-    <ul class="button-list">
-        <li><a asp-page="/Account/EditProfile" class="btn btn-primary checkout-btn">Bewerk Profiel</a></li>
-        <li><a asp-page="/Account/UserOrders" class="btn btn-primary checkout-btn">Mijn Orders</a></li>
-        <li><a asp-page="/Account/UserSettings" class="btn btn-primary checkout-btn">Settings</a></li>
-        <li><a asp-page="/Account/Logout" class="btn btn-outline-danger checkout-btn">Uitloggen</a></li>
-    </ul>
+    <div class="button-list">
+        <a asp-page="/Account/EditProfile" class="btn btn-primary checkout-btn">Bewerk Profiel</a>
+        <a asp-page="/Account/UserOrders" class="btn btn-primary checkout-btn">Mijn Orders</a>
+        <a asp-page="/Account/UserSettings" class="btn btn-primary checkout-btn">Settings[WIP]</a>
+        <a asp-page="/Account/Logout" class="btn btn-outline-danger checkout-btn">Uitloggen</a>
+    </div>
 </div>

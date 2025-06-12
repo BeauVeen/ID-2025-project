@@ -1,13 +1,13 @@
 ﻿@page
 @model MatrixWebApp.Pages.Admin.AdminProductsModel
 @{
-	ViewData["Title"] = "Admin Dashboard";
+	ViewData["Title"] = "Producten overzicht";
 	ViewData["ShowSidebar"] = true;
 }
 <div class="d-flex mb-3">
 	<form method="get" class="flex-grow-1 me-2" role="search">
 		<input id="searchSerial" type="text" name="SearchSerial" 
-			class="form-control" placeholder="Zoek op serienummer..." />
+			class="form-control" placeholder="Zoek op productnummer..." />
 	</form>
 	<a href="/Admin/AddProducts" class="btn btn-success">Product toevoegen</a>
 </div>
@@ -43,7 +43,7 @@
 
 			<div class="flex-grow-1 d-flex flex-column justify-content-between ms-3">
 				<h5 class="mb-1">@product.Name</h5>
-				<small class="text-muted">@category.CategoryName | Serienummer: @product.ProductId</small>
+				<small class="text-muted">@category.CategoryName | Productnummer: @product.ProductId</small>
 				<p class="mb-0">@product.Description</p>
 			</div>
 
