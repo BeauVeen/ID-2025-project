@@ -51,7 +51,7 @@ namespace MatrixMobileApp.API.Services
                     return null;
                 }
 
-                Console.WriteLine("=== DESERIALIZED RESPONSE ===");
+                Console.WriteLine("=== DESERIALIZED RESPONSE ==="); // Debug
                 Console.WriteLine($"Token: {!string.IsNullOrEmpty(authResponse.Token)}");
                 Console.WriteLine($"Email: {authResponse.Email}");
                 Console.WriteLine($"UserId: {authResponse.UserId}");

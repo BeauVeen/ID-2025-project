@@ -41,11 +41,15 @@
 
         private void OnLogoutClicked(object sender, EventArgs e)
         {
-            // Verwijder alle opgeslagen voorkeuren
-            Preferences.Clear();
-
+            Preferences.Remove("auth_token");
+            
             // Navigeer naar login pagina
             Shell.Current.GoToAsync("//LoginPage");
+
+            if (Shell.Current.CurrentPage is LoginPage loginPage)
+            {
+                loginPage.ResetLoginFields();
+            }
         }
     }
 

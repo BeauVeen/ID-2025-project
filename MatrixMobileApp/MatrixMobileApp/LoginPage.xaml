@@ -61,6 +61,17 @@
                    TextColor="Black"
                    PlaceholderColor="Gray" />
 
+            <!--Remember Me checkbox-->
+            <StackLayout Orientation="Horizontal" Spacing="8">
+                <CheckBox x:Name="RememberMeCheckBox"
+                          Color="#426373"
+                          Margin="-10"
+                          VerticalOptions="Center"/>
+                <Label Text="Onthoud mij"
+                       VerticalOptions="Center"
+                       TextColor="Black"/>
+            </StackLayout>
+
             <!-- Foutmelding -->
             <Label x:Name="ErrorLabel"
                    TextColor="Red"
