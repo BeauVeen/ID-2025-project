@@ -30,6 +30,33 @@
         {
             await Navigation.PushAsync(new ActiveOrdersPage());
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var token = Preferences.Get("auth_token", string.Empty);
+            var roleId = Preferences.Get("user_role", "0");
+
+            if (string.IsNullOrEmpty(token) || roleId != "2")
+            {
+                Shell.Current.GoToAsync("//LoginPage");
+            }
+        }
+
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            Preferences.Remove("auth_token");
+            
+            // Navigeer naar login pagina
+            await Shell.Current.GoToAsync("//LoginPage");
+
+            if (Shell.Current.CurrentPage is LoginPage loginPage)
+            {
+                loginPage.ResetLoginFields();
+            }
+        }
     }
+
 
 }
