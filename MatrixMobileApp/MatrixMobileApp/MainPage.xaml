@@ -3,6 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MatrixMobileApp.MainPage">
 
+    <ContentPage.ToolbarItems> 
+        <ToolbarItem Text="Uitloggen" Clicked="OnLogoutClicked" />
+    </ContentPage.ToolbarItems>
+
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
@@ -37,5 +41,4 @@
                 HorizontalOptions="Fill"/>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

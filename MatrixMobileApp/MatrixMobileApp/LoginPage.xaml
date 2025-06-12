@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.LoginPage"
+             x:Name="loginPage"
+             Title="Inloggen">
+
+    <Grid BackgroundColor="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="220"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        
+
+        <Grid Grid.Row="0">
+            <Path Fill="#426373" Stroke="Transparent"
+                  Aspect="Fill"
+                  HorizontalOptions="Fill"
+                  VerticalOptions="Fill"
+                  Data="M0,0 H400 V160 C280,200 120,180 0,140 Z" />
+
+        </Grid>
+
+        <!-- Avatar -->
+        <StackLayout Grid.Row="1"
+                     Margin="15,-120,0,0"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Start">
+            <Frame BackgroundColor="White"
+                   HeightRequest="80"
+                   WidthRequest="80"
+                   CornerRadius="40"
+                   Padding="0"
+                   HasShadow="True">
+                <Image Source="user.png"
+                       Aspect="AspectFill" />
+            </Frame>
+        </StackLayout>
+
+        <Label Grid.Row="1" Text=" Matrix Couriers" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="10"/>
+        <Label Grid.Row="2" Text="Log in om te beginnen met bezorgen" HorizontalOptions="Center" FontSize="Subtitle" Margin="-460"/>
+
+
+        <!-- Invoervelden -->
+        <StackLayout Grid.Row="1"
+                     Margin="30,100,30,0"
+                     VerticalOptions="Start"
+                     Spacing="20">
+            <!-- E-mail -->
+            <Entry x:Name="EmailEntry"
+                   Placeholder="E-mailadres"
+                   Keyboard="Email"
+                   TextColor="Black"
+                   PlaceholderColor="Gray" />
+
+            <!-- Wachtwoord -->
+            <Entry x:Name="PasswordEntry"
+                   Placeholder="Wachtwoord"
+                   IsPassword="True"
+                   TextColor="Black"
+                   PlaceholderColor="Gray" />
+
+            <!-- Foutmelding -->
+            <Label x:Name="ErrorLabel"
+                   TextColor="Red"
+                   FontSize="Small"
+                   IsVisible="False"
+                   HorizontalOptions="Center" />
+
+            <!-- Inlogknop -->
+            <Button x:Name="LoginButton"
+                    Text="Inloggen"
+                    Clicked="OnLoginClicked"
+                    BackgroundColor="#426373"
+                    TextColor="White"
+                    CornerRadius="8"
+                    FontAttributes="Bold" />
+
+            <!-- Loading -->
+            <ActivityIndicator x:Name="LoadingIndicator"
+                               IsRunning="False"
+                               IsVisible="False"
+                               Color="#8391AE"
+                               HorizontalOptions="Center" />
+        </StackLayout>
+
+    </Grid>
+</ContentPage>

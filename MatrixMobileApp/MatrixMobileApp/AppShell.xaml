@@ -7,9 +7,14 @@
     Shell.FlyoutBehavior="Disabled"
     Title="MatrixMobileApp">
 
-    <ShellContent
+    <ShellContent 
+        Title="Login"
+        Route="LoginPage" 
+        ContentTemplate="{DataTemplate local:LoginPage}" />
+
+    <ShellContent 
         Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="HomePage" 
+        ContentTemplate="{DataTemplate local:MainPage}" />
 
 </Shell>
