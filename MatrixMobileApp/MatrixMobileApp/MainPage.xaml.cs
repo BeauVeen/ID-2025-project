@@ -26,6 +26,11 @@
             await Navigation.PushAsync(new ProductsPage());
         }
 
+        private async void OnViewOrdersClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ActiveOrdersPage());
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -39,12 +44,12 @@
             }
         }
 
-        private void OnLogoutClicked(object sender, EventArgs e)
+        private async void OnLogoutClicked(object sender, EventArgs e)
         {
             Preferences.Remove("auth_token");
             
             // Navigeer naar login pagina
-            Shell.Current.GoToAsync("//LoginPage");
+            await Shell.Current.GoToAsync("//LoginPage");
 
             if (Shell.Current.CurrentPage is LoginPage loginPage)
             {

@@ -67,14 +67,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="ActiveOrdersPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="OrderDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <Compile Update="LoginPage.xaml.cs">
 	    <DependentUpon>LoginPage.xaml</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="LoginPage.xaml">
-	    <Generator></Generator>
+	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="ProductsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
@@ -82,7 +85,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<MauiXaml Update="**\*.xaml" Generator="MSBuild:Compile" />
+	  <Compile Update="OrderDetailPage.xaml.cs">
+	    <DependentUpon>OrderDetailPage.xaml</DependentUpon>
+	  </Compile>
+	  <MauiXaml Update="**\*.xaml" Generator="MSBuild:Compile" />
 	</ItemGroup>
 
 </Project>
