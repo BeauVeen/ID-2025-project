@@ -63,9 +63,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="ActiveOrdersPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="OrderDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="ProductsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="OrderDetailPage.xaml.cs">
+	    <DependentUpon>OrderDetailPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

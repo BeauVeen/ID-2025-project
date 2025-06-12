@@ -35,6 +35,11 @@
                 Text="Bekijk producten"
                 Clicked="OnViewProductsClicked"
                 HorizontalOptions="Fill"/>
+
+            <Button
+                Text="Bekijk actieve orders"
+                Clicked="OnViewOrdersClicked"
+                HorizontalOptions="Fill" />
         </VerticalStackLayout>
     </ScrollView>
 

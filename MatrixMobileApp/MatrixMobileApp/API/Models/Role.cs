@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MatrixMobileApp.API.Models
 {
-    internal class Role
+    public class Role
     {
         public int RoleId { get; set; }
         public string RoleName { get; set; } = null!;
