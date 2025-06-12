@@ -45,19 +45,13 @@ namespace MatrixMobileApp
                     Password = PasswordEntry.Text
                 };
 
-                // Validatie
+                // Basisvalidatie
                 if (string.IsNullOrWhiteSpace(loginRequest.Email))
                     throw new Exception("E-mailadres is verplicht");
                 if (string.IsNullOrWhiteSpace(loginRequest.Password))
                     throw new Exception("Wachtwoord is verplicht");
 
                 var response = await _jwtService.AuthenticateAsync(loginRequest);
-
-                if (response == null)
-                    throw new Exception("Geen response van server");
-
-                if (string.IsNullOrEmpty(response.Token))
-                    throw new Exception("Inloggen mislukt, geen token ontvangen");
 
                 if (response.RoleId != 2)
                     throw new Exception("Alleen bezorgers kunnen inloggen op deze app");
@@ -78,7 +72,6 @@ namespace MatrixMobileApp
                     Preferences.Remove(RememberedEmailKey);
                 }
 
-                // Alternatief voor gebruikersnaam: gebruik eerste deel van email
                 var userName = response.Email?.Split('@')[0] ?? "Bezorger";
                 Preferences.Set("user_name", userName);
                 Preferences.Set("user_role", response.RoleId.ToString());
@@ -88,7 +81,7 @@ namespace MatrixMobileApp
             catch (Exception ex)
             {
                 Console.WriteLine($"ERROR: {ex}");
-                ErrorLabel.Text = $"Fout bij inloggen: {ex.Message}";
+                ErrorLabel.Text = ex.Message; // Toon de specifieke foutmelding
                 ErrorLabel.IsVisible = true;
             }
             finally
