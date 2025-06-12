@@ -34,11 +34,19 @@ namespace MatrixWebApp.Services
             }
         }
 
+        public int UpdateCartItemCount()
+        {
+            var count = Cart.TotalItems;
+            Session.SetInt32("CartItemCount", count);
+            return count;
+        }
+
         public void AddProducts(CartItem item)
         {
             var cart = Cart;
             cart.AddItem(item);
             Cart = cart; // opslaan in sessie
+            UpdateCartItemCount();
         }
 
         public void UpdateProduct(int productId, int quantity)
@@ -46,18 +54,29 @@ namespace MatrixWebApp.Services
             var cart = Cart;
             cart.UpdateQuantity(productId, quantity);
             Cart = cart;
+            UpdateCartItemCount();
         }
 
-        public void RemoveProduct(int productId)
+        public (CartItem RemovedItem, int RemainingCount) RemoveProduct(int productId)
         {
             var cart = Cart;
-            cart.RemoveItem(productId);
-            Cart = cart;
+            var item = cart.Items.FirstOrDefault(i => i.ProductId == productId);
+
+            if (item != null)
+            {
+                cart.RemoveItem(productId);
+                Cart = cart;
+                var count = UpdateCartItemCount();
+                return (item, cart.TotalItems);
+            }
+
+            return (null, cart.TotalItems);
         }
 
         public void ClearCart()
         {
             Cart = new ShoppingCart();
+            UpdateCartItemCount();
         }
     }
 }
