@@ -3,6 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MatrixMobileApp.MainPage">
 
+    <ContentPage.ToolbarItems> 
+        <ToolbarItem Text="Uitloggen" Clicked="OnLogoutClicked" />
+    </ContentPage.ToolbarItems>
+
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
@@ -35,7 +39,11 @@
                 Text="Bekijk producten"
                 Clicked="OnViewProductsClicked"
                 HorizontalOptions="Fill"/>
+
+            <Button
+                Text="Bekijk actieve orders"
+                Clicked="OnViewOrdersClicked"
+                HorizontalOptions="Fill" />
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

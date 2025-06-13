@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatrixMobileApp.API.Models
+namespace MatrixMobileApp.ViewModels
 {
-    public class Orderline
+    public class OrderProductViewModel
     {
-        public int OrderlineId { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int Amount { get; set; }
         public decimal Price { get; set; }
-        public string ProductName { get; set; } = string.Empty;
     }
 }

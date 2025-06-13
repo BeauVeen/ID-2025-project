@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace MatrixMobileApp.API.Models
 {
-    public class Role
+    public class AuthResponse
     {
+        public string Token { get; set; }
+        public string Email { get; set; }
+        public int UserId { get; set; }
         public int RoleId { get; set; }
-        public string RoleName { get; set; } = null!;
+        public string RoleName { get; set; }
+
     }
 }

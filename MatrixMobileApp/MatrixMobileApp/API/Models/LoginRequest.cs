@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MatrixMobileApp.API.Models
 {
-    public class Role
+    public class LoginRequest
     {
-        public int RoleId { get; set; }
-        public string RoleName { get; set; } = null!;
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }
