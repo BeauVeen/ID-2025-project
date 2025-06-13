@@ -1,12 +1,12 @@
 ﻿@page
 @model MatrixWebApp.Pages.Admin.CustomersModel
 @{
-    ViewData["Title"] = "Klanten";
+    ViewData["Title"] = "Klanten overzicht";
     ViewData["ShowSidebar"] = true;
     var klanten = Model.Users.Where(u => Model.GetRoleName(u.RoleId) == "Klant").ToList();
 }
 
-<h2>Klanten</h2>
+<h2 class="admin-h2">Klanten</h2>
 <a asp-page="/Admin/CreateUser" asp-route-ReturnUrl="/Admin/Customers" class="btn btn-primary mb-3">Nieuwe klant</a>
 
 <div class="d-flex align-items-center gap-2 mb-1">

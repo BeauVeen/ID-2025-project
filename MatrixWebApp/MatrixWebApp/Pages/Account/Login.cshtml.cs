@@ -85,7 +85,14 @@ namespace MatrixWebApp.Pages.Account
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                return RedirectToPage("/Index");
+                if (roleName == "Administrator")
+                {
+                    return RedirectToPage("/Admin/Dashboard");
+                }
+                else
+                {
+                    return RedirectToPage("/Index");
+                }
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound ||
                      response.StatusCode == System.Net.HttpStatusCode.Unauthorized)

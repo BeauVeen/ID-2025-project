@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="flex-grow-1 d-flex flex-column justify-content-between ms-3">
                     <h5 class="mb-1">${product.name}</h5>
-                    <small class="text-muted">Serienummer: ${product.productId}</small>
+                    <small class="text-muted">Productnummer: ${product.productId}</small>
                     <p class="mb-0">${product.description}</p>
                 </div>
 

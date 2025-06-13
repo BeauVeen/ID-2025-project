@@ -14,7 +14,7 @@ namespace MatrixWebApp.Pages
 
         public void OnGet()
         {
-
+            ViewData["IsDarkMode"] = true;
         }
     }
 }

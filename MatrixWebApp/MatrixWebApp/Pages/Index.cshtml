@@ -1,8 +1,9 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home - Matrix Inc.";
+    ViewData["Title"] = "Home";
     ViewData["showProductSidebar"] = false;
+    ViewData["MainTransparent"] = true;
     ViewData["ShowMatrixRain"] = true; // Activeer de matrix rain
 }
 
@@ -13,57 +14,3 @@
         <a href="/Products" class="btn matrix-btn">EXPLORE OUR PRODUCTS</a>
     </div>
 </div>
-
-<style>
-    .hero-section {
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        color: white;
-        position: relative;
-        background-color: transparent; /* Zorg dat het transparant is */
-    }
-
-    .hero-content {
-        z-index: 2;
-        max-width: 800px;
-        padding: 2rem;
-    }
-
-    .matrix-btn {
-        background-color: #63894d;
-        color: #000;
-        border: none;
-        padding: 15px 40px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        border-radius: 30px;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 0 10px #63894d;
-    }
-
-        .matrix-btn:hover {
-            background-color: #63894d;
-            color: #000;
-            transform: translateY(-3px);
-            box-shadow: 0 0 20px #63894d;
-        }
-
-    .hero-title {
-        font-size: 3.5rem;
-        margin-bottom: 1.5rem;
-        color: white;
-        opacity: 0.9;
-        text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-    }
-
-    .hero-subtitle {
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
-        opacity: 0.9;
-    }
-</style>
