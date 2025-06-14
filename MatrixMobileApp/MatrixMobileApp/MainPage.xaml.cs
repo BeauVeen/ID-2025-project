@@ -1,24 +1,20 @@
-﻿namespace MatrixMobileApp
+﻿using MatrixMobileApp.API;
+using MatrixMobileApp.API.Services;
+using Xamarin.Google.Crypto.Tink.Shaded.Protobuf;
+
+
+namespace MatrixMobileApp
 {
     public partial class MainPage : ContentPage
     {
         int count = 0;
 
+        private readonly UserService userService; 
         public MainPage()
         {
             InitializeComponent();
-        }
-
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            var api = new ApiService();
+            userService = new UserService(api.Client); 
         }
 
         private async void OnViewProductsClicked(object sender, EventArgs e)
@@ -31,7 +27,7 @@
             await Navigation.PushAsync(new ActiveOrdersPage());
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
@@ -40,7 +36,30 @@
 
             if (string.IsNullOrEmpty(token) || roleId != "2")
             {
-                Shell.Current.GoToAsync("//LoginPage");
+                await Shell.Current.GoToAsync("//LoginPage");
+                return;
+            }
+
+            // Haal users op en display de naam van de user als begroeting 
+            try
+            {
+                var users = await userService.GetUsersAsync();
+                var userEmail = Preferences.Get("user_email", string.Empty);
+                var user = users.FirstOrDefault(u => u.Email == userEmail); // Haal de correcte user op op basis van email 
+
+                if (user != null)
+                {
+                    UserNameLabel.Text = $"Welkom, {user.Name}!";
+                }
+                else
+                {
+                    UserNameLabel.Text = "User niet gevonden";
+                }
+            }
+            catch (Exception ex)
+            {
+                UserNameLabel.Text = "Error loading user";
+  
             }
         }
 
