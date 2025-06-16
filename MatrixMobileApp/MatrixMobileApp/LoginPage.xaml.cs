@@ -20,12 +20,11 @@ namespace MatrixMobileApp
             var api = new ApiService();
             _jwtService = new JwtService(api.Client);
 
-            // Controleer of "Remember me" eerder is aangevinkt
             if (Preferences.Get(RememberMeKey, false))
             {
                 RememberMeCheckBox.IsChecked = true;
                 EmailEntry.Text = Preferences.Get(RememberedEmailKey, string.Empty);
-                // Optioneel: focus op wachtwoordveld
+
                 PasswordEntry.Focus();
             }
         }
@@ -61,7 +60,7 @@ namespace MatrixMobileApp
                 Preferences.Set("user_id", response.UserId.ToString());
                 Preferences.Set("user_email", response.Email ?? string.Empty);
 
-                // "Remember me" functionaliteit
+                // "Remember e-mail" functionaliteit
                 Preferences.Set(RememberMeKey, RememberMeCheckBox.IsChecked);
                 if (RememberMeCheckBox.IsChecked)
                 {
