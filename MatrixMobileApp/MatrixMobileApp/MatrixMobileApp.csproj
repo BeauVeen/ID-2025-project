@@ -64,6 +64,8 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.0" />
+		<PackageReference Include="ZXing.Net.Maui" Version="0.4.0" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -95,6 +97,12 @@
 	    <DependentUpon>OrderDetailPage.xaml</DependentUpon>
 	  </Compile>
 	  <MauiXaml Update="**\*.xaml" Generator="MSBuild:Compile" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+	  <PackageReference Include="Xamarin.Google.ZXing.Core">
+	    <Version>3.5.3.8</Version>
+	  </PackageReference>
 	</ItemGroup>
 
 </Project>
