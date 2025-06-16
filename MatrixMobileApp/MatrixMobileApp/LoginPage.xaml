@@ -67,7 +67,7 @@
                           Color="#426373"
                           Margin="-10"
                           VerticalOptions="Center"/>
-                <Label Text="Onthoud mij"
+                <Label Text="Onthoud e-mail"
                        VerticalOptions="Center"
                        TextColor="Black"/>
             </StackLayout>

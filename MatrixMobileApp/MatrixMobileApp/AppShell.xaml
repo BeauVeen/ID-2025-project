@@ -12,9 +12,26 @@
         Route="LoginPage" 
         ContentTemplate="{DataTemplate local:LoginPage}" />
 
-    <ShellContent 
-        Title="Home"
-        Route="HomePage" 
-        ContentTemplate="{DataTemplate local:MainPage}" />
+    <!-- Tab bar voor hoofdmenu -->
+    <TabBar>
+        <Tab Title="Route" Icon="map.png">
+            <ShellContent 
+            Route="RoutePage" 
+            ContentTemplate="{DataTemplate local:RoutePage}" />
+        </Tab>
+
+        <Tab Title="Home" Icon="house.png">
+            <ShellContent 
+            Route="HomePage" 
+            ContentTemplate="{DataTemplate local:HomePage}" />
+        </Tab>
+        
+        <Tab Title="Actieve Orders" Icon="order2.png">
+            <ShellContent 
+            Route="OrdersPage" 
+            ContentTemplate="{DataTemplate local:ActiveOrdersPage}" />
+        </Tab>
+
+    </TabBar>
 
 </Shell>
