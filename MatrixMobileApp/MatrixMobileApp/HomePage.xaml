@@ -39,9 +39,6 @@
                 FontSize="20"
                 FontAttributes="Bold"
                 HorizontalOptions="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnScanQrTapped" NumberOfTapsRequired="1"/>
-                    </Label.GestureRecognizers>
                 </Label>
 
                 <Image

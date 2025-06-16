@@ -32,11 +32,6 @@ namespace MatrixMobileApp
             await Navigation.PushAsync(new ActiveOrdersPage());
         }
 
-        private async void OnScanQrTapped(object sender, EventArgs e)
-        { 
-            await Navigation.PushAsync(new QRScanPage()); 
-        }
-
         private async void OnInfoTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Hoe werkt het?",
