@@ -59,11 +59,25 @@ namespace MatrixApi.Controllers
         {
             try
             {
+                byte[]? signatureBytes = null;
+                if (orderDto.Signature != null)
+                {
+                    using var ms = new MemoryStream();
+                    await orderDto.Signature.CopyToAsync(ms);
+                    signatureBytes = ms.ToArray();
+                    Console.WriteLine($"Signature bytes length: {signatureBytes.Length}");
+                }
+                else
+                {
+                    Console.WriteLine("No signature received");
+                }
+
                 var order = new Order
                 {
                     UserId = orderDto.UserId,
                     CreatedAt = DateTime.UtcNow,
                     Status = orderDto.Status,
+                    Signature = signatureBytes,
                     Orderlines = orderDto.Orderlines.Select(ol => new Orderline
                     {
                         ProductId = ol.ProductId,
@@ -82,17 +96,34 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, Order order)
+        public async Task<ActionResult> Update(int id, [FromForm] OrderUpdateDto dto)
         {
-            if (id != order.OrderId) return BadRequest();
+            if (id != dto.OrderId) return BadRequest();
 
             try
             {
-                var updated = await _orderService.UpdateAsync(order);
-                if (!updated)
+                byte[]? signatureBytes = null;
+
+                if (dto.Signature != null)
                 {
-                    return NotFound();
+                    using var ms = new MemoryStream();
+                    await dto.Signature.CopyToAsync(ms);
+                    signatureBytes = ms.ToArray();
                 }
+
+                var order = new Order
+                {
+                    OrderId = dto.OrderId,
+                    UserId = dto.UserId,
+                    Status = dto.Status,
+                    Signature = signatureBytes,
+                };
+
+                var updated = await _orderService.UpdateAsync(order);
+
+                if (!updated)
+                    return NotFound();
+
                 return NoContent();
             }
             catch (NotFoundException)
