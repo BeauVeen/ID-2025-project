@@ -4,17 +4,13 @@
              xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.Maui.Controls"
              x:Class="MatrixMobileApp.HomePage">
             
-    <ContentPage.ToolbarItems> 
+    <ContentPage.ToolbarItems>
         <ToolbarItem 
             Text="Uitloggen"
             IconImageSource="logout3.png"
             Clicked="OnLogoutClicked" />
-        
-        
     </ContentPage.ToolbarItems>
-    
-
-
+   
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
@@ -53,21 +49,30 @@
             </HorizontalStackLayout>
 
 
-            <!-- Camera window -->
             <Frame HeightRequest="350"
-                Margin="0,100,0,20"
-                Padding="0"
-                CornerRadius="32"
-                IsClippedToBounds="True">
-                <zxing:CameraBarcodeReaderView 
-                x:Name="cameraView"
-                IsTorchOn="False"
-                IsDetecting="True"
-                HorizontalOptions="Fill"
-                VerticalOptions="Fill"
-                BarcodesDetected="BarcodesDetected" />
+       Margin="0,100,0,20"
+       Padding="0"
+       CornerRadius="32"
+       IsClippedToBounds="True">
+           <Grid>
+            <!-- Camera Layer (onderaan) -->
+                    <zxing:CameraBarcodeReaderView 
+            x:Name="cameraView"
+            IsTorchOn="False"
+            IsDetecting="True"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            BarcodesDetected="BarcodesDetected" />
+                    <!-- Overlay Afbeelding (bovenop de camera, maar niet interactief) -->
+               <Image Source="qrscan.png"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               WidthRequest="200"
+               HeightRequest="200"
+                        IsVisible="True" />
+                </Grid>
             </Frame>
-            
+
             <!-- Dashboard Section -->
             <Label
             x:Name="DashboardDateLabel"
@@ -107,8 +112,8 @@
                         <TapGestureRecognizer Tapped="OnProblemenCardTapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Image Source="alert.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Problemen" FontSize="15" HorizontalOptions="Center"/>
+                        <Image Source="car.png" HeightRequest="32" WidthRequest="32"/>
+                        <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center"/>
                         <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label 
                             
