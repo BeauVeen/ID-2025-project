@@ -76,6 +76,7 @@ namespace MatrixMobileApp
                 // Container logica hier nog toevoegen
                 // zoals alle orders van de container toevoegen aan actieve orders pagina
                 // Orders moeten gemarkeerd worden als 'Onderweg' wanneer bezorger container scant en op 'Begin rit' klikt (Begin Rit 2.2.0 design in Trello)
+                // Er moet een optimale route voor deze orders gegenereerd worden op de Route pagina
 
             }
 
