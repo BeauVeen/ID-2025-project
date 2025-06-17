@@ -1,55 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.Maui.Controls"
              x:Class="MatrixMobileApp.HomePage">
             
-    <ContentPage.ToolbarItems> 
+    <ContentPage.ToolbarItems>
         <ToolbarItem 
             Text="Uitloggen"
             IconImageSource="logout3.png"
             Clicked="OnLogoutClicked" />
-        
-        
     </ContentPage.ToolbarItems>
-    
-
-
+   
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
 
+            <!-- user begroeting -->
             <Label             
                 x:Name="UserNameLabel"
                 Text="Loading..."
                 Style="{StaticResource Headline}"
-                FontSize="25"
+                FontSize="20"
                 SemanticProperties.HeadingLevel="Level1" />
 
-            <Image
-                Source="scanqr.png"
-                HeightRequest="150"
-                WidthRequest="150"
-                Aspect="AspectFit">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnScanQrTapped" NumberOfTapsRequired="1"/>
-                </Image.GestureRecognizers>
-            </Image>
-
+            <!-- QR scan text met info icoon -->
             <HorizontalStackLayout
                 HorizontalOptions="Center"
                 Spacing="8"
-                Margin="10,-20,0,0">
+                Margin="10,10,0,-120">
 
-            <Label
+                <Label
                 Text="Scan QR"
-                FontSize="22"
+                FontSize="20"
                 FontAttributes="Bold"
-                Margin="0,0,0,0"
                 HorizontalOptions="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnScanQrTapped" NumberOfTapsRequired="1"/>
-                    </Label.GestureRecognizers>
                 </Label>
 
                 <Image
@@ -64,16 +49,40 @@
             </HorizontalStackLayout>
 
 
+            <Frame HeightRequest="350"
+       Margin="0,100,0,20"
+       Padding="0"
+       CornerRadius="32"
+       IsClippedToBounds="True">
+           <Grid>
+            <!-- Camera Layer (onderaan) -->
+                    <zxing:CameraBarcodeReaderView 
+            x:Name="cameraView"
+            IsTorchOn="False"
+            IsDetecting="True"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            BarcodesDetected="BarcodesDetected" />
+                    <!-- Overlay Afbeelding (bovenop de camera, maar niet interactief) -->
+               <Image Source="qrscan.png"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               WidthRequest="200"
+               HeightRequest="200"
+                        IsVisible="True" />
+                </Grid>
+            </Frame>
+
             <!-- Dashboard Section -->
             <Label
             x:Name="DashboardDateLabel"
             FontSize="20"
             FontAttributes="Bold"
-            Margin="0,75,0,0"
+            Margin="0,0,0,0"
             HorizontalOptions="Center" />
 
             <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
-                <!-- Afgeleverde orders card --> 
+                <!-- Afgeleverde orders card -->
                 <Frame CornerRadius="12" WidthRequest="100" BackgroundColor="#E8F5E9" Padding="10" HasShadow="True">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnAfgeleverdCardTapped" NumberOfTapsRequired="1"/>
@@ -103,8 +112,8 @@
                         <TapGestureRecognizer Tapped="OnProblemenCardTapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Image Source="alert.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Problemen" FontSize="15" HorizontalOptions="Center"/>
+                        <Image Source="car.png" HeightRequest="32" WidthRequest="32"/>
+                        <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center"/>
                         <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label 
                             
@@ -116,20 +125,6 @@
                     </VerticalStackLayout>
                 </Frame>
             </HorizontalStackLayout>
-
-
-            <!--
-            <Button
-                Margin="0,25,0, -15"
-                Text="Bekijk actieve orders"
-                Clicked="OnViewOrdersClicked"
-                HorizontalOptions="Fill" />
-
-            <Button
-                Text="Bekijk producten"
-                Clicked="OnViewProductsClicked"
-                HorizontalOptions="Fill"/> -->
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
