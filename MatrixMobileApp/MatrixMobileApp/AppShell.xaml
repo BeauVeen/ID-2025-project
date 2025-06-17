@@ -7,9 +7,29 @@
     Shell.FlyoutBehavior="Disabled"
     Title="MatrixMobileApp">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <ShellContent 
+        Title="Login"
+        Route="LoginPage" 
+        ContentTemplate="{DataTemplate local:LoginPage}" />
 
+    <!-- Tab bar voor hoofdmenu -->
+    <TabBar>
+        <Tab Title="Route" Icon="map.png">
+            <ShellContent 
+            Route="RoutePage" 
+            ContentTemplate="{DataTemplate local:RoutePage}" />
+        </Tab>
+
+        <Tab Title="Home" Icon="house.png">
+            <ShellContent 
+            Route="HomePage" 
+            ContentTemplate="{DataTemplate local:HomePage}" />
+        </Tab>
+
+        <Tab Title="Actieve Orders" Icon="box2.png">
+            <ShellContent 
+            Route="OrdersPage" 
+            ContentTemplate="{DataTemplate local:ActiveOrdersPage}" />
+        </Tab>
+    </TabBar>
 </Shell>
