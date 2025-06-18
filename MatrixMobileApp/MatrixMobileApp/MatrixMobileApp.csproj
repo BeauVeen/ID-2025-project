@@ -81,7 +81,7 @@
 	  <MauiXaml Update="ActiveOrdersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="OrderDetailPage.xaml">
+	  <MauiXaml Update="MagazijnMedewerkerPages\OrderDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <Compile Update="LoginPage.xaml.cs">
@@ -89,6 +89,12 @@
 	  </Compile>
 	  <Compile Update="HomePage.xaml.cs">
 	    <DependentUpon>HomePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="MagazijnMedewerkerPages\ContainersPage.xaml.cs">
+	    <DependentUpon>ContainersPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="MagazijnMedewerkerPages\HomePageMagazijn.xaml.cs">
+	    <DependentUpon>HomePageMagazijn.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="RoutePage.xaml.cs">
 	    <DependentUpon>RoutePage.xaml</DependentUpon>
@@ -102,7 +108,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="OrderDetailPage.xaml.cs">
+	  <Compile Update="MagazijnMedewerkerPages\OrderDetailPage.xaml.cs">
 	    <DependentUpon>OrderDetailPage.xaml</DependentUpon>
 	  </Compile>
 	  <MauiXaml Update="**\*.xaml" Generator="MSBuild:Compile" />

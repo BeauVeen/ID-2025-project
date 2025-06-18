@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MatrixMobileApp
+namespace MatrixMobileApp.MagazijnMedewerkerPages
 {
     public partial class OrderDetailPage : ContentPage
     {
