@@ -50,27 +50,28 @@
 
 
             <Frame HeightRequest="350"
-       Margin="0,100,0,20"
-       Padding="0"
-       CornerRadius="32"
-       IsClippedToBounds="True">
+                Margin="0,100,0,20"
+                Padding="0"
+                CornerRadius="32"
+                IsClippedToBounds="True">
            <Grid>
-            <!-- Camera Layer (onderaan) -->
-                    <zxing:CameraBarcodeReaderView 
+            <!-- Camera window met scan functie-->
+            <zxing:CameraBarcodeReaderView 
             x:Name="cameraView"
             IsTorchOn="False"
             IsDetecting="True"
             HorizontalOptions="Fill"
             VerticalOptions="Fill"
             BarcodesDetected="BarcodesDetected" />
-                    <!-- Overlay Afbeelding (bovenop de camera, maar niet interactief) -->
-               <Image Source="qrscan.png"
-               HorizontalOptions="Center"
-               VerticalOptions="Center"
-               WidthRequest="200"
-               HeightRequest="200"
-                        IsVisible="True" />
-                </Grid>
+           <!-- Overlay QR image  -->
+           <Image Source="qrscan2.png"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            WidthRequest="400"
+            HeightRequest="300"
+            Aspect="AspectFill" 
+            IsVisible="True" />
+           </Grid>
             </Frame>
 
             <!-- Dashboard Section -->

@@ -7,6 +7,7 @@ namespace MatrixMobileApp
         public App()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(OfflinePage), typeof(OfflinePage));
             MainPage = new AppShell();
 
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
@@ -16,19 +17,14 @@ namespace MatrixMobileApp
         {
             if (e.NetworkAccess != NetworkAccess.Internet)
             {
-                // Toon de OfflinePage als er geen internet is
                 await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
-                    // Controleer of we niet al op de OfflinePage zitten
-                    if (Current.MainPage is not OfflinePage)
+
+                    if (Shell.Current.CurrentPage is not OfflinePage && Shell.Current.CurrentPage is not LoginPage)
                     {
-                        Current.MainPage = new OfflinePage();
+                        await Shell.Current.GoToAsync(nameof(OfflinePage));
                     }
                 });
-            }
-            else
-            {
-                // hier hoeft even niks. laat gebruiker zelf op Retry klikken op OfflinePage
             }
         }
     }

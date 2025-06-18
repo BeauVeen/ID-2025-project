@@ -17,17 +17,17 @@ public partial class OfflinePage : ContentPage
             if (!string.IsNullOrEmpty(authToken))
             {
 
-                Application.Current.MainPage = new AppShell();
+                await Shell.Current.GoToAsync("//HomePage");
             }
             else
             {
                 await DisplayAlert("Niet ingelogd", "Je bent niet ingelogd. Log opnieuw in om verder te gaan.", "OK");
-                Application.Current.MainPage = new LoginPage();
+                await Shell.Current.GoToAsync("//LoginPage");
             }
         }
         else
         {
-            await DisplayAlert("Nog steeds offline", "Er is nog steeds geen internetverbinding.", "OK");
+            await DisplayAlert("Geen internetverbinding", "Er is nog steeds geen netwerkverbinding gedetecteerd. Controleer uw verbinding en probeer het opnieuw.", "OK");
         }
     }
 }
