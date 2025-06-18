@@ -11,21 +11,22 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
     public partial class ContainerOrdersPage : ContentPage
     {
         private readonly int _containerId;
+        private readonly ContainerService _containerService;
 
         public ContainerOrdersPage(int containerId)
         {
             InitializeComponent();
             _containerId = containerId;
+
+            var api = new ApiService();
+            _containerService = new ContainerService(api.Client);
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            var api = new ApiService();
-            var containerService = new ContainerService(api.Client);
-
-            var containers = await containerService.GetContainersAsync();
+            var containers = await _containerService.GetContainersAsync();
             var container = containers.FirstOrDefault(c => c.ContainerId == _containerId);
 
             if (container != null)
@@ -61,8 +62,8 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
 
         private void UpdateAcceptButtonVisibility(List<OrderWithReadyViewModel> orders)
         {
-            // Show if there are no orders, or if all orders have no products
-            AcceptButton.IsVisible = !orders.Any() || orders.All(o => o.Orderlines == null || o.Orderlines.Count == 0) 
+            AcceptButton.IsVisible = !orders.Any()
+                || orders.All(o => o.Orderlines == null || o.Orderlines.Count == 0)
                 || (orders.Any() && orders.All(o => o.IsReady));
         }
 
@@ -75,14 +76,10 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
 
             if (confirm)
             {
-                var api = new ApiService();
-                var containerService = new ContainerService(api.Client);
-
                 try
                 {
-                    await containerService.PatchContainerStatusAsync(_containerId, "Klaar voor verzenden");
+                    await _containerService.PatchContainerStatusAsync(_containerId, "Klaar voor verzending");
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt.", "OK");
-                    await Navigation.PopAsync();
                 }
                 catch (Exception ex)
                 {
