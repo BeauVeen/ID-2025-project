@@ -61,7 +61,9 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
 
         private void UpdateAcceptButtonVisibility(List<OrderWithReadyViewModel> orders)
         {
-            AcceptButton.IsVisible = orders.Any() && orders.All(o => o.IsReady);
+            // Show if there are no orders, or if all orders have no products
+            AcceptButton.IsVisible = !orders.Any() || orders.All(o => o.Orderlines == null || o.Orderlines.Count == 0) 
+                || (orders.Any() && orders.All(o => o.IsReady));
         }
 
         private async void OnAcceptClicked(object sender, EventArgs e)
@@ -76,18 +78,15 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
                 var api = new ApiService();
                 var containerService = new ContainerService(api.Client);
 
-                var containers = await containerService.GetContainersAsync();
-                var container = containers.FirstOrDefault(c => c.ContainerId == _containerId);
-                if (container != null)
+                try
                 {
-                    container.Status = "Klaar voor verzenden";
-                    await containerService.UpdateContainerAsync(container);
+                    await containerService.PatchContainerStatusAsync(_containerId, "Klaar voor verzenden");
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt.", "OK");
                     await Navigation.PopAsync();
                 }
-                else
+                catch (Exception ex)
                 {
-                    await DisplayAlert("Fout", "Container niet gevonden.", "OK");
+                    await DisplayAlert("Fout", $"Status bijwerken mislukt: {ex.Message}", "OK");
                 }
             }
         }

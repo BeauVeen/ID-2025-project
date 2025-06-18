@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MatrixMobileApp.API.Models;
 
+
 namespace MatrixMobileApp.API.Services
 {
     internal class ContainerService
@@ -31,6 +32,28 @@ namespace MatrixMobileApp.API.Services
             var json = JsonSerializer.Serialize(container);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _client.PutAsync($"/api/Container/{container.ContainerId}", content);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task PatchContainerStatusAsync(int containerId, string newStatus)
+        {
+            var payload = new { status = newStatus };
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, $"/api/Container/{containerId}")
+            {
+                Content = content
+            };
+            request.Headers.Accept.Clear();
+            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/plain"));
+
+            // Optional: Add JWT if your API requires it
+            var token = Preferences.Get("auth_token", string.Empty);
+            if (!string.IsNullOrEmpty(token))
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
     }

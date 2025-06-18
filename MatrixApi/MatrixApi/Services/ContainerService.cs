@@ -84,6 +84,9 @@ namespace MatrixApi.Services
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(newStatus))
+                    throw new ArgumentException("Status cannot be null or empty.", nameof(newStatus));
+
                 var container = await _context.Containers
                     .Include(c => c.ContainerOrders)
                         .ThenInclude(co => co.Order)
@@ -108,7 +111,7 @@ namespace MatrixApi.Services
             }
             catch (Exception ex) when (!(ex is NotFoundException))
             {
-                Console.WriteLine($"Error updating container and related order statuses: {ex.Message}");
+                Console.WriteLine($"Error updating container and related order statuses: {ex}");
                 throw;
             }
         }
