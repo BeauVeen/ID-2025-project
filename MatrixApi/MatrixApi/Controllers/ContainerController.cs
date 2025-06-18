@@ -64,6 +64,24 @@ namespace MatrixApi.Controllers
             }
         }
 
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<Container>> UpdateStatus(int id, [FromBody] ContainerUpdateDto dto)
+        {
+            try
+            {
+                var updated = await _containerService.UpdateStatusAsync(id, dto.Status);
+                return Ok(updated);
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
