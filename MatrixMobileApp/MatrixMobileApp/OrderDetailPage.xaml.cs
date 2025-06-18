@@ -13,9 +13,15 @@ namespace MatrixMobileApp
     {
         private readonly Order _order;
 
-        public OrderDetailPage(Order order)
+
+        public OrderDetailPage()
         {
             InitializeComponent();
+        }
+
+ 
+        public OrderDetailPage(Order order) : this()
+        {
             _order = order;
         }
 
@@ -23,7 +29,7 @@ namespace MatrixMobileApp
         {
             base.OnAppearing();
 
-            // Fetch all orderlines
+ 
             var api = new API.ApiService();
             var orderlineService = new OrderlineService(api.Client);
 
