@@ -4,7 +4,7 @@ using MatrixMobileApp.API;
 using MatrixMobileApp.API.Models;
 using MatrixMobileApp.API.Services;
 using Microsoft.Maui.Controls;
-
+using MatrixMobileApp.MagazijnMedewerkerPages;
 namespace MatrixMobileApp
 {
     public partial class LoginPage : ContentPage
@@ -58,23 +58,30 @@ namespace MatrixMobileApp
                 // gebruik de AuthenticateAsync functie uit jwtService, die via de api een authenticatie doet (/api/User/authenticate post request) om inloggegevens te valideren
                 var response = await _jwtService.AuthenticateAsync(loginRequest);
 
-                if (response.RoleId != 2)
-                    throw new Exception("Alleen bezorgers kunnen inloggen op deze app");
+                if (response.RoleId != 2 && response.RoleId != 4)
+                    throw new Exception("Alleen bezorgers of magazijnmedewerkers kunnen inloggen op deze app");
 
                 // opslaan van gebruikersgegevens
                 Preferences.Set("auth_token", response.Token);
                 Preferences.Set("user_id", response.UserId.ToString());
-                Preferences.Set("user_email", response.Email ?? string.Empty); // sla email 
+                Preferences.Set("user_email", response.Email ?? string.Empty);
 
                 // het e-mailadres wordt opgeslagen voor sneller inlogproces
                 Preferences.Set(RememberedEmailKey, response.Email ?? string.Empty);
 
-                var userName = response.Email?.Split('@')[0] ?? "Bezorger";
+                var userName = response.Email?.Split('@')[0] ?? "Gebruiker";
                 Preferences.Set("user_name", userName);
                 Preferences.Set("user_role", response.RoleId.ToString());
 
-                //Redirect naar de homepage bij succesvolle login 
-                await Shell.Current.GoToAsync("//HomePage");
+                // Redirect naar de juiste homepage bij succesvolle login
+                if (response.RoleId == 2)
+                {
+                    await Shell.Current.GoToAsync("//HomePage");
+                }
+                else if (response.RoleId == 4)
+                {
+                    await Shell.Current.GoToAsync("//HomePageMagazijn");
+                }
             }
             catch (Exception ex)
             {
@@ -92,6 +99,12 @@ namespace MatrixMobileApp
                 LoginButton.IsEnabled = true;
             }
         }
+        //temporary method to navigate to ContainersPage
+        private async void OnGoToContainersPageClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ContainersPage());
+        }
+        
 
         public void ResetLoginFields()
         {
