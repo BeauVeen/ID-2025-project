@@ -21,7 +21,8 @@ namespace MatrixApi.Services
             {
                 return await _context.Containers
                     .Include(c => c.ContainerOrders)
-                    .ThenInclude(co => co.Order)
+                        .ThenInclude(co => co.Order)
+                            .ThenInclude(o => o.Orderlines)
                     .ToListAsync();
             }
             catch (Exception ex)
@@ -37,7 +38,8 @@ namespace MatrixApi.Services
             {
                 var container = await _context.Containers
                     .Include(c => c.ContainerOrders)
-                    .ThenInclude(co => co.Order)
+                        .ThenInclude(co => co.Order)
+                            .ThenInclude(o => o.Orderlines)
                     .FirstOrDefaultAsync(c => c.ContainerId == id);
 
                 if (container == null)
@@ -77,6 +79,41 @@ namespace MatrixApi.Services
                 throw;
             }
         }
+
+        public async Task<Container> UpdateStatusAsync(int containerId, string newStatus)
+        {
+            try
+            {
+                var container = await _context.Containers
+                    .Include(c => c.ContainerOrders)
+                        .ThenInclude(co => co.Order)
+                    .FirstOrDefaultAsync(c => c.ContainerId == containerId);
+
+                if (container == null)
+                    throw new NotFoundException($"Container with id {containerId} not found.");
+
+                container.Status = newStatus;
+
+                foreach (var containerOrder in container.ContainerOrders)
+                {
+                    if (containerOrder.Order != null)
+                    {
+                        containerOrder.Order.Status = newStatus;
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                return container;
+            }
+            catch (Exception ex) when (!(ex is NotFoundException))
+            {
+                Console.WriteLine($"Error updating container and related order statuses: {ex.Message}");
+                throw;
+            }
+        }
+
+
 
         public async Task<bool> DeleteAsync(int id)
         {
