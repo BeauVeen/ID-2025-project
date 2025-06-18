@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using MatrixMobileApp.API.Models;
@@ -23,6 +24,14 @@ namespace MatrixMobileApp.API.Services
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<Container>>(json, _jsonOptions) ?? new List<Container>();
+        }
+
+        public async Task UpdateContainerAsync(Container container)
+        {
+            var json = JsonSerializer.Serialize(container);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"/api/Container/{container.ContainerId}", content);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

@@ -1,0 +1,95 @@
+using MatrixMobileApp.API;
+using MatrixMobileApp.API.Models;
+using MatrixMobileApp.API.Services;
+using MatrixMobileApp.ViewModels;
+using Microsoft.Maui.Controls;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace MatrixMobileApp.MagazijnMedewerkerPages
+{
+    public partial class ContainerOrdersPage : ContentPage
+    {
+        private readonly int _containerId;
+
+        public ContainerOrdersPage(int containerId)
+        {
+            InitializeComponent();
+            _containerId = containerId;
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var api = new ApiService();
+            var containerService = new ContainerService(api.Client);
+
+            var containers = await containerService.GetContainersAsync();
+            var container = containers.FirstOrDefault(c => c.ContainerId == _containerId);
+
+            if (container != null)
+            {
+                HeaderLabel.Text = $"Container {container.ContainerId} - Orders";
+                var orderViewModels = container.ContainerOrders
+                    .Select(co => new OrderWithReadyViewModel
+                    {
+                        OrderId = co.Order.OrderId,
+                        Status = co.Order.Status,
+                        Orderlines = co.Order.Orderlines,
+                        IsReady = Preferences.Get($"order_{co.Order.OrderId}_ready", false)
+                    })
+                    .ToList();
+
+                OrdersList.ItemsSource = orderViewModels;
+                UpdateAcceptButtonVisibility(orderViewModels);
+            }
+            else
+            {
+                await DisplayAlert("Fout", "Container niet gevonden.", "OK");
+                await Navigation.PopAsync();
+            }
+        }
+
+        private async void OnOrderTapped(object sender, TappedEventArgs e)
+        {
+            if (e.Parameter is int orderId)
+            {
+                await Navigation.PushAsync(new OrderProductsPage(orderId));
+            }
+        }
+
+        private void UpdateAcceptButtonVisibility(List<OrderWithReadyViewModel> orders)
+        {
+            AcceptButton.IsVisible = orders.Any() && orders.All(o => o.IsReady);
+        }
+
+        private async void OnAcceptClicked(object sender, EventArgs e)
+        {
+            bool confirm = await DisplayAlert(
+                "Bevestigen",
+                "Weet je zeker dat je de status van deze container wilt zetten op 'Klaar voor Verzending'?",
+                "Ja", "Nee");
+
+            if (confirm)
+            {
+                var api = new ApiService();
+                var containerService = new ContainerService(api.Client);
+
+                var containers = await containerService.GetContainersAsync();
+                var container = containers.FirstOrDefault(c => c.ContainerId == _containerId);
+                if (container != null)
+                {
+                    container.Status = "Klaar voor verzenden";
+                    await containerService.UpdateContainerAsync(container);
+                    await DisplayAlert("Succes", "Containerstatus is bijgewerkt.", "OK");
+                    await Navigation.PopAsync();
+                }
+                else
+                {
+                    await DisplayAlert("Fout", "Container niet gevonden.", "OK");
+                }
+            }
+        }
+    }
+}

@@ -5,7 +5,7 @@ using MatrixMobileApp.ViewModels;
 using Microsoft.Maui.Controls;
 using System.Linq;
 
-namespace MatrixMobileApp
+namespace MatrixMobileApp.MagazijnMedewerkerPages
 {
     public partial class ContainersPage : ContentPage
     {
@@ -41,15 +41,12 @@ namespace MatrixMobileApp
                 await DisplayAlert("Fout", $"Kan containers niet laden: {ex.Message}", "OK");
             }
         }
-        //temp
+
         private async void OnContainerSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is ContainerViewModel selectedContainer)
             {
-                // Option 1: Pass only the ID
                 await Navigation.PushAsync(new ContainerOrdersPage(selectedContainer.ContainerId));
-                // Option 2: Pass the whole Container object (if you have it)
-                // await Navigation.PushAsync(new ContainerOrdersPage(selectedContainer));
             }
 
             // Deselect item after navigation for better UX

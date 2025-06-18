@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.MagazijnMedewerkerPages.HomePageMagazijn"
+             Title="Dashboard"
+             BackgroundColor="#F6F8FA">
+
+    <VerticalStackLayout Padding="24" Spacing="18">
+        <Label x:Name="UserNameLabel"
+               FontSize="22"
+               FontAttributes="Bold"
+               TextColor="#2D3A4A"
+               Margin="0,0,0,4"/>
+        <Label x:Name="DashboardDateLabel"
+               FontSize="16"
+               TextColor="#6B7280"
+               Margin="0,0,0,18"/>
+        <Label Text="Welkom in het magazijn!"
+               FontSize="18"
+               TextColor="#2D3A4A"
+               Margin="0,0,0,18"/>
+        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*">
+            <!-- Containers Card -->
+            <Frame Grid.Row="0"
+                   Padding="18"
+                   CornerRadius="14"
+                   BackgroundColor="White"
+                   HasShadow="True"
+                   Margin="0,0,0,16">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnViewContainersClicked"/>
+                </Frame.GestureRecognizers>
+                <HorizontalStackLayout>
+                    <Image Source="box.png" HeightRequest="36" WidthRequest="36"/>
+                    <VerticalStackLayout Margin="12,0,0,0">
+                        <Label Text="Containers" FontSize="18" FontAttributes="Bold" TextColor="#2D3A4A"/>
+                        <Label Text="Bekijk en beheer containers" FontSize="14" TextColor="#6B7280"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Frame>
+            <!-- Producten Card -->
+            <Frame Grid.Row="1"
+                   Padding="18"
+                   CornerRadius="14"
+                   BackgroundColor="White"
+                   HasShadow="True"
+                   Margin="0,0,0,16">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnViewProductsClicked"/>
+                </Frame.GestureRecognizers>
+                <HorizontalStackLayout>
+                    <Image Source="products.png" HeightRequest="36" WidthRequest="36"/>
+                    <VerticalStackLayout Margin="12,0,0,0">
+                        <Label Text="Producten" FontSize="18" FontAttributes="Bold" TextColor="#2D3A4A"/>
+                        <Label Text="Bekijk en beheer producten" FontSize="14" TextColor="#6B7280"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Frame>
+            <!-- Orders Card -->
+            <Frame Grid.Row="2"
+                   Padding="18"
+                   CornerRadius="14"
+                   BackgroundColor="White"
+                   HasShadow="True"
+                   Margin="0,0,0,0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnViewOrdersClicked"/>
+                </Frame.GestureRecognizers>
+                <HorizontalStackLayout>
+                    <Image Source="orders.png" HeightRequest="36" WidthRequest="36"/>
+                    <VerticalStackLayout Margin="12,0,0,0">
+                        <Label Text="Orders" FontSize="18" FontAttributes="Bold" TextColor="#2D3A4A"/>
+                        <Label Text="Bekijk en beheer alle orders" FontSize="14" TextColor="#6B7280"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Frame>
+        </Grid>
+        <Button Text="Uitloggen"
+                Clicked="OnLogoutClicked"
+                BackgroundColor="#512BD4"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                Margin="0,24,0,0"/>
+    </VerticalStackLayout>
+</ContentPage>

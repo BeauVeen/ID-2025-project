@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MatrixMobileApp.ViewModels"
+             x:Class="MatrixMobileApp.MagazijnMedewerkerPages.ContainersPage"
+             Title="Containers"
+             BackgroundColor="#F6F8FA">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <vm:StatusToColorConverter x:Key="StatusToColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Padding="24" Spacing="18">
+        <Label Text="Beschikbare containers" 
+               FontSize="24"
+               FontAttributes="Bold"
+               TextColor="#2D3A4A"
+               HorizontalOptions="Center"
+               Margin="0,0,0,12"/>
+        <CollectionView x:Name="ContainersList"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,0,0,14"
+                           Padding="16"
+                           CornerRadius="14"
+                           BackgroundColor="White"
+                           HasShadow="True"
+                           BorderColor="#E0E0E0">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OnContainerTapped"
+                                CommandParameter="{Binding ContainerId}" />
+                        </Frame.GestureRecognizers>
+                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                            
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Container ID:" FontAttributes="Bold" FontSize="14" TextColor="#6B7280"/>
+                                <Label Text="{Binding ContainerId}" FontSize="28" FontAttributes="Bold" TextColor="#2D3A4A"/>
+                                <Label Text="Aantal orders:" FontAttributes="Bold" FontSize="14" TextColor="#6B7280" Margin="0,8,0,0"/>
+                                <Label Text="{Binding OrderCount}" FontSize="16" TextColor="#2D3A4A"/>
+                                <Label Text="Status:" FontAttributes="Bold" FontSize="14" TextColor="#6B7280" Margin="0,8,0,0"/>
+                                <Label Text="{Binding Status}" 
+                                       FontSize="16" 
+                                       TextColor="{Binding Status, Converter={StaticResource StatusToColorConverter}}" 
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                            
+                            <Label Grid.Column="1"
+                                   Text="&#x276F;" 
+                                   FontSize="28"
+                                   TextColor="#B0B0B0"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

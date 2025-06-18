@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MatrixMobileApp.ContainerOrdersPage"
+             xmlns:viewModels="clr-namespace:MatrixMobileApp.ViewModels"
+             x:Class="MatrixMobileApp.MagazijnMedewerkerPages.ContainerOrdersPage"
              Title="Orders in Container">
     <VerticalStackLayout Padding="16">
         <Label x:Name="HeaderLabel"
@@ -13,13 +14,19 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Margin="0,0,0,12" Padding="12" BorderColor="#426373" CornerRadius="10">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OnOrderTapped"
+                                CommandParameter="{Binding OrderId}" />
+                        </Frame.GestureRecognizers>
                         <VerticalStackLayout>
-                            <Label Text="Order ID:" FontAttributes="Bold"/>
-                            <Label Text="{Binding OrderId}" />
+                            <HorizontalStackLayout>
+                                <Label Text="Order ID:" FontAttributes="Bold"/>
+                                <Label Text="{Binding OrderId}" />
+                                <Label Text="✔" TextColor="Green" FontSize="Large" IsVisible="{Binding IsReady}" Margin="8,0,0,0"/>
+                            </HorizontalStackLayout>
                             <Label Text="Status:" FontAttributes="Bold" Margin="0,8,0,0"/>
                             <Label Text="{Binding Status}" />
-
-                            <!-- Products in this order -->
                             <Label Text="Producten:" FontAttributes="Bold" Margin="0,12,0,0"/>
                             <CollectionView ItemsSource="{Binding Orderlines}">
                                 <CollectionView.ItemTemplate>
@@ -39,23 +46,11 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
-        <Label Text="Producten in deze container:" 
-               FontSize="Subtitle"
-               FontAttributes="Bold"
-               Margin="0,24,0,8"/>
-        <CollectionView x:Name="ProductsChecklist">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Orientation="Horizontal" Padding="4">
-                        <CheckBox IsChecked="{Binding IsPicked}" VerticalOptions="Center"/>
-                        <Label Text="{Binding Name}" VerticalOptions="Center" Margin="8,0,0,0"/>
-                        <Label Text="x" VerticalOptions="Center" Margin="4,0,0,0"/>
-                        <Label Text="{Binding Amount}" VerticalOptions="Center" Margin="0,0,0,0"/>
-                        <Label Text="{Binding Price, StringFormat='€{0:F2}'}" VerticalOptions="Center" Margin="8,0,0,0"/>
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <Button x:Name="AcceptButton"
+                Text="Accepteren"
+                Margin="0,24,0,0"
+                HorizontalOptions="Fill"
+                IsVisible="False"
+                Clicked="OnAcceptClicked"/>
     </VerticalStackLayout>
 </ContentPage>
