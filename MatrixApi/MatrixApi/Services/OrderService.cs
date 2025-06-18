@@ -18,7 +18,10 @@ namespace MatrixApi.Services
         {
             try
             {
-                return await _context.Orders.ToListAsync();
+                return await _context.Orders
+                    .Include(o => o.Orderlines)
+                        .ThenInclude(ol => ol.Product)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -31,7 +34,11 @@ namespace MatrixApi.Services
         {
             try
             {
-                var order = await _context.Orders.FindAsync(id);
+                var order = await _context.Orders
+                    .Include(o => o.Orderlines)
+                        .ThenInclude(ol => ol.Product)
+                    .FirstOrDefaultAsync(o => o.OrderId == id);
+
                 if (order == null)
                 {
                     throw new NotFoundException($"Order with id {id} not found.");
@@ -72,6 +79,7 @@ namespace MatrixApi.Services
 
                 existing.UserId = order.UserId;
                 existing.Status = order.Status;
+                existing.Signature = order.Signature;
 
                 await _context.SaveChangesAsync();
 

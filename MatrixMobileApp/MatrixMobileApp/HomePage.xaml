@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.Maui.Controls"
+             x:Class="MatrixMobileApp.HomePage">
+            
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            Text="Uitloggen"
+            IconImageSource="logout3.png"
+            Clicked="OnLogoutClicked" />
+    </ContentPage.ToolbarItems>
+   
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+
+            <!-- user begroeting -->
+            <Label             
+                x:Name="UserNameLabel"
+                Text="Loading..."
+                Style="{StaticResource Headline}"
+                FontSize="20"
+                SemanticProperties.HeadingLevel="Level1" />
+
+            <!-- QR scan text met info icoon -->
+            <HorizontalStackLayout
+                HorizontalOptions="Center"
+                Spacing="8"
+                Margin="10,10,0,-120">
+
+                <Label
+                Text="Scan QR"
+                FontSize="20"
+                FontAttributes="Bold"
+                HorizontalOptions="Center">
+                </Label>
+
+                <Image
+                Source="info.png"
+                HeightRequest="19"
+                WidthRequest="19"
+                VerticalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnInfoTapped" NumberOfTapsRequired="1"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </HorizontalStackLayout>
+
+
+            <Frame HeightRequest="350"
+       Margin="0,100,0,20"
+       Padding="0"
+       CornerRadius="32"
+       IsClippedToBounds="True">
+           <Grid>
+            <!-- Camera Layer (onderaan) -->
+                    <zxing:CameraBarcodeReaderView 
+            x:Name="cameraView"
+            IsTorchOn="False"
+            IsDetecting="True"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            BarcodesDetected="BarcodesDetected" />
+                    <!-- Overlay Afbeelding (bovenop de camera, maar niet interactief) -->
+               <Image Source="qrscan.png"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               WidthRequest="200"
+               HeightRequest="200"
+                        IsVisible="True" />
+                </Grid>
+            </Frame>
+
+            <!-- Dashboard Section -->
+            <Label
+            x:Name="DashboardDateLabel"
+            FontSize="20"
+            FontAttributes="Bold"
+            Margin="0,0,0,0"
+            HorizontalOptions="Center" />
+
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                <!-- Afgeleverde orders card -->
+                <Frame CornerRadius="12" WidthRequest="100" BackgroundColor="#E8F5E9" Padding="10" HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAfgeleverdCardTapped" NumberOfTapsRequired="1"/>
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Image Source="order2.png" HeightRequest="32" WidthRequest="32"/>
+                        <Label Text="Afgeleverd" FontSize="15" HorizontalOptions="Center"/>
+                        <Label x:Name="AfgeleverdCountLabel" Text="12" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Te bezorgen Card -->
+                <Frame CornerRadius="12" BackgroundColor="#E3F2FD"  WidthRequest="110" Padding="10" HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTeBezorgenCardTapped" NumberOfTapsRequired="1"/>
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Image Source="pending.png" HeightRequest="32" WidthRequest="32"/>
+                        <Label Text="Te bezorgen" FontSize="15" HorizontalOptions="Center"/>
+                        <Label x:Name="TeBezorgenCountLabel" Text="5" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Problemen Card -->
+                <Frame CornerRadius="12" BackgroundColor="#FFF9C4" WidthRequest="110" Padding="10" HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnProblemenCardTapped" NumberOfTapsRequired="1"/>
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Image Source="car.png" HeightRequest="32" WidthRequest="32"/>
+                        <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center"/>
+                        <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label 
+                            
+                            FontSize="10" 
+                            HorizontalOptions="Center"
+                            TextColor="Gray"
+                            LineBreakMode="WordWrap"
+                            MaxLines="2"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

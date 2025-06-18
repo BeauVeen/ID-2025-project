@@ -1,0 +1,91 @@
+﻿@page
+@model MatrixWebApp.Pages.ShoppingCartModel
+@{
+    ViewData["Title"] = "Winkelwagen";
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    @if (Model.Cart.Items.Count == 0)
+    {
+        <div class="alert alert-info">
+            Je winkelwagen is leeg.
+        </div>
+        <a href="/Products" class="btn btn-primary">Verder winkelen</a>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="cart-header d-none d-md-flex fw-bold border-bottom pb-2 mb-3">
+                    <div class="col-md-5">Product</div>
+                    <div class="col-md-2">Prijs</div>
+                    <div class="col-md-2">Aantal</div>
+                    <div class="col-md-2">Totaal</div>
+                    <div class="col-md-1"></div>
+                </div>
+
+                @foreach (var item in Model.Cart.Items)
+                {
+                    <div class="cart-item row align-items-center py-2 border-bottom">
+                        <div class="col-md-5 d-flex align-items-center">
+                            @if (item.Picture != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Picture)"
+                                     style="width: 50px; height: 50px; object-fit: contain;" class="me-3" alt="@item.Name">
+                            }
+                            <div>
+                                <h6 class="mb-0">@item.Name</h6>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            €@item.Price.ToString("0.00")
+                        </div>
+                        <div class="col-md-2">
+                            <form method="post" asp-page-handler="UpdateQuantity">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="10"
+                                       class="form-control form-control-sm"
+                                       style="width: 70px; display: inline-block;"
+                                       onchange="this.form.submit()" />
+                            </form>
+                        </div>
+                        <div class="col-md-2">
+                            €@((item.Price * item.Quantity).ToString("0.00"))
+                        </div>
+                        <div class="col-md-1">
+                            <form method="post" asp-page-handler="RemoveItem">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Overzicht</h5>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Aantal artikelen:</span>
+                            <span>@Model.Cart.TotalItems</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Totaal:</strong>
+                            <strong>€@Model.Cart.TotalPrice.ToString("0.00")</strong>
+                        </div>
+                        <form method="post" asp-page-handler="Checkout">
+                            <button type="submit" class="btn btn-success w-100">Afrekenen</button>
+                        </form>
+                        <a href="/Products" class="btn btn-outline-secondary w-100 mt-2">Verder winkelen</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

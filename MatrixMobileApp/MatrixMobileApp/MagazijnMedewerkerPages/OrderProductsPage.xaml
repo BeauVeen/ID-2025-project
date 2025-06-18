@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.MagazijnMedewerkerPages.OrderProductsPage"
+             Title="Producten in Order">
+    <VerticalStackLayout Padding="16">
+        <Label x:Name="HeaderLabel"
+               FontSize="Title"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               Margin="0,0,0,16"/>
+        <CollectionView x:Name="ProductsList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal" Padding="4">
+                        <CheckBox IsChecked="{Binding IsPicked, Mode=TwoWay}" CheckedChanged="OnProductCheckedChanged"/>
+                        <Label Text="{Binding Name}" VerticalOptions="Center" Margin="8,0,0,0"/>
+                        <Label Text="x" VerticalOptions="Center" Margin="4,0,0,0"/>
+                        <Label Text="{Binding Amount}" VerticalOptions="Center" Margin="0,0,0,0"/>
+                        <Label Text="{Binding Price, StringFormat='€{0:F2}'}" VerticalOptions="Center" Margin="8,0,0,0"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Label x:Name="ReadyLabel"
+               Text="Alle producten gepickt! ✔"
+               TextColor="Green"
+               FontAttributes="Bold"
+               FontSize="Medium"
+               IsVisible="False"
+               HorizontalOptions="Center"
+               Margin="0,16,0,0"/>
+        <Button
+            Text="Klaar"
+            Margin="0,24,0,0"
+            HorizontalOptions="Fill"
+            Clicked="OnDoneClicked"/>
+    </VerticalStackLayout>
+</ContentPage>

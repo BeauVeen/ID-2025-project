@@ -1,0 +1,82 @@
+﻿@page
+@model MatrixWebApp.Pages.CheckoutModel
+@{
+    ViewData["Title"] = "Afrekenen";
+}
+
+<div class="checkout-container">
+    <h2>Afrekenen</h2>
+
+    <div class="checkout-grid">
+        <!-- Linkerkolom - Gebruikersgegevens -->
+        <div class="checkout-section">
+            @if (Model.UserData != null)
+            {
+                <h3>Jouw gegevens</h3>
+                <div class="account-info-grid">
+                    <strong>Naam</strong>
+                    <div>@Model.UserData.Name</div>
+
+                    <strong>Adres</strong>
+                    <div>@Model.UserData.Address</div>
+
+                    <strong>Postcode</strong>
+                    <div>@Model.UserData.Zipcode</div>
+
+                    <strong>Woonplaats</strong>
+                    <div>@Model.UserData.City</div>
+
+                    <strong>Telefoon</strong>
+                    <div>@Model.UserData.PhoneNumber</div>
+
+                    <strong>E-mail</strong>
+                    <div>@Model.UserData.Email</div>
+                </div>
+                <a href="/Account/EditProfile" class="edit-link link-primary">
+                    <i class="bi bi-pencil-square"></i> Gegevens aanpassen
+                </a>
+            }
+            else
+            {
+                <p class="text-center">Adres niet gevonden.</p>
+            }
+        </div>
+
+        <!-- Rechterkolom - Bestellingsoverzicht -->
+        <div class="checkout-section">
+            @if (Model.Cart != null && Model.Cart.Items.Count > 0)
+            {
+                <h3>Je bestelling</h3>
+
+                <div class="product-list">
+                    @foreach (var item in Model.Cart.Items)
+                    {
+                        <div class="product-item">
+                            <div class="product-name">
+                                <h5 class="mb-1">@item.Name</h5>
+                                <small>Aantal: @item.Quantity</small>
+                            </div>
+                            <div class="text-end">@item.Price.ToString("C")</div>
+                            <div class="text-end"><strong>@((item.Price * item.Quantity).ToString("C"))</strong></div>
+                        </div>
+                    }
+                </div>
+
+                <div class="total-display">
+                    Totaal: <strong>@Model.Cart.TotalPrice.ToString("C")</strong>
+                </div>
+            }
+            else
+            {
+                <p class="text-center">Je winkelwagen is leeg.</p>
+            }
+        </div>
+    </div>
+
+    @if (Model.Cart != null && Model.Cart.Items.Count > 0)
+    {
+        <form method="post">
+            <button type="submit" class="btn btn-primary checkout-btn">Bestelling afronden</button>
+        </form>
+    }
+</div>

@@ -1,5 +1,8 @@
 @page
 @model UserAuthorisationModel
+@{
+    ViewData["Title"] = "Gebruikersbeheer";
+}
 
 @{
     var bezorgers = Model.Users.Where(u => Model.GetRoleName(u.RoleId) == "Bezorger").ToList();
@@ -8,7 +11,7 @@
     var adminsToShow = admins.Take(Model.AdminsToShow).ToList();
 }
 
-<h2>Gebruikersbeheer</h2>
+<h2 class ="admin-h2">Gebruikersbeheer</h2>
 <a asp-page="/Admin/CreateUser" class="btn btn-primary mb-3">Nieuwe gebruiker</a>
 
 <div class="d-flex align-items-center gap-2 mb-1">
@@ -83,8 +86,4 @@
     <div class="d-flex justify-content-start my-1">
         <button id="load-more-admins" class="btn btn-outline-primary">Laad meer</button>
     </div>
-}
-
-@section Scripts {
-    <script src="~/js/user-authorisation.js"></script>
 }

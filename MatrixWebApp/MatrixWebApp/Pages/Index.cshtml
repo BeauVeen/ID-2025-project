@@ -1,7 +1,16 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Start pagina";
+    ViewData["Title"] = "Home";
+    ViewData["showProductSidebar"] = false;
+    ViewData["MainTransparent"] = true;
+    ViewData["ShowMatrixRain"] = true; // Activeer de matrix rain
 }
 
-<h2>Start pagina</h2>
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">WELKOM BIJ<br>MATRIX INC.</h1>
+        <p class="hero-subtitle">Discover the future of technology with our cutting-edge products</p>
+        <a href="/Products" class="btn matrix-btn">EXPLORE OUR PRODUCTS</a>
+    </div>
+</div>

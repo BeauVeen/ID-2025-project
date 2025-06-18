@@ -1,0 +1,148 @@
+﻿@page
+@model MatrixWebApp.Pages.Admin.AdminDashboardModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    ViewData["ShowSidebar"] = true;
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h2 class="admin-h2">Klanten & Orderdata</h2>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Totaal aantal bestellingen geplaatst
+                        <span class="badge bg-primary rounded-pill fs-5">@Model.OrdersPlaced</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Totaal aantal klanten
+                        <span class="badge bg-success rounded-pill fs-5">@Model.CustomersCount</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mb-3 d-flex align-items-center gap-2">
+            <label for="monthsSelect" class="form-label mb-0">Toon data van:</label>
+            <select id="monthsSelect" class="form-select form-select-sm" style="width: auto;">
+                <option value="3">Laatste 3 maanden</option>
+                <option value="6">Laatste 6 maanden</option>
+                <option value="12" selected>Laatste 12 maanden</option>
+            </select>
+            <button id="compareBtn" class="btn btn-outline-secondary btn-sm ms-2">Vergelijken</button>
+            <button id="splitBtn" class="btn btn-outline-secondary btn-sm ms-2 d-none">Splitsen</button>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Nieuwe klanten per maand</h5>
+                        <canvas id="customersLineChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Bestellingen geplaatst per maand</h5>
+                        <canvas id="salesLineChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="combinedChartContainer" class="mb-4" style="display:none;">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Vergelijking: Nieuwe klanten & Bestellingen</h5>
+                    <canvas id="combinedLineChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LAGE VOORRAAD HOKJE TOEGEVOEGD -->
+@if (Model.LageVoorraadProducten != null && Model.LageVoorraadProducten.Any())
+{
+    <div class="card border-danger shadow-sm mb-4">
+        <div class="card-header bg-danger text-white d-flex align-items-center">
+            <span class="me-2" style="font-size:1.5rem;">&#9888;</span>
+            <span>
+                Let op: <strong>@Model.LageVoorraadProducten.Count</strong> producten met lage voorraad!
+            </span>
+        </div>
+        <div class="card-body p-0">
+            <table class="table mb-0 align-middle" id="low-stock-list">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 40px;"></th>
+                        <th>Product</th>
+                        <th>Voorraad</th>
+                        <th>Prijs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.LageVoorraadProducten.Count; i++)
+                    {
+                        var product = Model.LageVoorraadProducten[i];
+                        string kleur = "";
+                        string dot = "";
+
+                        if (product.Stock <= 5)
+                        {
+                            kleur = "text-danger";
+                            dot = "bg-danger";
+                        }
+                        else if (product.Stock <= 10)
+                        {
+                            kleur = "text-warning";
+                            dot = "bg-warning";
+                        }
+
+                        <tr class="low-stock-row @(i >= 5 ? "d-none" : "")">
+                            <td>
+                                <span class="d-inline-block rounded-circle @dot" style="width:16px; height:16px;"></span>
+                            </td>
+                            <td>
+                                <strong>@product.Name</strong>
+                            </td>
+                            <td class="@kleur fw-bold">
+                                @product.Stock
+                            </td>
+                            <td class="text-muted">
+                                @product.Price.ToString("C")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.LageVoorraadProducten.Count > 5)
+            {
+                <div class="d-flex justify-content-start my-2 ms-3">
+                    <button id="load-more-low-stock" class="btn btn-outline-primary btn-sm">Laad meer</button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        var dashboardData = {
+            ordersPlaced: @Html.Raw(Json.Serialize(Model.OrdersPlaced)),
+            customersCount: @Html.Raw(Json.Serialize(Model.CustomersCount)),
+            customerMonths: @Html.Raw(Json.Serialize(Model.CustomerMonths)),
+            customerCounts: @Html.Raw(Json.Serialize(Model.CustomerCounts)),
+            ordersMonths: @Html.Raw(Json.Serialize(Model.OrdersMonths)),
+            ordersCounts: @Html.Raw(Json.Serialize(Model.OrdersCounts))
+        };
+    </script>
+    <script src="~/js/admindashboard.js" asp-append-version="true"></script>
+}
+

@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using MatrixApi.Data;
+using MatrixApi.DTOs;
 using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using MatrixApi.Services;
@@ -54,10 +55,37 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> Create(Order order)
+        public async Task<ActionResult<Order>> Create([FromBody] OrderCreateDto orderDto)
         {
             try
             {
+                byte[]? signatureBytes = null;
+                if (orderDto.Signature != null)
+                {
+                    using var ms = new MemoryStream();
+                    await orderDto.Signature.CopyToAsync(ms);
+                    signatureBytes = ms.ToArray();
+                    Console.WriteLine($"Signature bytes length: {signatureBytes.Length}");
+                }
+                else
+                {
+                    Console.WriteLine("No signature received");
+                }
+
+                var order = new Order
+                {
+                    UserId = orderDto.UserId,
+                    CreatedAt = DateTime.UtcNow,
+                    Status = orderDto.Status,
+                    Signature = signatureBytes,
+                    Orderlines = orderDto.Orderlines.Select(ol => new Orderline
+                    {
+                        ProductId = ol.ProductId,
+                        Amount = ol.Amount,
+                        Price = ol.Price
+                    }).ToList()
+                };
+
                 var created = await _orderService.AddAsync(order);
                 return CreatedAtAction(nameof(GetById), new { id = created.OrderId }, created);
             }
@@ -68,17 +96,34 @@ namespace MatrixApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, Order order)
+        public async Task<ActionResult> Update(int id, [FromForm] OrderUpdateDto dto)
         {
-            if (id != order.OrderId) return BadRequest();
+            if (id != dto.OrderId) return BadRequest();
 
             try
             {
-                var updated = await _orderService.UpdateAsync(order);
-                if (!updated)
+                byte[]? signatureBytes = null;
+
+                if (dto.Signature != null)
                 {
-                    return NotFound();
+                    using var ms = new MemoryStream();
+                    await dto.Signature.CopyToAsync(ms);
+                    signatureBytes = ms.ToArray();
                 }
+
+                var order = new Order
+                {
+                    OrderId = dto.OrderId,
+                    UserId = dto.UserId,
+                    Status = dto.Status,
+                    Signature = signatureBytes,
+                };
+
+                var updated = await _orderService.UpdateAsync(order);
+
+                if (!updated)
+                    return NotFound();
+
                 return NoContent();
             }
             catch (NotFoundException)

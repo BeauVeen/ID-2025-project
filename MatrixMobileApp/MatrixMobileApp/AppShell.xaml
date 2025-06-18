@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MatrixMobileApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MatrixMobileApp"
+    xmlns:magazijn="clr-namespace:MatrixMobileApp.MagazijnMedewerkerPages"
+    Shell.FlyoutBehavior="Disabled"
+    Title="MatrixMobileApp">
+
+    <ShellContent 
+        Title="Login"
+        Route="LoginPage" 
+        ContentTemplate="{DataTemplate local:LoginPage}" />
+    
+
+    <!-- Tab bar voor hoofdmenu -->
+    <TabBar>
+        <Tab Title="Route" Icon="map.png">
+            <ShellContent 
+            Route="RoutePage" 
+            ContentTemplate="{DataTemplate local:RoutePage}" />
+        </Tab>
+
+        <Tab Title="Home" Icon="house.png">
+            <ShellContent 
+            Route="HomePage" 
+            ContentTemplate="{DataTemplate local:HomePage}" />
+        </Tab>
+
+        <Tab Title="Actieve Orders" Icon="box2.png">
+            <ShellContent 
+            Route="OrdersPage" 
+            ContentTemplate="{DataTemplate local:ActiveOrdersPage}" />
+        </Tab>
+
+        <Tab Title="Magazijn Home" Icon="warehouse.png">
+            <ShellContent 
+                Title="Magazijn Home"
+                Route="HomePageMagazijn"
+                ContentTemplate="{DataTemplate magazijn:HomePageMagazijn}" />
+        </Tab>
+    </TabBar>
+</Shell>

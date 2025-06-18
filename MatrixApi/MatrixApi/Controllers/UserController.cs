@@ -6,7 +6,6 @@ using MatrixApi.Models;
 using MatrixApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MatrixApi.DTOs;
 
 namespace MatrixApi.Controllers
 {
@@ -15,10 +14,12 @@ namespace MatrixApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly JwtService _jwtService;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, JwtService jwtService)
         {
             _userService = userService;
+            _jwtService = jwtService;
         }
 
         [HttpGet]
@@ -60,8 +61,8 @@ namespace MatrixApi.Controllers
         {
             var user = new User
             {
-                Password = dto.Password,
-                RoleId = dto.RoleId,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                RoleId = dto.RoleId ?? 1,
                 Name = dto.Name,
                 Address = dto.Address,
                 Zipcode = dto.Zipcode,
@@ -85,21 +86,9 @@ namespace MatrixApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UpdateUserDto dto)
         {
-            if (id != dto.UserId) return BadRequest();
+            if (id != dto.UserId)
+                    return BadRequest("Mismatch with id in URL and body.");
 
-            var user = new User
-            {
-                UserId = dto.UserId,
-                Password = dto.Password, 
-                RoleId = dto.RoleId,
-                Name = dto.Name,
-                Address = dto.Address,
-                Zipcode = dto.Zipcode,
-                City = dto.City,
-                PhoneNumber = dto.PhoneNumber,
-                Email = dto.Email
-                
-            };
             try
             {
                 var success = await _userService.UpdateAsync(id, dto);
@@ -143,6 +132,33 @@ namespace MatrixApi.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
+        {
+            try
+            {
+                var user = await _userService.AuthenticateUserAsync(request.Email, request.Password);
+
+                if (user == null)
+                    return Unauthorized(new { message = "Ongeldige gebruikersnaam of wachtwoord." });
+
+                var token = _jwtService.GenerateToken(user);
+
+                return Ok(new
+                {
+                    token,
+                    email = user.Email,
+                    userId = user.UserId,
+                    roleId = user.RoleId,
+                    roleName = user.Role?.RoleName
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
             }
         }
     }

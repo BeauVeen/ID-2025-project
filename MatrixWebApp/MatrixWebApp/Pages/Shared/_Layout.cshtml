@@ -1,10 +1,24 @@
-﻿@{
-    var showProductSidebar = ViewData["showProductSidebar"] as bool? == true;
-    var showAdminSidebar = ViewData["showSidebar"] as bool? == true;
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http
+<!-- Injecteren van gebruikersrollen en loginstatus -->
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var showProductSidebar = ViewData["showProductSidebar"] as bool? ?? false;
+    var showAdminSidebar = ViewData["showSidebar"] as bool? ?? false;
+    var maxPrice = ViewData["MaxPrice"] as decimal? ?? 1000000m;
+
+    // Ophalen van ingelogde gebruiker en controlleren welke rol die gebruiker is
+    var user = HttpContextAccessor.HttpContext?.User;
+    var isLoggedIn = user?.Identity?.IsAuthenticated ?? false;
+    var isAdmin = user?.IsInRole("Administrator") ?? false;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="icon" href="/Images/icon-v3.ico" type="image/x-icon" />
     <link rel="icon" href="/Images/icon.png" type="image/png" />
 
@@ -12,44 +26,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Matric inc. | @ViewData["Title"]</title>
 
-    <link rel="stylesheet" href="~/css/bootstrap.css" asp-append-version="true" /> 
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <!-- Opmaak van website -->
+    <link rel="stylesheet" href="~/css/bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
 
+    <!-- Iconen -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
+    <!-- Matrix effect voorpagina -->
+    <div class="matrix-container" id="matrixContainer"
+         style="display: none;"
+         data-show="@((ViewData["ShowMatrixRain"] as bool? == true).ToString().ToLower())">
+        <canvas id="matrix-rain"></canvas>
+    </div>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand text-white" asp-page="/Index">Matrix Inc.</a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="search-container search-container-position">
-                    <input type="text" id="navbarSearch" placeholder="Zoek producten..." />
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         onclick="searchProducts()"
-                         viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                    </svg>
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <!-- Links: Producten (Over ons verborgen voor admin) -->
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand text-white" asp-page="/Index">Matrix Inc.</a>
+                    <a class="nav-link text-white ms-3 d-none d-lg-inline" asp-page="/Products">Producten</a>
+                    @if (!isAdmin)
+                    {
+                        <a class="nav-link text-white ms-3 d-none d-lg-inline" asp-page="/Products">Over Ons</a>
+                    }
                 </div>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-page="/Index">Index</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-page="/Products">Producten</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-page="/Admin/AdminDashboard">Admin</a>
-                        </li>
-                    </ul>
+                <!-- Midden: Zoekbalk (Verborgen voor admin) -->
+                @if (isAdmin)
+                {
+                    <div style="color: #00ff00; font-family: 'Courier New', monospace; font-size: 1.2rem;">
+                        is_admin = true
+                    </div>
+                }
+                else
+                {
+                    <div class="search-container position-absolute start-50 translate-middle-x">
+                        <input type="text" id="navbarSearch" placeholder="Zoek producten..." />
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                        onclick="searchProducts()"
+                        viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                    </div>
+                }
+
+                <!-- Rechts: Winkelwagen + Inloggen (Winkelwagen verborgen voor admin)-->
+                <div class="d-flex align-items-center">
+                    @if (!isAdmin)
+                    {
+                        <div class="nav-item me-3 position-relative d-flex align-items-center">
+                            <a class="nav-link text-white" asp-page="/ShoppingCart">
+                                <i class="bi bi-cart"></i> Winkelwagen
+                                @{
+                                    var cartItemCount = Context.Session.GetInt32("CartItemCount") ?? 0;
+                                }
+                                @if (cartItemCount > 0)
+                                {
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        @cartItemCount
+                                    </span>
+                                }
+                            </a>
+                        </div>
+                    }
+                    <!-- Bij log in, toon specifieke dropdowns voor user role -->
+                    @if (isLoggedIn)
+                    {
+                        <div class="nav-item dropdown d-flex align-items-center">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                Mijn Account
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-3">
+                                @if (!isAdmin)
+                                {
+                                    <a class="dropdown-item" href="/Account/UserProfile">Profiel</a>
+                                }
+                                @if (isAdmin)
+                                {
+                                    <a class="dropdown-item" href="/Admin/Dashboard">Admin</a>
+                                }
+                                <a class="dropdown-item" href="/Account/Logout">Uitloggen</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="nav-item dropdown d-flex align-items-center">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                Inloggen
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-3">
+                                <a class="dropdown-item" href="/Account/Login">Ga naar inlogpagina</a>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>
@@ -57,62 +132,80 @@
 
     <div class="container-fluid">
         <div class="row">
-            @if (ViewData["showProductSideBar"] as bool? == true)
+            <!-- Sidebar voor producten pagina -->
+            @if (ViewData["showProductSidebar"] as bool? == true)
             {
-                <nav class="col-md-2 d-none d-md-block sidebar vh-100 p-3 border-end" style="background-color: #d5d5d5;">
-                    <h5 class="text-center">Categorieën</h5>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link d-flex justify-content-between align-items-center"
-                            data-bs-toggle="collapse" href="#collapseCategories" role="button"
-                            aria-expanded="false" aria-controls="collapseCategories" id="categoriesToggle">
-                                Alle categorieën
-                                <span class="arrow">&gt;</span>
-                            </a>
-                            <div class="collapse show" id="collapseCategories">
-                                <ul class="nav flex-column ms-3">
-                                    @await Component.InvokeAsync("CategorySidebar")
-                                </ul>
+                <nav class="col-md-2 d-none d-md-block sidebar p-3 border-end position-sticky top-0" style="background-color: #e1e1e1; height: 100vh; overflow-y: auto;">
+                    <div class="price-filter">
+                        <h6 class="text-center mb-3">Prijs filteren</h6>
+                        <button class="btn btn-outline-primary w-100 mb-2" onclick="sortProducts('price-asc')">
+                            <i class="bi bi-arrow-up"></i> Prijs laag - hoog
+                        </button>
+                        <button class="btn btn-outline-primary w-100" onclick="sortProducts('price-desc')">
+                            <i class="bi bi-arrow-down"></i> Prijs hoog - laag
+                        </button>
+                        <div class="price-input price-slider">
+                            <div class="field">
+                                <span class="price-label">Vanaf (€)</span>
+                                <input type="number" class="input-min" value="0">
                             </div>
-                        </li>
+                            <div class="separator">-</div>
+                            <div class="field">
+                                <span class="price-label">Tot (€)</span>
+                                <input type="number" class="input-max" max="@maxPrice" value="@maxPrice">
+                            </div>
+                        </div>
+                        <div class="slider">
+                            <div class="progress"></div>
+                        </div>
+                        <div class="range-input" data-max-price="@maxPrice">
+                            <input type="range" class="range-min" min="0" max="@maxPrice" value="0" step="10">
+                            <input type="range" class="range-max" min="0" max="@maxPrice" value="@(maxPrice /2)" step="10">
+                        </div>
+                    </div>
+                    <hr />
+                    <h5 class="text-center category-header">Categorieën</h5>
+                    <!-- Dynamisch laden van categorieën -->
+                    <ul class="nav flex-column category-spacing" id="collapseCategories" style="color: black;">
+                        @await Component.InvokeAsync("CategorySidebar")
                     </ul>
                 </nav>
             }
             else if (showAdminSidebar)
             {
+                <!-- Sidebar voor admin pagina -->
                 <nav class="col-md-2 d-none d-md-block bg-light sidebar vh-100 p-3 border-end">
                     <h5 class="text-center">Admin</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Admin/AdminDashboard">Admin-Dashboard</a>
+                            <a class="nav-link" asp-page="/Admin/Dashboard">Admin-Dashboard</a>
                         </li>
-                            <a class="nav-link d-flex justify-content-between align-items-center"
+                        <li class="nav-item">
+                            <a class="nav-link d-flex justify-content-between align-items-center text-black"
                                data-bs-toggle="collapse" href="#collapseProducts" role="button"
                                aria-expanded="false" aria-controls="collapseProducts" id="productsToggle">
                                 Producten
                                 <span class="arrow">&gt;</span>
                             </a>
-                          
                             <div class="collapse" id="collapseProducts">
                                 <ul class="nav flex-column ms-3">
                                     <li class="nav-item">
                                         <a class="nav-link" asp-page="/Admin/AddProducts">Producten toevoegen</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" asp-page="/Admin/AdminProducts">Producten lijst</a>
+                                        <a class="nav-link" asp-page="/Admin/Products">Producten lijst</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" asp-page="/Admin/AdminCategories">Categorieën</a>
+                                        <a class="nav-link" asp-page="/Admin/EditCategories">Categorieën</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" asp-page="/Admin/DelProducts">Verwijderde producten</a>
+                                        <a class="nav-link" asp-page="/Admin/DeletedProducts">Verwijderde producten</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Admin/AdminOrders">Bestellingen</a>
+                            <a class="nav-link" asp-page="/Admin/Orders">Bestellingen</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Admin/Customers">Klanten</a>
@@ -123,19 +216,67 @@
                     </ul>
                 </nav>
             }
-
-            <main class="@((ViewData["ShowSidebar"] as bool? == true) ? "col-md-10" : "col-12") mt-4">
+            <!-- Laadt volledige pagina -->
+            <main class="@((ViewData["showProductSidebar"] as bool? == true || ViewData["showSidebar"] as bool? == true) ? "col-md-10" : "col-12") py-3">
                 @RenderBody()
             </main>
+
         </div>
     </div>
 
+    <!-- Notificaties voor mogelijke meldingen -->
+    <div id="notification-data"
+         data-message="@TempData["Message"]"
+         style="display: none;"></div>
+    <div id="notification-warning"
+         data-message="@TempData["WarningMessage"]"
+         style="display: none;"></div>
+    <div id="notification-error"
+         data-message="@TempData["ErrorMessage"]"
+         style="display: none;"></div>
 
+    <!-- Externe JavaScripts laden -->
     <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- Lokale JavaScripts laden -->
+    <script src="~/js/productsfilter.js" asp-append-version="true"></script>
+    <script src="~/js/search.js" asp-append-version="true"></script>
+    <script src="~/js/rangeslider.js" asp-append-version="true"></script>
+    <script src="~/js/matrixrain.js" asp-append-version="true"></script>
+    <script src="~/js/notification.js" asp-append-version="true"></script>
+    <script src="~/js/dropdownreminder.js" asp-append-version="true"></script>
+
+    <script>
+               const switchToggle = document.getElementById('darkModeSwitch');
+
+        if (switchToggle) {
+            // Check localStorage voor voorkeur
+            if(localStorage.getItem('darkMode') === 'enabled') {
+              document.body.classList.add('dark-mode');
+              switchToggle.checked = true;
+            }
+
+            switchToggle.addEventListener('change', () => {
+              if(switchToggle.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+              } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+              }
+            });
+        } else {
+            // Geen toggle op deze pagina, maar wel dark mode toepassen bij load
+            if(localStorage.getItem('darkMode') === 'enabled') {
+              document.body.classList.add('dark-mode');
+            }
+        }
+    </script>
+
+    <!-- Toestaan van scripts per pagina -->
     @RenderSection("Scripts", required: false)
 </body>
 </html>
-

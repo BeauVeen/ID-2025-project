@@ -1,0 +1,77 @@
+﻿@page
+@model MatrixWebApp.Pages.Account.UserOrdersModel
+@using System.Globalization
+@{
+    ViewData["Title"] = "Jouw bestellingen";
+    var culture = new CultureInfo("nl-NL");
+}
+
+<h2>Mijn Bestellingen</h2>
+
+@if (Model.CurrentUserWithOrders == null)
+{
+    <div class="alert alert-danger" role="alert">
+        Kon je bestellingen niet ophalen. Probeer opnieuw in te loggen.
+    </div>
+}
+else if (Model.CurrentUserWithOrders.Orders == null || !Model.CurrentUserWithOrders.Orders.Any())
+{
+    <div class="alert alert-info resize" role="alert">
+        Je hebt nog geen bestellingen.
+    </div>
+}
+
+
+else
+{
+    <div class="list-group">
+        @foreach (var order in Model.CurrentUserWithOrders.Orders)
+        {
+            decimal totaalOrderPrijs = 0;
+
+            <div class="list-group-item flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Order #@order.OrderId</h5>
+                    <small>@order.CreatedAt.ToString("dd-MM-yyyy")</small>
+                </div>
+                <p>
+                    <strong>Status:</strong>
+                    <span class="badge @(GetStatusBadgeClass(order.Status))">@order.Status</span>
+                </p>
+                <h6>Orderregels:</h6>
+                @if (order.Orderlines != null && order.Orderlines.Any())
+                {
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var line in order.Orderlines)
+                        {
+                            decimal regelTotaal = line.Amount * line.Price;
+                            totaalOrderPrijs += regelTotaal;
+                            <li class="mb-2">
+                                <strong>@line.ProductName</strong> - Aantal: @line.Amount - Prijs per stuk: @(line.Price.ToString("C", culture))<br />
+                                <span class="ms-3">Regel totaal: @regelTotaal.ToString("C", culture)</span>
+                            </li>
+                        }
+                    </ul>
+                    <p class="mt-2"><strong>Totaal van deze order:</strong> @totaalOrderPrijs.ToString("C", culture)</p>
+                }
+                else
+                {
+                    <p><em>Geen orderregels beschikbaar.</em></p>
+                }
+            </div>
+        }
+    </div>
+}
+
+@functions {
+    private string GetStatusBadgeClass(string status)
+    {
+        return status.ToLower() switch
+        {
+            "pending" => "bg-warning text-dark",
+            "completed" => "bg-success",
+            "cancelled" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}

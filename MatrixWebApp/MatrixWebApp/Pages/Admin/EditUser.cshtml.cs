@@ -1,13 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MatrixWebApp.Pages.Admin
 {
+    [Authorize(Roles = "Administrator")]
     public class EditUserModel : PageModel
     {
         private readonly HttpClient _httpClient;
@@ -38,6 +40,7 @@ namespace MatrixWebApp.Pages.Admin
             public string Email { get; set; }
 
             [Display(Name = "Wachtwoord")]
+            [DataType(DataType.Password)]
             public string? Password { get; set; }
 
             [Required(ErrorMessage = "Rol is verplicht")]
@@ -67,7 +70,7 @@ namespace MatrixWebApp.Pages.Admin
             public string? Zipcode { get; set; }
             public string? City { get; set; }
             public string? PhoneNumber { get; set; }
-            public string? Password { get; set; }
+            public string? PasswordHash { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -111,11 +114,12 @@ namespace MatrixWebApp.Pages.Admin
                 ["phoneNumber"] = Input.PhoneNumber
             };
 
-           
+
             if (!string.IsNullOrWhiteSpace(Input.Password))
             {
-                updatePayload["password"] = Input.Password;
+                updatePayload["passwordHash"] = Input.Password;
             }
+
 
             var response = await _httpClient.PutAsJsonAsync($"api/User/{Id}", updatePayload);
 

@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using MatrixApi.Data;
+using MatrixApi.DTOs;
 using MatrixApi.Exceptions;
 using MatrixApi.Models;
 using MatrixApi.Services;
@@ -25,7 +26,16 @@ namespace MatrixApi.Controllers
             try
             {
                 var orderlines = await _orderlineService.GetAllAsync();
-                return Ok(orderlines);
+
+                var orderlinesDto = orderlines.Select(ol => new OrderlineDto
+                {
+                    OrderlineId = ol.OrderlineId,
+                    Amount = ol.Amount,
+                    Price = ol.Price,
+                    ProductName = ol.Product.Name
+                }).ToList();
+
+                return Ok(orderlinesDto);
             }
             catch (Exception ex)
             {
@@ -38,8 +48,17 @@ namespace MatrixApi.Controllers
         {
             try
             {
-                var orderline = await _orderlineService.GetByIdAsync(id);
-                return Ok(orderline);
+                var ol = await _orderlineService.GetByIdAsync(id);
+
+                var orderlineDto = new OrderlineDto
+                {
+                    OrderlineId = ol.OrderlineId,
+                    Amount = ol.Amount,
+                    Price = ol.Price,
+                    ProductName = ol.Product.Name
+                };
+
+                return Ok(orderlineDto);
 
             }
             catch (NotFoundException)

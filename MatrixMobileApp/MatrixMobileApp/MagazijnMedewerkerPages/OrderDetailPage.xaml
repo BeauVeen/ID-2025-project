@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.MagazijnMedewerkerPages.OrderDetailPage"
+             Title="Order Details">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <Label x:Name="OrderIdLabel" FontAttributes="Bold" FontSize="18"/>
+            <Label x:Name="UserIdLabel"/>
+            <Label x:Name="CreatedAtLabel"/>
+            <Label x:Name="StatusLabel" TextColor="Green"/>
+            <Label Text="Producten:" FontAttributes="Bold" Margin="0,20,0,0"/>
+            <CollectionView x:Name="ProductsList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="LightGray" CornerRadius="8" Padding="8" Margin="4">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                <Label Text="{Binding ProductId, StringFormat='Product ID: {0}'}"/>
+                                <Label Text="{Binding Amount, StringFormat='Aantal: {0}'}"/>
+                                <Label Text="{Binding Price, StringFormat='Prijs: €{0:F2}'}"/>
+                                <!-- Optional: Show product photo if you want -->
+                              
+                                <Image Source="{Binding PhotoBase64}" IsVisible="{Binding PhotoBase64, Converter={StaticResource NullToBoolConverter}}" />
+                              
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
