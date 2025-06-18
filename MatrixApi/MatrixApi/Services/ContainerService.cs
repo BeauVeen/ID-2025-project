@@ -21,7 +21,8 @@ namespace MatrixApi.Services
             {
                 return await _context.Containers
                     .Include(c => c.ContainerOrders)
-                    .ThenInclude(co => co.Order)
+                        .ThenInclude(co => co.Order)
+                            .ThenInclude(o => o.Orderlines)
                     .ToListAsync();
             }
             catch (Exception ex)
@@ -37,7 +38,8 @@ namespace MatrixApi.Services
             {
                 var container = await _context.Containers
                     .Include(c => c.ContainerOrders)
-                    .ThenInclude(co => co.Order)
+                        .ThenInclude(co => co.Order)
+                            .ThenInclude(o => o.Orderlines)
                     .FirstOrDefaultAsync(c => c.ContainerId == id);
 
                 if (container == null)

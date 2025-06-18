@@ -25,7 +25,7 @@ namespace MatrixApi.Data
             modelBuilder.Entity<Order>().ToTable("Orders");
             modelBuilder.Entity<Orderline>().ToTable("Orderlines");
             modelBuilder.Entity<Role>().ToTable("Roles");
-            modelBuilder.Entity<Container>().ToTable("Containers");
+            modelBuilder.Entity<Container>().ToTable("Container");
             modelBuilder.Entity<ContainerOrder>().ToTable("ContainerOrders");
 
             modelBuilder.Entity<Order>()
