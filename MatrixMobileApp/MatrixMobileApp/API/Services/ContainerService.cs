@@ -48,7 +48,6 @@ namespace MatrixMobileApp.API.Services
             request.Headers.Accept.Clear();
             request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/plain"));
 
-            // Optional: Add JWT if your API requires it
             var token = Preferences.Get("auth_token", string.Empty);
             if (!string.IsNullOrEmpty(token))
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
