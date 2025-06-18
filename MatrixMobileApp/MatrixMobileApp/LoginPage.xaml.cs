@@ -74,6 +74,9 @@ namespace MatrixMobileApp
                 Preferences.Set("user_role", response.RoleId.ToString());
 
                 // Redirect naar de juiste homepage bij succesvolle login
+
+                Application.Current.MainPage = new AppShell();
+
                 if (response.RoleId == 2)
                 {
                     await Shell.Current.GoToAsync("//HomePage");
