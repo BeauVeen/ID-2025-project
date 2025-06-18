@@ -84,21 +84,35 @@ namespace MatrixApi.Services
         {
             try
             {
-                var container = await _context.Containers.FindAsync(containerId);
+                var container = await _context.Containers
+                    .Include(c => c.ContainerOrders)
+                        .ThenInclude(co => co.Order)
+                    .FirstOrDefaultAsync(c => c.ContainerId == containerId);
+
                 if (container == null)
                     throw new NotFoundException($"Container with id {containerId} not found.");
 
                 container.Status = newStatus;
+
+                foreach (var containerOrder in container.ContainerOrders)
+                {
+                    if (containerOrder.Order != null)
+                    {
+                        containerOrder.Order.Status = newStatus;
+                    }
+                }
+
                 await _context.SaveChangesAsync();
 
                 return container;
             }
             catch (Exception ex) when (!(ex is NotFoundException))
             {
-                Console.WriteLine($"Error updating container status: {ex.Message}");
+                Console.WriteLine($"Error updating container and related order statuses: {ex.Message}");
                 throw;
             }
         }
+
 
 
         public async Task<bool> DeleteAsync(int id)
