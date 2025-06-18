@@ -1,6 +1,7 @@
 using MatrixMobileApp.API;
 using MatrixMobileApp.API.Services;
 using MatrixMobileApp.API.Models;
+using MatrixMobileApp.MagazijnMedewerkerPages;
 using Microsoft.Maui.Controls;
 using System;
 using System.Linq;
