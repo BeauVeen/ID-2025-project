@@ -80,6 +80,27 @@ namespace MatrixApi.Services
             }
         }
 
+        public async Task<Container> UpdateStatusAsync(int containerId, string newStatus)
+        {
+            try
+            {
+                var container = await _context.Containers.FindAsync(containerId);
+                if (container == null)
+                    throw new NotFoundException($"Container with id {containerId} not found.");
+
+                container.Status = newStatus;
+                await _context.SaveChangesAsync();
+
+                return container;
+            }
+            catch (Exception ex) when (!(ex is NotFoundException))
+            {
+                Console.WriteLine($"Error updating container status: {ex.Message}");
+                throw;
+            }
+        }
+
+
         public async Task<bool> DeleteAsync(int id)
         {
             try
