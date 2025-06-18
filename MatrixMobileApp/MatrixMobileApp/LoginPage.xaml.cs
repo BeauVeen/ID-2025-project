@@ -90,6 +90,12 @@ namespace MatrixMobileApp
                 LoginButton.IsEnabled = true;
             }
         }
+        //temporary method to navigate to ContainersPage
+        private async void OnGoToContainersPageClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ContainersPage());
+        }
+        
 
         public void ResetLoginFields()
         {

@@ -88,6 +88,14 @@
                     CornerRadius="8"
                     FontAttributes="Bold" />
 
+            <!-- Test Navigation Button naar containers -->
+            <Button Text="Ga naar ContainersPage"
+                    Clicked="OnGoToContainersPageClicked"
+                    BackgroundColor="#8391AE"
+                    TextColor="White"
+                    CornerRadius="8"
+                    FontAttributes="Bold" />
+
             <!-- Loading -->
             <ActivityIndicator x:Name="LoadingIndicator"
                                IsRunning="False"

@@ -81,6 +81,9 @@
 	  <Compile Update="HomePage.xaml.cs">
 	    <DependentUpon>HomePage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="ContainersPage.xaml.cs">
+	    <DependentUpon>ContainersPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="RoutePage.xaml.cs">
 	    <DependentUpon>RoutePage.xaml</DependentUpon>
 	  </Compile>
