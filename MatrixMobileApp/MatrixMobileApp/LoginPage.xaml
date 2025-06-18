@@ -19,7 +19,6 @@
                   HorizontalOptions="Fill"
                   VerticalOptions="Fill"
                   Data="M0,0 H400 V160 C280,200 120,180 0,140 Z" />
-
         </Grid>
 
         <!-- Avatar -->
@@ -61,16 +60,19 @@
                    TextColor="Black"
                    PlaceholderColor="Gray" />
 
-            <!--Remember Me checkbox-->
-            <StackLayout Orientation="Horizontal" Spacing="8">
-                <CheckBox x:Name="RememberMeCheckBox"
-                          Color="#426373"
-                          Margin="-10"
-                          VerticalOptions="Center"/>
-                <Label Text="Onthoud e-mail"
-                       VerticalOptions="Center"
-                       TextColor="Black"/>
-            </StackLayout>
+            <!-- Toggle icon voor zichtbaarheid wachtwoord -->
+            <Image Source="notvisible.png"
+                   HeightRequest="25"
+                   WidthRequest="25"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"
+                   Margin="0,-60,5,20"
+                   Aspect="AspectFit"
+                   InputTransparent="False" >
+                   <Image.GestureRecognizers>
+                   <TapGestureRecognizer Tapped="TogglePasswordVisibility" NumberOfTapsRequired="1"/>
+                   </Image.GestureRecognizers>
+            </Image>
 
             <!-- Foutmelding -->
             <Label x:Name="ErrorLabel"

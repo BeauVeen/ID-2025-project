@@ -9,8 +9,9 @@ namespace MatrixMobileApp
         {
             var builder = MauiApp.CreateBuilder();
             builder
+
                 .UseMauiApp<App>()
-                .UseBarcodeReader(); // Gebruik de ZXing barcode reader (QR scan functionaliteit)
+                .UseBarcodeReader(); // Gebruik de ZXing barcode reader (QR scan functionaliteit op de homepage)
             builder.ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
