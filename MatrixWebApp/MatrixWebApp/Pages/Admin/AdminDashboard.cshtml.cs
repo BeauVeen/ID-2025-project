@@ -33,7 +33,7 @@ namespace MatrixWebApp.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            // Bestaande code om klanten te tellen en groeperen
+            //  klanten tellen en groeperen
             var users = await _httpClient.GetFromJsonAsync<List<UserDto>>("api/User") ?? new List<UserDto>();
             CustomersCount = users.Count;
 
@@ -46,7 +46,7 @@ namespace MatrixWebApp.Pages.Admin
             CustomerMonths = groupedUsers.Select(g => $"{g.Key.Year}-{g.Key.Month:00}").ToList();
             CustomerCounts = groupedUsers.Select(g => g.Count()).ToList();
 
-            // Bestaande code om orders te tellen en groeperen
+            //orders tellen en groeperen
             var orders = await _httpClient.GetFromJsonAsync<List<OrderDto>>("api/Order") ?? new List<OrderDto>();
 
             var ordersByMonth = orders
