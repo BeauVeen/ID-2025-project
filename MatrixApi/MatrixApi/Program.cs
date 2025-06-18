@@ -30,9 +30,6 @@ namespace MatrixApi
                     });
             });
 
-            //MySQL connection.
-
-            //var connectionString = "server=localhost;port=3306;database=matrixdb;user=dbadmin;password=P@ssword1";
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(
                     builder.Configuration.GetConnectionString("DefaultConnection"),
