@@ -14,8 +14,20 @@
                FontSize="18"
                HorizontalOptions="Center" />
 
-        <Button Text="Opnieuw proberen" 
-                Clicked="OnRetryClicked"
-                HorizontalOptions="Center" />
+        <Button Text="Refresh"
+        ImageSource="refresh3.png"
+        Clicked="OnRetryClicked"
+        HorizontalOptions="Center"
+        Margin="0,0,0,450"
+        HeightRequest="40"
+        WidthRequest="120"
+        TextColor="White"
+        BackgroundColor="#426373"  
+        BorderColor="Black"
+        FontAttributes="Bold"/>
+
     </VerticalStackLayout>
+    
+    
+
 </ContentPage>

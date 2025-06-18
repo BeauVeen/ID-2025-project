@@ -30,4 +30,5 @@ public partial class OfflinePage : ContentPage
             await DisplayAlert("Geen internetverbinding", "Er is nog steeds geen netwerkverbinding gedetecteerd. Controleer uw verbinding en probeer het opnieuw.", "OK");
         }
     }
+
 }
