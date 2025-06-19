@@ -18,8 +18,7 @@ namespace MatrixMobileApp
         {
             InitializeComponent();
             var api = new ApiService();
-            userService = new UserService(api.Client); 
-
+            userService = new UserService(api.Client);
         }
 
         private async void OnViewProductsClicked(object sender, EventArgs e)
@@ -104,8 +103,11 @@ namespace MatrixMobileApp
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
             await RequestCameraPermission();
-            cameraView.IsDetecting = true;
+
+            CameraReset();
+            //cameraView.IsDetecting = true;
 
             // Laat huidige datum voor dashboard zien 
             var culture = new CultureInfo("nl-NL");
@@ -163,7 +165,41 @@ namespace MatrixMobileApp
                 loginPage.ResetLoginFields();
             }
         }
+
+
+        // deze functie is nodig om de camera werkend te houden bij het navigeren van een TabBar terug naar HomePage (zonder deze functie blijft camera window zwart)
+        private async void CameraReset()
+        {
+            if (cameraView?.CameraLocation == CameraLocation.Rear)
+            {
+                try
+                {
+                    // sla huidige staat van de cameraView op
+                    var wasDetecting = cameraView.IsDetecting;
+                    // zet cameraView uit om te voorkomen dat de camera blijft detecteren tijdens het wisselen van camera
+                    cameraView.IsDetecting = false;
+
+                    // zet visibility van camera tijdelijk uit, zodat gebruiker niet merkt dat de cameraview wisselt
+                    cameraView.IsVisible = false;
+                    cameraView.CameraLocation = CameraLocation.Front;                 
+
+                    cameraView.CameraLocation = CameraLocation.Rear;
+                    // zet visibility weer aan nadat de juiste camera wordt gebruikt
+                    cameraView.IsVisible = true;
+
+                    // herstel initiele staat
+                    cameraView.IsDetecting = wasDetecting;
+                }
+                catch
+                {
+                    // fallback naar normale werking
+                    cameraView.IsDetecting = true;
+                }
+            }
+            else
+            {
+                cameraView.IsDetecting = true;
+            }
+        }
     }
-
-
 }

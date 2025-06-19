@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.OrderID">
+
+    <StackLayout Padding="20">
+
+        <SearchBar
+            Placeholder="Zoek Container"
+            Text="{Binding SearchText}"
+            SearchCommand="{Binding SearchCommand}" />
+
+        <StackLayout Orientation="Horizontal" Margin="0,20,0,0" IsVisible="{Binding IsOrderCheckedVisible}">
+            <Label Text="{Binding DisplayContainer}" VerticalOptions="Center" />
+            <CheckBox IsChecked="{Binding IsOrderChecked}" HorizontalOptions="Start" Margin="10,0,0,0"/>
+        </StackLayout>
+
+        <CollectionView ItemsSource="{Binding Orders}" Margin="0,20,0,0" HeightRequest="200">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal" Padding="5">
+                        <Label Text="{Binding OrderId}" FontAttributes="Bold" VerticalOptions="Center" />
+                        <Label Text=" - " VerticalOptions="Center"/>
+                        <Label Text="{Binding Status}" VerticalOptions="Center" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button
+            Text="Order bevestigen"
+            IsVisible="{Binding CanConfirmOrder}"
+            Clicked="OnConfirmOrderClicked"
+            VerticalOptions="End"
+            HorizontalOptions="FillAndExpand"
+            Margin="0,20,0,0" />
+
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.KlantAanwezig">
+
+    <StackLayout Padding="20" Spacing="20">
+
+        <Label 
+            Text="Is de klant aanwezig op het adres?" 
+            FontSize="Large"
+            HorizontalOptions="Center"
+            HorizontalTextAlignment="Center" />
+
+        <Button 
+            Text="Klant is aanwezig" 
+            BackgroundColor="LightGreen"
+            TextColor="Black"
+            Clicked="OnKlantAanwezigClicked" />
+
+        <Button 
+            Text="Klant is niet aanwezig" 
+            BackgroundColor="LightCoral"
+            TextColor="Black"
+            Clicked="OnKlantNietAanwezigClicked" />
+
+    </StackLayout>
+
+</ContentPage>

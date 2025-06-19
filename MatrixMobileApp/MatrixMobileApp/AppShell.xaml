@@ -13,7 +13,6 @@
         Route="LoginPage" 
         ContentTemplate="{DataTemplate local:LoginPage}" />
     
-
     <!-- Tab bar voor hoofdmenu -->
     <TabBar>
         <Tab Title="Route" Icon="map.png">

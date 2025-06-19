@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.Handtekening"
+             Title="Handtekening van afgifte">
+
+    <StackLayout Padding="20" Spacing="20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
+        <Label Text="Handtekening veld" 
+               FontSize="Large" 
+               HorizontalOptions="Center" />
+
+        <BoxView HeightRequest="200" WidthRequest="300" BackgroundColor="LightGray" />
+
+        <Label Text="(nog geen functionaliteit)" 
+               FontSize="Small" 
+               HorizontalOptions="Center" 
+               TextColor="Gray" />
+
+        <!-- Footer met aantal orders en knoppen -->
+        <StackLayout Orientation="Vertical" VerticalOptions="End" HorizontalOptions="FillAndExpand" Margin="0,20,0,0" >
+
+            <Label x:Name="OrdersCountLabel" 
+                   Text="Aantal gescande orders: 0" 
+                   HorizontalOptions="Center" 
+                   FontSize="Medium" />
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20" Margin="0,10,0,0">
+
+                <Button Text="Annuleer" 
+                        BackgroundColor="Red" 
+                        TextColor="White" 
+                        WidthRequest="140"
+                        Clicked="OnAnnuleerClicked"/>
+
+                <Button Text="Verstuur" 
+                        BackgroundColor="Black" 
+                        TextColor="White" 
+                        WidthRequest="140"
+                        Clicked="OnVerstuurClicked"/>
+
+            </StackLayout>
+        </StackLayout>
+
+    </StackLayout>
+
+</ContentPage>
