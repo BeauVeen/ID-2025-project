@@ -38,7 +38,7 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
             var productDetails = allOrderlines
                 .Select(ol => new OrderProductViewModel
                 {
-                    Name = ol.ProductName,
+                    ProductName = ol.ProductName,
                     Amount = ol.Amount,
                     Price = ol.Price
                 })
