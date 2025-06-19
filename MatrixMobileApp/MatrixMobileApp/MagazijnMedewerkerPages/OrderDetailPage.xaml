@@ -15,12 +15,10 @@
                     <DataTemplate>
                         <Frame BorderColor="LightGray" CornerRadius="8" Padding="8" Margin="4">
                             <VerticalStackLayout>
-                                <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                <Label Text="{Binding ProductName}" FontAttributes="Bold"/>
                                 <Label Text="{Binding ProductId, StringFormat='Product ID: {0}'}"/>
                                 <Label Text="{Binding Amount, StringFormat='Aantal: {0}'}"/>
-                                <Label Text="{Binding Price, StringFormat='Prijs: €{0:F2}'}"/>
-                                <!-- Optional: Show product photo if you want -->
-                              
+
                                 <Image Source="{Binding PhotoBase64}" IsVisible="{Binding PhotoBase64, Converter={StaticResource NullToBoolConverter}}" />
                               
                             </VerticalStackLayout>
