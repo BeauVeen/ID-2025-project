@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using MatrixMobileApp.API.Models;
-
 
 namespace MatrixMobileApp.API.Services
 {
@@ -46,14 +46,21 @@ namespace MatrixMobileApp.API.Services
                 Content = content
             };
             request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/plain"));
-
-            var token = Preferences.Get("auth_token", string.Empty);
-            if (!string.IsNullOrEmpty(token))
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                throw new Exception(
+                    $"PATCH mislukt ({(int)response.StatusCode} {response.ReasonPhrase})\n" +
+                    $"Verzonden payload: {json}\n" +
+                    $"Antwoord van server: {responseContent}"
+                );
+
+                //sponse.EnsureSuccessStatusCode();
+            }
         }
     }
 }
