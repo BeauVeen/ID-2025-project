@@ -11,7 +11,7 @@ namespace MatrixMobileApp.ViewModels
     {
         public int OrderId { get; set; }
         public string Status { get; set; } = string.Empty;
-        public List<Orderline> Orderlines { get; set; } = new();
+        public List<OrderProductViewModel> ProductsList { get; set; } = new();
         public bool IsReady { get; set; }
     }
 }

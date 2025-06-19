@@ -26,29 +26,40 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
             var api = new ApiService();
             var orderService = new OrderService(api.Client);
 
-            var orders = await orderService.GetOrdersAsync();
-            var order = orders.FirstOrDefault(o => o.OrderId == _orderId);
-
-            if (order != null)
+            try
             {
-                HeaderLabel.Text = $"Order {order.OrderId} - Producten";
-                _productList = order.Orderlines.Select(ol => new ProductChecklistItemViewModel
+                // Fetch all orders
+                var allOrders = await orderService.GetOrdersAsync();
+
+                // Find the specific order by _orderId
+                var order = allOrders.FirstOrDefault(o => o.OrderId == _orderId);
+
+                if (order != null)
                 {
-                    Name = ol.ProductName,
-                    Amount = ol.Amount,
-                    Price = ol.Price,
-                    // Use OrderlineId for unique key
-                    IsPicked = Preferences.Get($"order_{_orderId}_product_{ol.OrderlineId}_picked", false),
-                    OrderlineId = ol.OrderlineId
-                }).ToList();
+                    HeaderLabel.Text = $"Order {order.OrderId} - Producten";
 
-                ProductsList.ItemsSource = _productList;
-                UpdateReadyLabel();
+                    // Map the products from the orderlines
+                    _productList = order.Orderlines.Select(ol => new ProductChecklistItemViewModel
+                    {
+                        ProductName = ol.ProductName,
+                        Amount = ol.Amount,
+                        Price = ol.Price,
+                        IsPicked = Preferences.Get($"order_{_orderId}_product_{ol.OrderlineId}_picked", false),
+                        OrderlineId = ol.OrderlineId
+                    }).ToList();
+
+                    ProductsList.ItemsSource = _productList;
+                    UpdateReadyLabel();
+                }
+                else
+                {
+                    await DisplayAlert("Fout", "Order niet gevonden.", "OK");
+                    await Navigation.PopAsync();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await DisplayAlert("Fout", "Order niet gevonden.", "OK");
-                await Navigation.PopAsync();
+                await DisplayAlert("Fout", $"Kan ordergegevens niet laden: {ex.Message}", "OK");
             }
         }
 
