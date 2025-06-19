@@ -90,8 +90,8 @@
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Image Source="order2.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Afgeleverd" FontSize="15" HorizontalOptions="Center"/>
-                        <Label x:Name="AfgeleverdCountLabel" Text="12" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Afgeleverd" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                        <Label x:Name="AfgeleverdCountLabel" Text="12" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
                     </VerticalStackLayout>
                 </Frame>
 
@@ -102,8 +102,8 @@
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Image Source="pending.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Te bezorgen" FontSize="15" HorizontalOptions="Center"/>
-                        <Label x:Name="TeBezorgenCountLabel" Text="5" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Te bezorgen" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                        <Label x:Name="TeBezorgenCountLabel" Text="5" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
                     </VerticalStackLayout>
                 </Frame>
 
@@ -114,8 +114,8 @@
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Image Source="car.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center"/>
-                        <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                        <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
                         <Label 
                             
                             FontSize="10" 
