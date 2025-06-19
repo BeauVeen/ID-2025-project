@@ -58,6 +58,7 @@ namespace MatrixMobileApp
                 // gebruik de AuthenticateAsync functie uit jwtService, die via de api een authenticatie doet (/api/User/authenticate post request) om inloggegevens te valideren
                 var response = await _jwtService.AuthenticateAsync(loginRequest);
 
+                // alleen als de jwtservice de inlogpoging valideert, gebeurd onderstaande code pas
                 if (response.RoleId != 2 && response.RoleId != 4)
                     throw new Exception("Alleen bezorgers of magazijnmedewerkers kunnen inloggen op deze app");
 
@@ -73,14 +74,18 @@ namespace MatrixMobileApp
                 Preferences.Set("user_name", userName);
                 Preferences.Set("user_role", response.RoleId.ToString());
 
+
+                // maak nieuwe instantie van AppShell aan om de user te redirecten naar de Homepage. In AppShell staat de LoginPage bovenaan, maar er ontstaat geen loop omdat absolute routes gebruikt worden in onderstaande code
+                Application.Current.MainPage = new AppShell();
+
                 // Redirect naar de juiste homepage bij succesvolle login
                 if (response.RoleId == 2)
                 {
-                    await Shell.Current.GoToAsync("//HomePage");
+                    await Shell.Current.GoToAsync("//HomePage"); // gebruik absolute route 
                 }
                 else if (response.RoleId == 4)
                 {
-                    await Shell.Current.GoToAsync("//HomePageMagazijn");
+                    await Shell.Current.GoToAsync("//HomePageMagazijn"); // gebruik absolute route
                 }
             }
             catch (Exception ex)

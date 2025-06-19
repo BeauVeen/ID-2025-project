@@ -50,27 +50,28 @@
 
 
             <Frame HeightRequest="350"
-       Margin="0,100,0,20"
-       Padding="0"
-       CornerRadius="32"
-       IsClippedToBounds="True">
+                Margin="0,100,0,20"
+                Padding="0"
+                CornerRadius="32"
+                IsClippedToBounds="True">
            <Grid>
-            <!-- Camera Layer (onderaan) -->
-                    <zxing:CameraBarcodeReaderView 
+            <!-- Camera window met scan functie-->
+            <zxing:CameraBarcodeReaderView 
             x:Name="cameraView"
             IsTorchOn="False"
             IsDetecting="True"
             HorizontalOptions="Fill"
             VerticalOptions="Fill"
             BarcodesDetected="BarcodesDetected" />
-                    <!-- Overlay Afbeelding (bovenop de camera, maar niet interactief) -->
-               <Image Source="qrscan.png"
-               HorizontalOptions="Center"
-               VerticalOptions="Center"
-               WidthRequest="200"
-               HeightRequest="200"
-                        IsVisible="True" />
-                </Grid>
+           <!-- Overlay QR image  -->
+           <Image Source="qrscan2.png"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            WidthRequest="400"
+            HeightRequest="300"
+            Aspect="AspectFill" 
+            IsVisible="True" />
+           </Grid>
             </Frame>
 
             <!-- Dashboard Section -->
@@ -89,8 +90,8 @@
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Image Source="order2.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Afgeleverd" FontSize="15" HorizontalOptions="Center"/>
-                        <Label x:Name="AfgeleverdCountLabel" Text="12" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Afgeleverd" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                        <Label x:Name="AfgeleverdCountLabel" Text="12" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
                     </VerticalStackLayout>
                 </Frame>
 
@@ -101,8 +102,8 @@
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Image Source="pending.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Te bezorgen" FontSize="15" HorizontalOptions="Center"/>
-                        <Label x:Name="TeBezorgenCountLabel" Text="5" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Te bezorgen" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                        <Label x:Name="TeBezorgenCountLabel" Text="5" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
                     </VerticalStackLayout>
                 </Frame>
 
@@ -113,8 +114,8 @@
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Image Source="car.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center"/>
-                        <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                        <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
                         <Label 
                             
                             FontSize="10" 

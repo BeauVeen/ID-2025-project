@@ -105,6 +105,5 @@
                                Color="#8391AE"
                                HorizontalOptions="Center" />
         </StackLayout>
-
     </Grid>
 </ContentPage>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- pagina die getoont wordt wanneer er geen internetverbinding is -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MatrixMobileApp.OfflinePage"
+             Title="Offline">
+
+    <VerticalStackLayout Spacing="20" Padding="20" VerticalOptions="Center">
+        <Label Text="Geen internetverbinding" 
+               FontSize="24"
+               HorizontalOptions="Center" />
+
+        <Label Text="Kan data niet laden" 
+               FontSize="18"
+               HorizontalOptions="Center" />
+
+        <Button Text="Refresh"
+        ImageSource="refresh3.png"
+        Clicked="OnRetryClicked"
+        HorizontalOptions="Center"
+        Margin="0,0,0,450"
+        HeightRequest="40"
+        WidthRequest="120"
+        TextColor="White"
+        BackgroundColor="#426373"  
+        BorderColor="Black"
+        FontAttributes="Bold"/>
+
+    </VerticalStackLayout>
+</ContentPage>
