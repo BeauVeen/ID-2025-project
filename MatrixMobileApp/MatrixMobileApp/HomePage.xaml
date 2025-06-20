@@ -76,12 +76,13 @@
            </Grid>
             </Frame>
 
-            <!-- Klikbare edit.png foto -->
-            <Image Source="edit.png"
+            <!-- Klikbare edit.png foto - dichter bij camera frame geplaatst -->
+            <Image Source="edit.png"                   
                    HorizontalOptions="Center"
-                   HeightRequest="40"
-                   WidthRequest="40"
-                   Margin="0,-10,0,0">
+                   HeightRequest="25"
+                   WidthRequest="30"
+                   Margin="280,-30,0,10">
+                <!-- Top margin negative to pull up, bottom margin for spacing -->
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="onClickManualInput" NumberOfTapsRequired="1"/>
                 </Image.GestureRecognizers>

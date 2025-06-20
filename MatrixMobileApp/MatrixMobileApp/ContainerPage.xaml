@@ -72,10 +72,9 @@
 
                                 <!-- Kopregel -->
                                 <Grid ColumnDefinitions="*,*,*" Margin="0,5,0,0">
-                                    <Label Text="ProductID" Grid.Column="0" FontAttributes="Bold" HorizontalOptions="Start"/>
-                                    <Label Text="Prijs (per stuk)" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="End"/>
+                                    <Label Text="Productnaam" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Start"/>
+                                    <Label Text="Product ID" Grid.Column="0" FontAttributes="Bold" HorizontalOptions="Start"/>
                                     <Label Text="Aantal" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Center"/>
-
                                 </Grid>
 
                                 <BoxView HeightRequest="1" Color="LightGray" Margin="0,5"/>
@@ -87,21 +86,21 @@
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid ColumnDefinitions="*,*,*" Padding="0,5">
-                                                
-                                                <!-- Product ID -->
-                                                <Label Text="{Binding ProductId, StringFormat='{0}'}"
-                                                Grid.Column="0"
+
+                                                <!-- Product Name -->
+                                                <Label Text="{Binding ProductName, StringFormat='P{0}'}"
+                                                Grid.Column="1"
                                                 HorizontalOptions="Start"/>
 
-                                                <!-- Prijs  -->
-                                                <Label Text="{Binding Price, StringFormat='€{0:N2}'}"
-                                                Grid.Column="1"
-                                                HorizontalOptions="Center"
+                                                <!-- ID  -->
+                                                <Label Text="{Binding ProductId, StringFormat='{0}'}"
+                                                Grid.Column="0"
+                                                HorizontalOptions="Start"
                                                 HorizontalTextAlignment="Center"/>
 
 
                                                 <!-- Aantal-->
-                                                <Label Text="{Binding Amount, StringFormat='{0}'}"
+                                                <Label Text="{Binding Amount, StringFormat='{0}x'}"
                                                 Grid.Column="2"
                                                 HorizontalOptions="Center"  
                                                 HorizontalTextAlignment="Center"/>
@@ -111,10 +110,6 @@
                                 </CollectionView>
 
                                 <BoxView HeightRequest="1" Color="LightGray" Margin="0,5"/>
-
-                                <!-- Totale prijs -->
-                                <Label Text="{Binding Order.Orderlines, Converter={StaticResource OrderTotalConverter}}"
-           HorizontalOptions="Center" FontAttributes="Bold"/>
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
