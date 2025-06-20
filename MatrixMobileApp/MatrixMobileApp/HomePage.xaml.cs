@@ -15,13 +15,13 @@ namespace MatrixMobileApp
     {
 
         private readonly UserService userService; 
-        private readonly ManualContainerCodeService manualContainerService;
+       // private readonly ManualContainerCodeService manualContainerService;
         public HomePage()
         {
             InitializeComponent();
             var api = new ApiService();
             userService = new UserService(api.Client);
-            manualContainerService = new ManualContainerCodeService(api.Client);
+            //manualContainerService = new ManualContainerCodeService(api.Client);
         }
 
         async void BarcodesDetected(object sender, BarcodeDetectionEventArgs e) 
@@ -54,51 +54,7 @@ namespace MatrixMobileApp
             }
         }
 
-        async void OnManualContainerClicked(object sender, EventArgs e)
-        {
-            // Reset error label bij elke klik
-            ErrorLabel.IsVisible = false;
-            ErrorLabel.Text = string.Empty;
-
-            var containerCode = ManualContainerEntry.Text?.Trim();
-
-            if (string.IsNullOrEmpty(containerCode))
-            {
-                ShowError("Voer een containernummer in");
-                return;
-            }
-
-            try
-            {
-                if (!int.TryParse(containerCode, out int containerId))
-                {
-                    ShowError("Ongeldig containernummer");
-                    return;
-                }
-
-                var container = await manualContainerService.GetContainerById(containerId);
-
-                if (container == null)
-                {
-                    ShowError("Geen container met dit containernummer gevonden");
-                    return;
-                }
-
-                await Navigation.PushAsync(new ContainerPage(container));
-            }
-            catch (Exception ex)
-            {
-                ShowError($"Kan container niet laden: {ex.Message}");
-            }
-        }
-
-        private void ShowError(string message)
-        {
-            ErrorLabel.Text = message;
-            ErrorLabel.IsVisible = true;
-        }
-
-
+       
         private async Task RequestCameraPermission()
         {
             var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
@@ -218,7 +174,10 @@ namespace MatrixMobileApp
 
 
 
-
+        private async void onClickManualInput(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ManualContainerCodePage());
+        }
 
         private async void OnAfgeleverdCardTapped(object sender, EventArgs e) // Redirect naar de Afgeleverde Orders Details pagina
         {
