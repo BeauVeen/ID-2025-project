@@ -1,0 +1,18 @@
+﻿@page
+@model MatrixWebApp.Pages.Admin.BarcodeCreatorModel
+@{
+	ViewData["Title"] = "Product toevoegen";
+	ViewData["ShowSidebar"] = true;
+}
+
+<form method="get">
+    <label for="productCode">Productcode:</label>
+    <input type="text" id="productCode" name="productCode" value="@Request.Query["productCode"]" />
+    <button type="submit">Genereer barcode</button>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(Request.Query["productCode"]))
+{
+    <h3>Barcode voor: @Request.Query["productCode"]</h3>
+    <img src="/Admin/BarcodeCreator?handler=GenerateBarcode&productCode=@Request.Query["productCode"]" alt="Barcode afbeelding" />
+}

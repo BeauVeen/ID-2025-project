@@ -8,8 +8,11 @@ namespace MatrixMobileApp.ViewModels
 {
     public class OrderProductViewModel
     {
-        public string Name { get; set; } = string.Empty;
+        public string ProductName { get; set; } = string.Empty;
         public int Amount { get; set; }
         public decimal Price { get; set; }
+
     }
+    
+
 }

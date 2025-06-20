@@ -11,43 +11,57 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
     public partial class ContainerOrdersPage : ContentPage
     {
         private readonly int _containerId;
+        private readonly ContainerService _containerService;
 
         public ContainerOrdersPage(int containerId)
         {
             InitializeComponent();
             _containerId = containerId;
+
+            var api = new ApiService();
+            _containerService = new ContainerService(api.Client);
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            var api = new ApiService();
-            var containerService = new ContainerService(api.Client);
-
-            var containers = await containerService.GetContainersAsync();
-            var container = containers.FirstOrDefault(c => c.ContainerId == _containerId);
-
-            if (container != null)
+            try
             {
-                HeaderLabel.Text = $"Container {container.ContainerId} - Orders";
-                var orderViewModels = container.ContainerOrders
-                    .Select(co => new OrderWithReadyViewModel
-                    {
-                        OrderId = co.Order.OrderId,
-                        Status = co.Order.Status,
-                        Orderlines = co.Order.Orderlines,
-                        IsReady = Preferences.Get($"order_{co.Order.OrderId}_ready", false)
-                    })
-                    .ToList();
+                var containers = await _containerService.GetContainersAsync();
+                var container = containers.FirstOrDefault(c => c.ContainerId == _containerId);
 
-                OrdersList.ItemsSource = orderViewModels;
-                UpdateAcceptButtonVisibility(orderViewModels);
+                if (container != null)
+                {
+                    HeaderLabel.Text = $"Container {container.ContainerId} - Orders";
+
+                    var orderViewModels = container.ContainerOrders
+                        .Select(co => new OrderWithReadyViewModel
+                        {
+                            OrderId = co.Order.OrderId,
+                            Status = co.Order.Status,
+                            IsReady = Preferences.Get($"order_{co.Order.OrderId}_ready", false),
+                            ProductsList = co.Order.Orderlines.Select(ol => new OrderProductViewModel
+                            {
+                                ProductName = ol.ProductName,
+                                Amount = ol.Amount,
+                                Price = ol.Price
+                            }).ToList()
+                        })
+                        .ToList();
+
+                    OrdersList.ItemsSource = orderViewModels;
+                    UpdateAcceptButtonVisibility(orderViewModels);
+                }
+                else
+                {
+                    await DisplayAlert("Fout", "Container niet gevonden.", "OK");
+                    await Navigation.PopAsync();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await DisplayAlert("Fout", "Container niet gevonden.", "OK");
-                await Navigation.PopAsync();
+                await DisplayAlert("Fout", $"Kan containergegevens niet laden: {ex.Message}", "OK");
             }
         }
 
@@ -61,8 +75,8 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
 
         private void UpdateAcceptButtonVisibility(List<OrderWithReadyViewModel> orders)
         {
-            // Show if there are no orders, or if all orders have no products
-            AcceptButton.IsVisible = !orders.Any() || orders.All(o => o.Orderlines == null || o.Orderlines.Count == 0) 
+            AcceptButton.IsVisible = !orders.Any()
+                || orders.All(o => o.ProductsList == null || o.ProductsList.Count == 0)
                 || (orders.Any() && orders.All(o => o.IsReady));
         }
 
@@ -75,14 +89,10 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
 
             if (confirm)
             {
-                var api = new ApiService();
-                var containerService = new ContainerService(api.Client);
-
                 try
                 {
-                    await containerService.PatchContainerStatusAsync(_containerId, "Klaar voor verzenden");
+                    await _containerService.PatchContainerStatusAsync(_containerId, "Klaar voor verzending");
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt.", "OK");
-                    await Navigation.PopAsync();
                 }
                 catch (Exception ex)
                 {
