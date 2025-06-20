@@ -13,7 +13,7 @@ namespace MatrixMobileApp.ViewModels
                 return status switch
                 {
                     "In behandeling" => Color.FromArgb("#FFA500"),   // Orange
-                    "Klaar voor bezorging" => Color.FromArgb("#22C55E"), // Green
+                    "Klaar voor verzending" => Color.FromArgb("#22C55E"), // Green
                     "Onderweg" => Color.FromArgb("#3B82F6"),         // Light blue
                     _ => Color.FromArgb("#2D3A4A")                   // Default
                 };
