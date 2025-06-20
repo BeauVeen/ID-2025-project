@@ -88,7 +88,7 @@
                                             <Grid ColumnDefinitions="*,*,*" Padding="0,5">
 
                                                 <!-- Product Name -->
-                                                <Label Text="{Binding ProductName, StringFormat='P{0}'}"
+                                                <Label Text="{Binding ProductName, StringFormat='{0}'}"
                                                 Grid.Column="1"
                                                 HorizontalOptions="Start"/>
 
@@ -96,6 +96,7 @@
                                                 <Label Text="{Binding ProductId, StringFormat='{0}'}"
                                                 Grid.Column="0"
                                                 HorizontalOptions="Start"
+                                                Margin="25,0,0,0" 
                                                 HorizontalTextAlignment="Center"/>
 
 
