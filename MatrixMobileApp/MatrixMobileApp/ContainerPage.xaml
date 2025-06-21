@@ -109,7 +109,6 @@
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
-
                                 <BoxView HeightRequest="1" Color="LightGray" Margin="0,5"/>
                             </VerticalStackLayout>
                         </Frame>
