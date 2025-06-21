@@ -92,7 +92,9 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
                 try
                 {
                     await _containerService.PatchContainerStatusAsync(_containerId, "Klaar voor verzending");
+                    Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200));
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt.", "OK");
+                    
                 }
                 catch (Exception ex)
                 {
