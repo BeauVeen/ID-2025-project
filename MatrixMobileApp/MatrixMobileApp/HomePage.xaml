@@ -16,13 +16,13 @@
             Padding="30,0"
             Spacing="25">
 
-            <!-- user begroeting -->
+            <!-- user begroeting 
             <Label             
                 x:Name="UserNameLabel"
                 Text="Loading..."
                 Style="{StaticResource Headline}"
                 FontSize="20"
-                SemanticProperties.HeadingLevel="Level1" />
+                SemanticProperties.HeadingLevel="Level1" /> -->
 
             <!-- QR scan text met info icoon -->
             <HorizontalStackLayout
@@ -47,14 +47,15 @@
                     </Image.GestureRecognizers>
                 </Image>
             </HorizontalStackLayout>
-
+            
 
             <Frame HeightRequest="350"
                 Margin="0,100,0,20"
                 Padding="0"
                 CornerRadius="32"
                 IsClippedToBounds="True">
-           <Grid>
+                <Grid>
+                    
             <!-- Camera window met scan functie-->
             <zxing:CameraBarcodeReaderView 
             x:Name="cameraView"
@@ -63,6 +64,7 @@
             HorizontalOptions="Fill"
             VerticalOptions="Fill"
             BarcodesDetected="BarcodesDetected" />
+                    
            <!-- Overlay QR image  -->
            <Image Source="qrscan2.png"
             HorizontalOptions="Center"
@@ -74,6 +76,49 @@
            </Grid>
             </Frame>
 
+            <VerticalStackLayout
+            Padding="0"
+            Spacing="15"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+
+            <!-- Handmatige containercode invoer -->
+            <HorizontalStackLayout
+            HorizontalOptions="Center"
+            Spacing="10">
+
+           <Entry
+            x:Name="ManualContainerEntry"
+            Placeholder="Voer containernummer in"
+            WidthRequest="200"
+            ClearButtonVisibility="WhileEditing"
+            Keyboard="Default" />
+
+            <Button
+            Text="Bevestig"
+            Clicked="OnManualContainerClicked"
+            BackgroundColor="#426373"
+            TextColor="White"
+            CornerRadius="6"
+            HeightRequest="30"
+            WidthRequest="70"
+            FontSize="12"
+            FontAttributes="Bold"
+            Padding="6"
+            VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <!-- Foutmelding -->
+            <Label
+            x:Name="ErrorLabel"
+            TextColor="Red"
+            FontSize="Small"
+            IsVisible="False"
+            HorizontalOptions="Center" />
+            </VerticalStackLayout>
+            
+            
+
             <!-- Dashboard Section -->
             <Label
             x:Name="DashboardDateLabel"
@@ -83,6 +128,8 @@
             HorizontalOptions="Center" />
 
             <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                
+                
                 <!-- Afgeleverde orders card -->
                 <Frame CornerRadius="12" WidthRequest="100" BackgroundColor="#E8F5E9" Padding="10" HasShadow="True">
                     <Frame.GestureRecognizers>
@@ -107,6 +154,7 @@
                     </VerticalStackLayout>
                 </Frame>
 
+                
                 <!-- Problemen Card -->
                 <Frame CornerRadius="12" BackgroundColor="#FFF9C4" WidthRequest="110" Padding="10" HasShadow="True">
                     <Frame.GestureRecognizers>

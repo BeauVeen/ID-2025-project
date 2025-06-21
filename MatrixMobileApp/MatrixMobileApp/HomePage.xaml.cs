@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
 //using Xamarin.Google.Crypto.Tink.Shaded.Protobuf;
 
@@ -12,48 +13,15 @@ namespace MatrixMobileApp
 {
     public partial class HomePage : ContentPage
     {
-
+        private readonly ManualContainerCodeService manualContainerService;
         private readonly UserService userService; 
+
         public HomePage()
         {
             InitializeComponent();
             var api = new ApiService();
             userService = new UserService(api.Client);
-        }
-
-        private async void OnViewProductsClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ProductsPage());
-        }
-
-        private async void OnViewOrdersClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ActiveOrdersPage());
-        }
-
-        private async void OnInfoTapped(object sender, EventArgs e)
-        {
-            await DisplayAlert("Hoe werkt het?",
-                "1. Scan de QR-code van de container\n\n" +
-                "2. Het systeem bevestigt dat dit uw toegewezen container is\n\n" +
-                "3. Alle orders in deze container worden gemarkeerd als 'Onderweg' en zijn terug te vinden op de Actieve Orders pagina\n\n" +
-                "4. U ontvangt direct uw bezorgroute op de Route pagina.",
-                "Begrepen");
-        }
-
-        private async void OnAfgeleverdCardTapped(object sender, EventArgs e) // Redirect naar de Afgeleverde Orders Details pagina
-        {
-            await Navigation.PushAsync(new DetailsPages.AfgeleverdeOrdersDetailsPage());
-        }
-
-        private async void OnTeBezorgenCardTapped(object sender, EventArgs e) // Redirect naar de Te Bezorging Details pagina
-        {
-            await Navigation.PushAsync(new DetailsPages.TeBezorgenDetailsPage());
-        }
-
-        private async void OnProblemenCardTapped(object sender, EventArgs e) // Redirect naar de Probleem Details pagina
-        {
-            await Navigation.PushAsync(new DetailsPages.ProblemenDetailsPage());
+            manualContainerService = new ManualContainerCodeService(api.Client);
         }
 
         async void BarcodesDetected(object sender, BarcodeDetectionEventArgs e) 
@@ -86,6 +54,7 @@ namespace MatrixMobileApp
             }
         }
 
+       
         private async Task RequestCameraPermission()
         {
             var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
@@ -107,7 +76,6 @@ namespace MatrixMobileApp
             await RequestCameraPermission();
 
             CameraReset();
-            //cameraView.IsDetecting = true;
 
             // Laat huidige datum voor dashboard zien 
             var culture = new CultureInfo("nl-NL");
@@ -124,26 +92,26 @@ namespace MatrixMobileApp
             }
 
             // Haal users op en display de naam van de user als begroeting 
-            try
-            {
-                var users = await userService.GetUsersAsync();
-                var userEmail = Preferences.Get("user_email", string.Empty);
-                var user = users.FirstOrDefault(u => u.Email == userEmail); // Haal de correcte user op op basis van email 
+            //try
+            //{
+            //    var users = await userService.GetUsersAsync();
+            //    var userEmail = Preferences.Get("user_email", string.Empty);
+            //    var user = users.FirstOrDefault(u => u.Email == userEmail); // Haal de correcte user op op basis van email 
 
-                if (user != null)
-                {
-                    UserNameLabel.Text = $"Welkom, {user.Name}!";
-                }
-                else
-                {
-                    UserNameLabel.Text = "User niet gevonden";
-                }
-            }
-            catch (Exception ex)
-            {
-                UserNameLabel.Text = "Error loading user"; 
+            //    if (user != null)
+            //    {
+            //        UserNameLabel.Text = $"Welkom, {user.Name}!";
+            //    }
+            //    else
+            //    {
+            //        UserNameLabel.Text = "User niet gevonden";
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    UserNameLabel.Text = "Error loading user"; 
   
-            }
+            //}
         }
 
         protected override void OnDisappearing()
@@ -165,7 +133,6 @@ namespace MatrixMobileApp
                 loginPage.ResetLoginFields();
             }
         }
-
 
         // deze functie is nodig om de camera werkend te houden bij het navigeren van een TabBar terug naar HomePage (zonder deze functie blijft camera window zwart)
         private async void CameraReset()
@@ -201,5 +168,92 @@ namespace MatrixMobileApp
                 cameraView.IsDetecting = true;
             }
         }
+
+        // functie voor manual container code input
+        async void OnManualContainerClicked(object sender, EventArgs e)
+        {
+            ErrorLabel.IsVisible = false;
+            ErrorLabel.Text = string.Empty;
+
+            var containerCode = ManualContainerEntry.Text?.Trim();
+
+            if (string.IsNullOrEmpty(containerCode))
+            {
+                ShowError("Voer een containernummer in");
+                return;
+            }
+
+            try
+            {
+                if (!int.TryParse(containerCode, out int containerId))
+                {
+                    ShowError("Ongeldig containernummer");
+                    return;
+                }
+
+                var container = await manualContainerService.GetContainerById(containerId);
+
+                if (container == null)
+                {
+                    ShowError("Geen container met dit containernummer gevonden");
+                    return;
+                }
+
+                await Navigation.PushAsync(new ContainerPage(container));
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Kan container niet laden: {ex.Message}");
+            }
+        }
+
+        private void ShowError(string message)
+        {
+            ErrorLabel.Text = message;
+            ErrorLabel.IsVisible = true;
+        }
+
+
+
+
+
+
+
+
+        private async void OnAfgeleverdCardTapped(object sender, EventArgs e) // Redirect naar de Afgeleverde Orders Details pagina
+        {
+            await Navigation.PushAsync(new DetailsPages.AfgeleverdeOrdersDetailsPage());
+        }
+
+        private async void OnTeBezorgenCardTapped(object sender, EventArgs e) // Redirect naar de Te Bezorging Details pagina
+        {
+            await Navigation.PushAsync(new DetailsPages.TeBezorgenDetailsPage());
+        }
+
+        private async void OnProblemenCardTapped(object sender, EventArgs e) // Redirect naar de Probleem Details pagina
+        {
+            await Navigation.PushAsync(new DetailsPages.ProblemenDetailsPage());
+        }
+
+        private async void OnViewProductsClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProductsPage());
+        }
+
+        private async void OnViewOrdersClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ActiveOrdersPage());
+        }
+
+        private async void OnInfoTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Hoe werkt het?",
+                "1. Scan de QR-code van de container\n\n" +
+                "2. Het systeem bevestigt dat dit uw toegewezen container is\n\n" +
+                "3. Alle orders in deze container worden gemarkeerd als 'Onderweg' en zijn terug te vinden op de Actieve Orders pagina\n\n" +
+                "4. U ontvangt direct uw bezorgroute op de Route pagina.",
+                "Begrepen");
+        }
+
     }
 }
