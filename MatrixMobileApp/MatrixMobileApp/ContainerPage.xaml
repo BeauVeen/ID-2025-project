@@ -13,7 +13,7 @@
 
                     <!-- Grid met relatieve kolombreedtes -->
                     <Grid ColumnDefinitions="0.3*, 0.7*" RowDefinitions="Auto, Auto, Auto" RowSpacing="10">
-                        
+
                         <!-- ID -->
                         <Label Text="ID:" Grid.Row="0" Grid.Column="0" 
                    FontAttributes="Bold" 
@@ -25,7 +25,7 @@
                    FontSize="20"
                    VerticalOptions="Center"
                    Margin="10,0,0,0"/>
-                        
+
                         <!-- Status -->
                         <Label Text="Status:" Grid.Row="1" Grid.Column="0" 
                    FontAttributes="Bold"
@@ -53,7 +53,7 @@
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
-            
+
 
             <Label Text="Orders in deze container:" 
                    FontSize="16"
@@ -62,7 +62,8 @@
 
 
             <CollectionView ItemsSource="{Binding Container.ContainerOrders}" 
-                              EmptyView="Geen orders gevonden in deze container">  <!--toon deze melding als de view empty is-->
+                              EmptyView="Geen orders gevonden in deze container">
+                <!--toon deze melding als de view empty is-->
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame CornerRadius="8" Padding="10" HasShadow="True" Margin="0,0,0,10">

@@ -13,15 +13,15 @@ namespace MatrixMobileApp
 {
     public partial class HomePage : ContentPage
     {
-
+        private readonly ManualContainerCodeService manualContainerService;
         private readonly UserService userService; 
-       // private readonly ManualContainerCodeService manualContainerService;
+
         public HomePage()
         {
             InitializeComponent();
             var api = new ApiService();
             userService = new UserService(api.Client);
-            //manualContainerService = new ManualContainerCodeService(api.Client);
+            manualContainerService = new ManualContainerCodeService(api.Client);
         }
 
         async void BarcodesDetected(object sender, BarcodeDetectionEventArgs e) 
@@ -92,26 +92,26 @@ namespace MatrixMobileApp
             }
 
             // Haal users op en display de naam van de user als begroeting 
-            try
-            {
-                var users = await userService.GetUsersAsync();
-                var userEmail = Preferences.Get("user_email", string.Empty);
-                var user = users.FirstOrDefault(u => u.Email == userEmail); // Haal de correcte user op op basis van email 
+            //try
+            //{
+            //    var users = await userService.GetUsersAsync();
+            //    var userEmail = Preferences.Get("user_email", string.Empty);
+            //    var user = users.FirstOrDefault(u => u.Email == userEmail); // Haal de correcte user op op basis van email 
 
-                if (user != null)
-                {
-                    UserNameLabel.Text = $"Welkom, {user.Name}!";
-                }
-                else
-                {
-                    UserNameLabel.Text = "User niet gevonden";
-                }
-            }
-            catch (Exception ex)
-            {
-                UserNameLabel.Text = "Error loading user"; 
+            //    if (user != null)
+            //    {
+            //        UserNameLabel.Text = $"Welkom, {user.Name}!";
+            //    }
+            //    else
+            //    {
+            //        UserNameLabel.Text = "User niet gevonden";
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    UserNameLabel.Text = "Error loading user"; 
   
-            }
+            //}
         }
 
         protected override void OnDisappearing()
@@ -169,15 +169,56 @@ namespace MatrixMobileApp
             }
         }
 
-
-
-
-
-
-        private async void onClickManualInput(object sender, EventArgs e)
+        // functie voor manual container code input
+        async void OnManualContainerClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new ManualContainerCodePage());
+            ErrorLabel.IsVisible = false;
+            ErrorLabel.Text = string.Empty;
+
+            var containerCode = ManualContainerEntry.Text?.Trim();
+
+            if (string.IsNullOrEmpty(containerCode))
+            {
+                ShowError("Voer een containernummer in");
+                return;
+            }
+
+            try
+            {
+                if (!int.TryParse(containerCode, out int containerId))
+                {
+                    ShowError("Ongeldig containernummer");
+                    return;
+                }
+
+                var container = await manualContainerService.GetContainerById(containerId);
+
+                if (container == null)
+                {
+                    ShowError("Geen container met dit containernummer gevonden");
+                    return;
+                }
+
+                await Navigation.PushAsync(new ContainerPage(container));
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Kan container niet laden: {ex.Message}");
+            }
         }
+
+        private void ShowError(string message)
+        {
+            ErrorLabel.Text = message;
+            ErrorLabel.IsVisible = true;
+        }
+
+
+
+
+
+
+
 
         private async void OnAfgeleverdCardTapped(object sender, EventArgs e) // Redirect naar de Afgeleverde Orders Details pagina
         {
