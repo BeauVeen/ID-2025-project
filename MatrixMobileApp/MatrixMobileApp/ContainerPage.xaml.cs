@@ -60,6 +60,7 @@ namespace MatrixMobileApp
 
             // Forceer UI update
             OnPropertyChanged(nameof(Container));
+
         }
 
         private async void OnDeliverClicked(object sender, EventArgs e)

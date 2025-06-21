@@ -1,5 +1,6 @@
 ﻿using MatrixMobileApp.API;
 using MatrixMobileApp.API.Services;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using ZXing.Net.Maui;
@@ -24,56 +25,21 @@ namespace MatrixMobileApp
             manualContainerService = new ManualContainerCodeService(api.Client);
         }
 
-        async void BarcodesDetected(object sender, BarcodeDetectionEventArgs e) 
-        {
-            var first = e.Results?.FirstOrDefault();
-            if (first is null) return;
-
-
-            try { Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200)); } // Vibreer de telefoon bij het succesvol scannen van een barcode
-            catch { }
-
-            // 2. Bevestig dat het de juiste container is
-            var isCorrectContainer = await DisplayAlert("Container Scan",
-                $"Container {first.Value} gescand. Is dit uw toegewezen container?",
-                "Ja", "Nee");
-
-            if (isCorrectContainer)
-            {
-                // Container logica hier nog toevoegen
-                // zoals alle orders van de container toevoegen aan actieve orders pagina
-                // Orders moeten gemarkeerd worden als 'Onderweg' wanneer bezorger container scant en op 'Begin rit' klikt op de Route pagina (Begin Rit 2.2.0 design in Trello)
-                // Er moet een optimale route voor deze orders gegenereerd worden op de Route pagina
-
-            }
-
-            else 
-            {
-                // return als de container niet correct is
-                return;
-            }
-        }
-
-       
-        private async Task RequestCameraPermission()
-        {
-            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
-            if (status != PermissionStatus.Granted)
-            {
-                status = await Permissions.RequestAsync<Permissions.Camera>();
-            }
-
-            if (status != PermissionStatus.Granted)
-            {
-                await DisplayAlert("Warning", "Camera access is required", "OK");
-            }
-        }
-
         protected override async void OnAppearing()
         {
             base.OnAppearing();
 
             await RequestCameraPermission();
+
+            try
+            {
+                cameraView.IsDetecting = true;
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Camera Error", $"Could not start camera: {ex.Message}", "OK");
+            }
 
             CameraReset();
 
@@ -91,27 +57,6 @@ namespace MatrixMobileApp
                 return;
             }
 
-            // Haal users op en display de naam van de user als begroeting 
-            //try
-            //{
-            //    var users = await userService.GetUsersAsync();
-            //    var userEmail = Preferences.Get("user_email", string.Empty);
-            //    var user = users.FirstOrDefault(u => u.Email == userEmail); // Haal de correcte user op op basis van email 
-
-            //    if (user != null)
-            //    {
-            //        UserNameLabel.Text = $"Welkom, {user.Name}!";
-            //    }
-            //    else
-            //    {
-            //        UserNameLabel.Text = "User niet gevonden";
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    UserNameLabel.Text = "Error loading user"; 
-  
-            //}
         }
 
         protected override void OnDisappearing()
@@ -134,37 +79,64 @@ namespace MatrixMobileApp
             }
         }
 
-        // deze functie is nodig om de camera werkend te houden bij het navigeren van een TabBar terug naar HomePage (zonder deze functie blijft camera window zwart)
-        private async void CameraReset()
+
+        async void BarcodesDetected(object sender, BarcodeDetectionEventArgs e)
         {
-            if (cameraView?.CameraLocation == CameraLocation.Rear)
+            var barcode = e.Results?.FirstOrDefault();
+            if (barcode is null) return;
+
+            // stop verdere detectie tijdens verwerking
+            cameraView.IsDetecting = false;
+
+            try
             {
-                try
-                {
-                    // sla huidige staat van de cameraView op
-                    var wasDetecting = cameraView.IsDetecting;
-                    // zet cameraView uit om te voorkomen dat de camera blijft detecteren tijdens het wisselen van camera
-                    cameraView.IsDetecting = false;
-
-                    // zet visibility van camera tijdelijk uit, zodat gebruiker niet merkt dat de cameraview wisselt
-                    cameraView.IsVisible = false;
-                    cameraView.CameraLocation = CameraLocation.Front;                 
-
-                    cameraView.CameraLocation = CameraLocation.Rear;
-                    // zet visibility weer aan nadat de juiste camera wordt gebruikt
-                    cameraView.IsVisible = true;
-
-                    // herstel initiele staat
-                    cameraView.IsDetecting = wasDetecting;
-                }
-                catch
-                {
-                    // fallback naar normale werking
-                    cameraView.IsDetecting = true;
-                }
+                Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200)); // vibreer de telefoon bij het succesvol scannen van een barcode
             }
-            else
+            catch { }
+
+            try
             {
+                // Parse de gescande waarde naar een container ID
+                if (!int.TryParse(barcode.Value, out int containerId))
+                {
+                    await DisplayAlert("Fout", "Ongeldig containernummer", "OK");
+                    return;
+                }
+
+                // bevestig dat het de juiste container is
+                var isCorrectContainer = await DisplayAlert("Container Scan",
+                    $"Container {containerId} gescand. Is dit uw toegewezen container?",
+                    "Ja", "Nee");
+
+                if (!isCorrectContainer)
+                {
+                    return;
+                }
+
+                else
+                {
+                    // Haal container op via de service
+                    var container = await manualContainerService.GetContainerById(containerId);
+
+                    if (container == null)
+                    {
+                        await DisplayAlert("Fout", "Geen container met dit containernummer gevonden", "OK");
+                        return;
+                    }
+
+                    // Navigeer naar de ContainerPage
+                    await Navigation.PushAsync(new ContainerPage(container));
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Fout", $"Kan container niet laden: {ex.Message}", "OK");
+            }
+            finally
+            {
+                // herstart detectie na verwerking
                 cameraView.IsDetecting = true;
             }
         }
@@ -214,11 +186,59 @@ namespace MatrixMobileApp
         }
 
 
+        private async Task RequestCameraPermission()
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+            }
+
+            if (status != PermissionStatus.Granted)
+            {
+                await DisplayAlert("Warning", "Camera access is required", "OK");
+            }
+        }
+
+        // deze functie is nodig om de camera werkend te houden bij het navigeren van een TabBar terug naar HomePage (zonder deze functie blijft camera window zwart)
+        private async void CameraReset()
+        {
+            if (cameraView?.CameraLocation == CameraLocation.Rear)
+            {
+                try
+                {
+                    // sla huidige staat van de cameraView op
+                    var wasDetecting = cameraView.IsDetecting;
+                    // zet cameraView uit om te voorkomen dat de camera blijft detecteren tijdens het wisselen van camera
+                    cameraView.IsDetecting = false;
+
+                    // zet visibility van camera tijdelijk uit, zodat gebruiker niet merkt dat de cameraview wisselt
+                    cameraView.IsVisible = false;
+                    cameraView.CameraLocation = CameraLocation.Front;                 
+
+                    cameraView.CameraLocation = CameraLocation.Rear;
+                    // zet visibility weer aan nadat de juiste camera wordt gebruikt
+                    cameraView.IsVisible = true;
+
+                    // herstel initiele staat
+                    cameraView.IsDetecting = wasDetecting;
+                }
+                catch
+                {
+                    // fallback naar normale werking
+                    cameraView.IsDetecting = true;
+                }
+            }
+            else
+            {
+                cameraView.IsDetecting = true;
+            }
+        }
+
+       
 
 
-
-
-
+        // Redirect functies
 
         private async void OnAfgeleverdCardTapped(object sender, EventArgs e) // Redirect naar de Afgeleverde Orders Details pagina
         {

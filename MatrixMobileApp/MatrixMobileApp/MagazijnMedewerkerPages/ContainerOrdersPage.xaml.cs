@@ -13,6 +13,7 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
         private readonly int _containerId;
         private readonly ContainerService _containerService;
 
+
         public ContainerOrdersPage(int containerId)
         {
             InitializeComponent();
@@ -20,8 +21,10 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
 
             var api = new ApiService();
             _containerService = new ContainerService(api.Client);
-        }
 
+
+        }
+  
         protected override async void OnAppearing()
         {
             base.OnAppearing();
