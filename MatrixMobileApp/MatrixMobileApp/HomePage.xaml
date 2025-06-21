@@ -63,9 +63,11 @@
             IsDetecting="True"
             HorizontalOptions="Fill"
             VerticalOptions="Fill"
-            BarcodesDetected="BarcodesDetected" />
-                    
-           <!-- Overlay QR image  -->
+            BarcodesDetected="BarcodesDetected"/>
+
+
+
+                    <!-- Overlay QR image  -->
            <Image Source="qrscan2.png"
             HorizontalOptions="Center"
             VerticalOptions="Center"
