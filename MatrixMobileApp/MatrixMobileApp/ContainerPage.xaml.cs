@@ -62,7 +62,16 @@ namespace MatrixMobileApp
             OnPropertyChanged(nameof(Container));
 
         }
+
+        private void OnToggleExpandClicked(object sender, EventArgs e)
+        {
+            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder)
+            {
+                containerOrder.ToggleExpand();
+            }
+        }
     }
+
 
     // Converter voor aantal orderlines naar hoogte
     public class CountToHeightConverter : IValueConverter
@@ -79,4 +88,6 @@ namespace MatrixMobileApp
             throw new NotImplementedException();
         }
     }
+
+
 }

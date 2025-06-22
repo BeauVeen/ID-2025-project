@@ -1,10 +1,12 @@
 ﻿using MatrixMobileApp.API;
+using MatrixMobileApp.API.Models;   
 using MatrixMobileApp.API.Services;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
 //using Xamarin.Google.Crypto.Tink.Shaded.Protobuf;
@@ -15,7 +17,7 @@ namespace MatrixMobileApp
     public partial class HomePage : ContentPage
     {
         private readonly ManualContainerCodeService manualContainerService;
-        private readonly UserService userService; 
+        private readonly UserService userService;
 
         public HomePage()
         {
@@ -28,6 +30,13 @@ namespace MatrixMobileApp
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            var options = new BarcodeReaderOptions
+            {
+                AutoRotate = true
+            };
+
+            cameraView.Options = options;
 
             await RequestCameraPermission();
 
@@ -85,61 +94,31 @@ namespace MatrixMobileApp
             var barcode = e.Results?.FirstOrDefault();
             if (barcode is null) return;
 
-            // stop verdere detectie tijdens verwerking
+            // Stop verdere detectie tijdens verwerking
             cameraView.IsDetecting = false;
 
             try
             {
-                Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200)); // vibreer de telefoon bij het succesvol scannen van een barcode
-            }
-            catch { }
+                Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200));
 
-            try
-            {
-                // Parse de gescande waarde naar een container ID
-                if (!int.TryParse(barcode.Value, out int containerId))
+                // Vul de manual entry in en activeer de click handler
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    await DisplayAlert("Fout", "Ongeldig containernummer", "OK");
-                    return;
-                }
-
-                // bevestig dat het de juiste container is
-                var isCorrectContainer = await DisplayAlert("Container Scan",
-                    $"Container {containerId} gescand. Is dit uw toegewezen container?",
-                    "Ja", "Nee");
-
-                if (!isCorrectContainer)
-                {
-                    return;
-                }
-
-                else
-                {
-                    // Haal container op via de service
-                    var container = await manualContainerService.GetContainerById(containerId);
-
-                    if (container == null)
-                    {
-                        await DisplayAlert("Fout", "Geen container met dit containernummer gevonden", "OK");
-                        return;
-                    }
-
-                    // Navigeer naar de ContainerPage
-                    await Navigation.PushAsync(new ContainerPage(container));
-                }
-
-
+                    ManualContainerEntry.Text = barcode.Value;
+                    OnManualContainerClicked(null, EventArgs.Empty);
+                });
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Fout", $"Kan container niet laden: {ex.Message}", "OK");
+                await DisplayAlert("Fout", $"Er ging iets mis: {ex.Message}", "OK");
             }
             finally
             {
-                // herstart detectie na verwerking
+                // Herstart detectie na verwerking
                 cameraView.IsDetecting = true;
             }
         }
+
 
         // functie voor manual container code input
         async void OnManualContainerClicked(object sender, EventArgs e)

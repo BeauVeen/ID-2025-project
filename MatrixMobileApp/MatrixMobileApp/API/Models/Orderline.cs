@@ -30,7 +30,6 @@ namespace MatrixMobileApp.API.Models
             }
         }
 
-        // event dat hoort bij INotifyPropertyChanged. Hiermee kan de UI luisteren naar property-wijzigingen.
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
