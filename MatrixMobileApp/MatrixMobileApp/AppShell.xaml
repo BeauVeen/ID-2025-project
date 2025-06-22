@@ -12,7 +12,11 @@
         Title="Login"
         Route="LoginPage" 
         ContentTemplate="{DataTemplate local:LoginPage}" />
-    
+
+    <ShellContent 
+        Route="ContainerPage" ContentTemplate="{DataTemplate local:ContainerPage}" />
+
+
     <ShellContent 
     Title="Magazijn Home"
     Route="HomePageMagazijn"

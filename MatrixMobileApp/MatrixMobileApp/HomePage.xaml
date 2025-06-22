@@ -57,14 +57,16 @@
                 <Grid>
                     
             <!-- Camera window met scan functie-->
-                <zxing:CameraBarcodeReaderView 
-                x:Name="cameraView"
-                IsTorchOn="False"
-                IsDetecting="True"
-                HorizontalOptions="Fill"
-                VerticalOptions="Fill"
-                BarcodesDetected="BarcodesDetected">
-                </zxing:CameraBarcodeReaderView>
+            <zxing:CameraBarcodeReaderView 
+            x:Name="cameraView"
+            IsTorchOn="False"
+            IsDetecting="True"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            BarcodesDetected="BarcodesDetected"/>
+
+
+
 
             <!-- Overlay QR image  -->
            <Image Source="qrscan2.png"

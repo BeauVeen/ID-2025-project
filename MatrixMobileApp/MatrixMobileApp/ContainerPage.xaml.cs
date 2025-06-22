@@ -63,11 +63,28 @@ namespace MatrixMobileApp
 
         }
 
-        private void OnToggleExpandClicked(object sender, EventArgs e)
+
+        private async void OnDeliverClicked(object sender, EventArgs e)
         {
-            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder)
+            bool confirm = await DisplayAlert(
+                "Bevestigen",
+                "Weet je zeker dat je de status van deze container wilt zetten op 'Onderweg'?",
+                "Ja", "Nee");
+
+            if (confirm)
             {
-                containerOrder.ToggleExpand();
+                try
+                {
+                    var containerService = new ContainerService(new ApiService().Client);
+                    await containerService.PatchContainerStatusAsync(Container.ContainerId, "Onderweg");
+                    await DisplayAlert("Succes", "Containerstatus is bijgewerkt naar 'Onderweg'.", "OK");
+                    await Navigation.PushAsync(new RoutePage());
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Fout", $"Status bijwerken mislukt: {ex.Message}", "OK");
+                }
+
             }
         }
     }

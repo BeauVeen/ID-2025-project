@@ -130,6 +130,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <Button Text="Bezorgen" Clicked="OnDeliverClicked" BackgroundColor="Green" TextColor="White" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
