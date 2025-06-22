@@ -115,6 +115,7 @@ namespace MatrixMobileApp
             finally
             {
                 // Herstart detectie na verwerking
+                await Task.Delay(1800); 
                 cameraView.IsDetecting = true;
             }
         }
