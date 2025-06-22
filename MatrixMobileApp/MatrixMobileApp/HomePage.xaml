@@ -134,7 +134,7 @@
                 
                 
                 <!-- Afgeleverde orders card -->
-                <Frame CornerRadius="12" WidthRequest="100" BackgroundColor="#E8F5E9" Padding="10" HasShadow="True">
+                <Frame CornerRadius="12" WidthRequest="100" BackgroundColor="#E8F5E9" Padding="10" Margin="0,0,0,10" HasShadow="True">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnAfgeleverdCardTapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
@@ -146,7 +146,7 @@
                 </Frame>
 
                 <!-- Te bezorgen Card -->
-                <Frame CornerRadius="12" BackgroundColor="#E3F2FD"  WidthRequest="110" Padding="10" HasShadow="True">
+                <Frame CornerRadius="12" BackgroundColor="#E3F2FD"  WidthRequest="110" Padding="10" Margin="0,0,0,10"  HasShadow="True">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnTeBezorgenCardTapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
@@ -157,25 +157,18 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                
-                <!-- Problemen Card -->
-                <Frame CornerRadius="12" BackgroundColor="#FFF9C4" WidthRequest="110" Padding="10" HasShadow="True">
+                <!-- Mislukt card -->
+                <Frame CornerRadius="12" BackgroundColor="#FFF9C4"  WidthRequest="110" Padding="10" Margin="0,0,0,10"  HasShadow="True">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnProblemenCardTapped" NumberOfTapsRequired="1"/>
+                        <TapGestureRecognizer Tapped="OnTeBezorgenCardTapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Image Source="car.png" HeightRequest="32" WidthRequest="32"/>
+                        <Image Source="faileddelivery.png" HeightRequest="32" WidthRequest="32"/>
                         <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
                         <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-                        <Label 
-                            
-                            FontSize="10" 
-                            HorizontalOptions="Center"
-                            TextColor="Gray"
-                            LineBreakMode="WordWrap"
-                            MaxLines="2"/>
                     </VerticalStackLayout>
                 </Frame>
+
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

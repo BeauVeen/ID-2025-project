@@ -87,6 +87,14 @@ namespace MatrixMobileApp
 
             }
         }
+
+        private void OnToggleExpandClicked(object sender, EventArgs e)
+        {
+            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder)
+            {
+                containerOrder.ToggleExpand();
+            }
+        }
     }
 
 
