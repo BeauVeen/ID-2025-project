@@ -67,7 +67,8 @@
 
 
 
-                    <!-- Overlay QR image  -->
+
+            <!-- Overlay QR image  -->
            <Image Source="qrscan2.png"
             HorizontalOptions="Center"
             VerticalOptions="Center"
@@ -91,7 +92,7 @@
 
            <Entry
             x:Name="ManualContainerEntry"
-            Placeholder="Voer containernummer in"
+            Placeholder="Voer container ID in"
             WidthRequest="200"
             ClearButtonVisibility="WhileEditing"
             Keyboard="Default" />
