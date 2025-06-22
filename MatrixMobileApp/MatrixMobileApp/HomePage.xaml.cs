@@ -1,10 +1,12 @@
 ﻿using MatrixMobileApp.API;
+using MatrixMobileApp.API.Models;   
 using MatrixMobileApp.API.Services;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
 //using Xamarin.Google.Crypto.Tink.Shaded.Protobuf;
@@ -15,7 +17,7 @@ namespace MatrixMobileApp
     public partial class HomePage : ContentPage
     {
         private readonly ManualContainerCodeService manualContainerService;
-        private readonly UserService userService; 
+        private readonly UserService userService;
 
         public HomePage()
         {
@@ -116,6 +118,7 @@ namespace MatrixMobileApp
                 cameraView.IsDetecting = true;
             }
         }
+
 
         // functie voor manual container code input
         async void OnManualContainerClicked(object sender, EventArgs e)

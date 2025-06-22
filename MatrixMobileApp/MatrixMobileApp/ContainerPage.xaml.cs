@@ -63,6 +63,7 @@ namespace MatrixMobileApp
 
         }
 
+
         private async void OnDeliverClicked(object sender, EventArgs e)
         {
             bool confirm = await DisplayAlert(
@@ -83,9 +84,11 @@ namespace MatrixMobileApp
                 {
                     await DisplayAlert("Fout", $"Status bijwerken mislukt: {ex.Message}", "OK");
                 }
+
             }
         }
     }
+
 
     // Converter voor aantal orderlines naar hoogte
     public class CountToHeightConverter : IValueConverter
@@ -102,4 +105,6 @@ namespace MatrixMobileApp
             throw new NotImplementedException();
         }
     }
+
+
 }
