@@ -10,6 +10,7 @@ namespace MatrixMobileApp.API.Models
         public DateTime CreatedAt { get; set; }
         public string Status { get; set; } = string.Empty;
         public List<ContainerOrder> ContainerOrders { get; set; } = new();
+        public int OrderCount => ContainerOrders.Count; // geeft het totale aantal orders in de container terug
     }
 
     public class ContainerOrder : INotifyPropertyChanged //  INotifyPropertyChanged wordt toegevoegd om de dropdown iconen dynamisch aan te passen bij expand/unexpand 
