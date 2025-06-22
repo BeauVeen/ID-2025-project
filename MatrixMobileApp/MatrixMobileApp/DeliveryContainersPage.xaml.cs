@@ -2,7 +2,6 @@ using MatrixMobileApp.API;
 using MatrixMobileApp.API.Models;
 using MatrixMobileApp.API.Services;
 using MatrixMobileApp.ViewModels;
-using MatrixMobileApp.MagazijnMedewerkerPages;
 using Microsoft.Maui.Controls;
 using System.Linq;
 
@@ -11,12 +10,14 @@ namespace MatrixMobileApp
     public partial class DeliveryContainersPage : ContentPage
     {
         private readonly ContainerService _containerService;
+        private readonly ManualContainerCodeService _manualContainerService;
 
         public DeliveryContainersPage()
         {
             InitializeComponent();
             var api = new ApiService();
             _containerService = new ContainerService(api.Client);
+            _manualContainerService = new ManualContainerCodeService(api.Client);
         }
 
         protected override async void OnAppearing()
@@ -45,9 +46,26 @@ namespace MatrixMobileApp
 
         private async void OnContainerSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.CurrentSelection.FirstOrDefault() is ContainerViewModel selectedContainer)
+            if (e.CurrentSelection.FirstOrDefault() is not ContainerViewModel selectedContainer)
             {
-                await Navigation.PushAsync(new ContainerOrdersPage(selectedContainer.ContainerId));
+                return;
+            }
+
+            try
+            {
+                var container = await _manualContainerService.GetContainerById(selectedContainer.ContainerId);
+
+                if (container == null)
+                {
+                    await DisplayAlert("Fout", "Geen container met dit containernummer gevonden", "OK");
+                    return;
+                }
+
+                await Navigation.PushAsync(new ContainerPage(container));
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Fout", $"Kan container niet laden: {ex.Message}", "OK");
             }
 
             // Deselect item after navigation for better UX
