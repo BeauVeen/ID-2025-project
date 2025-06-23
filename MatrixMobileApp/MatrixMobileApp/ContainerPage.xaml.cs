@@ -63,7 +63,6 @@ namespace MatrixMobileApp
 
         }
 
-
         private async void OnDeliverClicked(object sender, EventArgs e)
         {
             bool confirm = await DisplayAlert(
@@ -75,8 +74,22 @@ namespace MatrixMobileApp
             {
                 try
                 {
+                    // haal userId op uit preferences (opgeslagen na inloggen)
+                    int userId = Preferences.Get("user_id", 0);
+
+                    if (userId == 0) // Controleer op geldige ID
+                    {
+                        await DisplayAlert("Fout", "Gebruiker niet ingelogd of ongeldige ID", "OK");
+                        return;
+                    }
+
                     var containerService = new ContainerService(new ApiService().Client);
-                    await containerService.PatchContainerStatusAsync(Container.ContainerId, "Onderweg");
+                    await containerService.PatchContainerStatusAsync(
+                        Container.ContainerId,
+                        "Onderweg",
+                        userId // bij bezorgen van een container wordt de bezorger gekoppeld aan de container
+                    );
+
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt naar 'Onderweg'.", "OK");
                     await Shell.Current.GoToAsync("//RoutePage");
                 }
@@ -84,7 +97,6 @@ namespace MatrixMobileApp
                 {
                     await DisplayAlert("Fout", $"Status bijwerken mislukt: {ex.Message}", "OK");
                 }
-
             }
         }
 

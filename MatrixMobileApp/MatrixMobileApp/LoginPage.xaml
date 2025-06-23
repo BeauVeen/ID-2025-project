@@ -36,8 +36,8 @@
                    VerticalOptions="Start"
                    HeightRequest="{OnIdiom Phone=100, Tablet=160}"
                    WidthRequest="{OnIdiom Phone=100, Tablet=160}"
-                   CornerRadius="50"
-                   Padding="0"
+                   CornerRadius="80"
+                   Padding="5"
                    HasShadow="True"
                    BackgroundColor="White"
                    ZIndex="1">
@@ -47,8 +47,8 @@
         </Grid>
 
 
-        <Label Grid.Row="1" Text=" Matrix Delivery" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="10"/>
-        <Label Grid.Row="2" Text="Log in om te beginnen met bezorgen" HorizontalOptions="Center" FontSize="Subtitle" Margin="-460"/>
+        <Label Grid.Row="1" Text=" Matrix Delivery" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" TextColor="Black" Padding="0" Margin="10"/>
+        <Label Grid.Row="2" Text="Log in om te beginnen met bezorgen" HorizontalOptions="Center" FontSize="Subtitle" TextColor="Black" Margin="-460"/>
 
 
         <!-- Invoervelden -->
