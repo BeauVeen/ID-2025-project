@@ -10,7 +10,7 @@
             IconImageSource="logout3.png"
             Clicked="OnLogoutClicked" />
     </ContentPage.ToolbarItems>
-   
+
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
@@ -47,7 +47,7 @@
                     </Image.GestureRecognizers>
                 </Image>
             </HorizontalStackLayout>
-            
+
 
             <Frame HeightRequest="350"
                 Margin="0,100,0,20"
@@ -55,9 +55,9 @@
                 CornerRadius="32"
                 IsClippedToBounds="True">
                 <Grid>
-                    
-            <!-- Camera window met scan functie-->
-            <zxing:CameraBarcodeReaderView 
+
+                    <!-- Camera window met scan functie-->
+                    <zxing:CameraBarcodeReaderView 
             x:Name="cameraView"
             IsTorchOn="False"
             IsDetecting="True"
@@ -68,15 +68,15 @@
 
 
 
-            <!-- Overlay QR image  -->
-           <Image Source="qrscan2.png"
+                    <!-- Overlay QR image  -->
+                    <Image Source="qrscan2.png"
             HorizontalOptions="Center"
             VerticalOptions="Center"
             WidthRequest="400"
             HeightRequest="300"
             Aspect="AspectFill" 
             IsVisible="True" />
-           </Grid>
+                </Grid>
             </Frame>
 
             <VerticalStackLayout
@@ -85,19 +85,19 @@
             HorizontalOptions="Center"
             VerticalOptions="Center">
 
-            <!-- Handmatige containercode invoer -->
-            <HorizontalStackLayout
+                <!-- Handmatige containercode invoer -->
+                <HorizontalStackLayout
             HorizontalOptions="Center"
             Spacing="10">
 
-           <Entry
+                    <Entry
             x:Name="ManualContainerEntry"
             Placeholder="Voer container ID in"
             WidthRequest="200"
             ClearButtonVisibility="WhileEditing"
             Keyboard="Default" />
 
-            <Button
+                    <Button
             Text="Bevestig"
             Clicked="OnManualContainerClicked"
             BackgroundColor="#426373"
@@ -109,18 +109,18 @@
             FontAttributes="Bold"
             Padding="6"
             VerticalOptions="Center" />
-            </HorizontalStackLayout>
+                </HorizontalStackLayout>
 
-            <!-- Foutmelding -->
-            <Label
+                <!-- Foutmelding -->
+                <Label
             x:Name="ErrorLabel"
             TextColor="Red"
             FontSize="Small"
             IsVisible="False"
             HorizontalOptions="Center" />
             </VerticalStackLayout>
-            
-            
+
+
 
             <!-- Dashboard Section -->
             <Label
@@ -131,8 +131,8 @@
             HorizontalOptions="Center" />
 
             <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
-                
-                
+
+
                 <!-- Afgeleverde orders card -->
                 <Frame CornerRadius="12" WidthRequest="100" BackgroundColor="#E8F5E9" Padding="10" HasShadow="True">
                     <Frame.GestureRecognizers>
@@ -157,7 +157,7 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                
+
                 <!-- Problemen Card -->
                 <Frame CornerRadius="12" BackgroundColor="#FFF9C4" WidthRequest="110" Padding="10" HasShadow="True">
                     <Frame.GestureRecognizers>
@@ -174,6 +174,8 @@
                             TextColor="Gray"
                             LineBreakMode="WordWrap"
                             MaxLines="2"/>
+
+
                     </VerticalStackLayout>
                 </Frame>
             </HorizontalStackLayout>

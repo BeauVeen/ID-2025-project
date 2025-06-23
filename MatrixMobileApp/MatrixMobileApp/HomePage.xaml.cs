@@ -1,6 +1,7 @@
 ﻿using MatrixMobileApp.API;
 using MatrixMobileApp.API.Models;   
 using MatrixMobileApp.API.Services;
+using Plugin.SimpleAudioPlayer;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -99,7 +100,13 @@ namespace MatrixMobileApp
 
             try
             {
+                //Vibreer de telefoon bij succesvolle detectie
                 Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200));
+                //Speel mp3 geluid af bij succesvolle detectie
+                var player = CrossSimpleAudioPlayer.Current;
+                player.Load("beep.mp3");
+                player.Play();
+
 
                 // Vul de manual entry in en activeer de click handler
                 MainThread.BeginInvokeOnMainThread(() =>
