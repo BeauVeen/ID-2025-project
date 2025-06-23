@@ -24,5 +24,15 @@ namespace MatrixMobileApp.API.Services
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<Product>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Product>();
         }
+
+        // Methode om productnamen te laten zien op de containerpage 
+        public async Task<Product> GetProductByIdAsync(int productId)
+        {
+            var response = await _client.GetAsync($"/api/Product/{productId}");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<Product>(json,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
     }
 }

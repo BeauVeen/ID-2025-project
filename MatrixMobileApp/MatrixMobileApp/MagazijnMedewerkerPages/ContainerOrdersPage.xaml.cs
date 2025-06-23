@@ -13,6 +13,7 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
         private readonly int _containerId;
         private readonly ContainerService _containerService;
 
+
         public ContainerOrdersPage(int containerId)
         {
             InitializeComponent();
@@ -20,8 +21,10 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
 
             var api = new ApiService();
             _containerService = new ContainerService(api.Client);
-        }
 
+
+        }
+  
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -92,7 +95,9 @@ namespace MatrixMobileApp.MagazijnMedewerkerPages
                 try
                 {
                     await _containerService.PatchContainerStatusAsync(_containerId, "Klaar voor verzending");
+                    Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200));
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt.", "OK");
+                    
                 }
                 catch (Exception ex)
                 {
