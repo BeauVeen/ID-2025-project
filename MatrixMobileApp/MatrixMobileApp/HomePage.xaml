@@ -101,8 +101,8 @@
                 </Image>
             </HorizontalStackLayout>
 
-            <!-- Foutmelding -->
-            <Label
+                <!-- Foutmelding -->
+                <Label
             x:Name="ErrorLabel"
             TextColor="Red"
             FontSize="Small"

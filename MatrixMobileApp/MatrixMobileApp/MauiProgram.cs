@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using ZXing.Net.Maui.Controls;
+using CommunityToolkit.Maui;
 
 namespace MatrixMobileApp
 {
@@ -11,7 +12,9 @@ namespace MatrixMobileApp
             builder
 
                 .UseMauiApp<App>()
-                .UseBarcodeReader(); // Gebruik de ZXing barcode reader (QR scan functionaliteit op de homepage)
+                .UseBarcodeReader() // Gebruik de ZXing barcode reader (QR scan functionaliteit op de homepage)
+                .UseMauiCommunityToolkit(); // Add CommunityToolkit.Maui
+            builder.UseMauiCommunityToolkit();
             builder.ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

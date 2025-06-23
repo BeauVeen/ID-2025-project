@@ -1,6 +1,7 @@
 ﻿using MatrixMobileApp.API;
 using MatrixMobileApp.API.Models;   
 using MatrixMobileApp.API.Services;
+using Plugin.SimpleAudioPlayer;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -25,6 +26,7 @@ namespace MatrixMobileApp
             var api = new ApiService();
             userService = new UserService(api.Client);
             manualContainerService = new ManualContainerCodeService(api.Client);
+            
         }
 
         protected override async void OnAppearing()
@@ -99,7 +101,14 @@ namespace MatrixMobileApp
 
             try
             {
+                //Vibreer de telefoon bij succesvolle detectie
                 Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200));
+
+                //Speel mp3 geluid af bij succesvolle detectie
+                var player = CrossSimpleAudioPlayer.Current;
+                player.Load("beep.mp3");
+                player.Play();
+
 
                 // Vul de manual entry in en activeer de click handler
                 MainThread.BeginInvokeOnMainThread(() =>
@@ -131,7 +140,7 @@ namespace MatrixMobileApp
 
             if (string.IsNullOrEmpty(containerCode))
             {
-                ShowError("Voer een containernummer in");
+                await DisplayAlert("Fout", "Voer een containernummer in", "OK");
                 return;
             }
 
@@ -139,7 +148,7 @@ namespace MatrixMobileApp
             {
                 if (!int.TryParse(containerCode, out int containerId))
                 {
-                    ShowError("Ongeldig containernummer");
+                    await DisplayAlert("Fout", "Ongeldig containernummer", "OK");
                     return;
                 }
 
@@ -147,24 +156,24 @@ namespace MatrixMobileApp
 
                 if (container == null)
                 {
-                    ShowError("Geen container met dit containernummer gevonden");
+                    await DisplayAlert("Fout", "Geen container met dit containernummer gevonden", "OK");
                     return;
                 }
-
-                await Navigation.PushAsync(new ContainerPage(container));
+                if (container.Status == "Klaar voor verzending")
+                {
+                    await Navigation.PushAsync(new ContainerPage(container));
+                }
+                else
+                {
+                    await DisplayAlert("Fout", "Deze container heeft niet de benodigde status om weergegeven te worden.\n\n" +
+                        "Controlleer of de container Klaar voor verzending is", "OK");
+                }
             }
             catch (Exception ex)
             {
-                ShowError($"Kan container niet laden: {ex.Message}");
+                await DisplayAlert("Fout", $"Kan container niet laden: {ex.Message}", "OK");
             }
         }
-
-        private void ShowError(string message)
-        {
-            ErrorLabel.Text = message;
-            ErrorLabel.IsVisible = true;
-        }
-
 
         private async Task RequestCameraPermission()
         {

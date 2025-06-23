@@ -84,7 +84,7 @@ namespace MatrixMobileApp.API.Services
                 );
 
                 //sponse.EnsureSuccessStatusCode();
-            }
+            }          
         }
     }
 }
