@@ -53,7 +53,6 @@ CREATE TABLE Orders (
     UserId INT NOT NULL,
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Status VARCHAR(50) NOT NULL DEFAULT 'In behandeling',
-    Signature MEDIUMBLOB NULL,
     FOREIGN KEY (UserId) REFERENCES Users(UserId),
     FOREIGN KEY (Status) REFERENCES OrderStatus(Status)
 );
@@ -71,8 +70,10 @@ CREATE TABLE Orderlines (
 CREATE TABLE Container (
     ContainerId INT AUTO_INCREMENT PRIMARY KEY,
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UserId INT, 
     Status VARCHAR(50) NOT NULL DEFAULT 'In behandeling',
-    FOREIGN KEY (Status) REFERENCES OrderStatus(Status)
+    FOREIGN KEY (Status) REFERENCES OrderStatus(Status),
+    FOREIGN KEY (UserId) REFERENCES Users(UserId)
 );
 
 CREATE TABLE ContainerOrders (

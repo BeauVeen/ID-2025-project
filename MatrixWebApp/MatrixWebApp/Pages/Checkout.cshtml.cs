@@ -46,17 +46,19 @@ namespace MatrixWebApp.Pages
                 return RedirectToPage("/Account/Login");
             }
 
+            UserData = await _httpClient.GetFromJsonAsync<UserDto>($"api/User/{userId}");
+
             if (Cart == null || !Cart.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "Je winkelwagen is leeg.");
                 return Page();
             }
 
-            // Maak order DTO aan
             var orderDto = new OrderDto
             {
                 UserId = userId,
                 Status = "Pending",
+                Signature = null,
                 Orderlines = Cart.Items.Select(item => new OrderlineDto
                 {
                     ProductId = item.ProductId,
@@ -99,6 +101,7 @@ namespace MatrixWebApp.Pages
     {
         public int UserId { get; set; }
         public string Status { get; set; }
+        public string? Signature { get; set; }
         public List<OrderlineDto> Orderlines { get; set; }
     }
 

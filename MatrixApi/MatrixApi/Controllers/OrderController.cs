@@ -59,25 +59,11 @@ namespace MatrixApi.Controllers
         {
             try
             {
-                byte[]? signatureBytes = null;
-                if (orderDto.Signature != null)
-                {
-                    using var ms = new MemoryStream();
-                    await orderDto.Signature.CopyToAsync(ms);
-                    signatureBytes = ms.ToArray();
-                    Console.WriteLine($"Signature bytes length: {signatureBytes.Length}");
-                }
-                else
-                {
-                    Console.WriteLine("No signature received");
-                }
-
                 var order = new Order
                 {
                     UserId = orderDto.UserId,
                     CreatedAt = DateTime.UtcNow,
                     Status = orderDto.Status,
-                    Signature = signatureBytes,
                     Orderlines = orderDto.Orderlines.Select(ol => new Orderline
                     {
                         ProductId = ol.ProductId,
@@ -102,21 +88,11 @@ namespace MatrixApi.Controllers
 
             try
             {
-                byte[]? signatureBytes = null;
-
-                if (dto.Signature != null)
-                {
-                    using var ms = new MemoryStream();
-                    await dto.Signature.CopyToAsync(ms);
-                    signatureBytes = ms.ToArray();
-                }
-
                 var order = new Order
                 {
                     OrderId = dto.OrderId,
                     UserId = dto.UserId,
-                    Status = dto.Status,
-                    Signature = signatureBytes,
+                    Status = dto.Status
                 };
 
                 var updated = await _orderService.UpdateAsync(order);

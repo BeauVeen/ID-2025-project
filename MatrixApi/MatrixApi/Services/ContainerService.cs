@@ -62,6 +62,7 @@ namespace MatrixApi.Services
                 {
                     CreatedAt = DateTime.UtcNow,
                     Status = dto.Status,
+                    UserId = dto.UserId,
                     ContainerOrders = dto.OrderIds.Select(orderId => new ContainerOrder
                     {
                         OrderId = orderId
