@@ -81,13 +81,10 @@ namespace MatrixApi.Services
             }
         }
 
-        public async Task<Container> UpdateStatusAsync(int containerId, string newStatus)
+        public async Task<Container> UpdateAsync(int containerId, ContainerUpdateDto dto)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(newStatus))
-                    throw new ArgumentException("Status cannot be null or empty.", nameof(newStatus));
-
                 var container = await _context.Containers
                     .Include(c => c.ContainerOrders)
                         .ThenInclude(co => co.Order)
@@ -96,14 +93,22 @@ namespace MatrixApi.Services
                 if (container == null)
                     throw new NotFoundException($"Container with id {containerId} not found.");
 
-                container.Status = newStatus;
-
-                foreach (var containerOrder in container.ContainerOrders)
+                if (!string.IsNullOrWhiteSpace(dto.Status))
                 {
-                    if (containerOrder.Order != null)
+                    container.Status = dto.Status;
+
+                    foreach (var containerOrder in container.ContainerOrders)
                     {
-                        containerOrder.Order.Status = newStatus;
+                        if (containerOrder.Order != null)
+                        {
+                            containerOrder.Order.Status = dto.Status;
+                        }
                     }
+                }
+
+                if (dto.UserId.HasValue)
+                {
+                    container.UserId = dto.UserId.Value;
                 }
 
                 await _context.SaveChangesAsync();
@@ -112,12 +117,10 @@ namespace MatrixApi.Services
             }
             catch (Exception ex) when (!(ex is NotFoundException))
             {
-                Console.WriteLine($"Error updating container and related order statuses: {ex}");
+                Console.WriteLine($"Error updating container: {ex}");
                 throw;
             }
         }
-
-
 
         public async Task<bool> DeleteAsync(int id)
         {
