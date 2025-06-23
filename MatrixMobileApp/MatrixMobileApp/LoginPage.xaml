@@ -47,9 +47,16 @@
         </Grid>
 
 
-        <Label Grid.Row="1" Text=" Matrix Delivery" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" TextColor="Black" Padding="0" Margin="10"/>
-        <Label Grid.Row="2" Text="Log in om te beginnen met bezorgen" HorizontalOptions="Center" FontSize="Subtitle" TextColor="Black" Margin="-460"/>
-
+        <StackLayout Grid.Row="1" Margin="0,10,0,0" Spacing="2" VerticalOptions="Start" HorizontalOptions="Center">
+            <Label Text="Matrix Delivery"
+                   FontSize="Title"
+                   Margin="50,0,0,0"
+                   FontAttributes="Bold"
+                   TextColor="Black"/>
+            <Label Text="Log in om te beginnen met bezorgen"
+                   FontSize="Subtitle"
+                   TextColor="Black"/>
+        </StackLayout>
 
         <!-- Invoervelden -->
         <StackLayout Grid.Row="1"

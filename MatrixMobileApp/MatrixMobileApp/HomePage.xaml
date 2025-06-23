@@ -23,7 +23,7 @@
                 Margin="10,10,0,-120">
 
             <Label
-                Text="Scan QR"
+                Text="Scan code"
                 FontSize="20"
                 FontAttributes="Bold"
                 HorizontalOptions="Center">
