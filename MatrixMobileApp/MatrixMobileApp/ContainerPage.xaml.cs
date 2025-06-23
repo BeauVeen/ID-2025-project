@@ -87,7 +87,7 @@ namespace MatrixMobileApp
                     await containerService.PatchContainerStatusAsync(
                         Container.ContainerId,
                         "Onderweg",
-                        userId
+                        userId // bij bezorgen van een container wordt de bezorger gekoppeld aan de container
                     );
 
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt naar 'Onderweg'.", "OK");

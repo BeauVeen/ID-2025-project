@@ -36,6 +36,18 @@ namespace MatrixMobileApp.API.Services
             response.EnsureSuccessStatusCode();
         }
 
+        // functie om alle containers op te halen die gekoppeld zijn aan een specifieke userId om ze te tonen op actieve orders pagina
+        public async Task<List<Container>> GetContainersByUserIdAsync(int userId)
+        {
+            // Alle containers ophalen
+            var allContainers = await GetContainersAsync();
+
+            // Filter containers op userId EN status "Onderweg"
+            return allContainers
+                .Where(c => c.UserId == userId && c.Status == "Onderweg") // alleen containers met de status Onderweg worden getoont op Actieve Orders pagina
+                .ToList();
+        }
+
         public async Task PatchContainerStatusAsync(int containerId, string newStatus, int? userId = null) // userId moet optioneel zijn
         {
             var payload = new

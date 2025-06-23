@@ -92,7 +92,7 @@
                 <!-- search icon-->
                 <Image
                 Source="search.png"
-                HeightRequest="19"
+                HeightRequest="19"                
                 WidthRequest="19"
                 VerticalOptions="Center">
                     <Image.GestureRecognizers>
