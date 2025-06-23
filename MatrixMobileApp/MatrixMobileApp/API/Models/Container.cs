@@ -9,7 +9,7 @@ namespace MatrixMobileApp.API.Models
         public int ContainerId { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Status { get; set; } = string.Empty;
-        public int UserId { get; set; } // wanneer een bezorger de orders van een container gaat bezorgen, wordt de userid van de bezorger gekoppeld aan de container
+        public int? UserId { get; set; } = null; // wanneer een bezorger de orders van een container gaat bezorgen, wordt de userid van de bezorger gekoppeld aan de container zodat hij de orders op de Actieve Orders pagina kan zien
         public List<ContainerOrder> ContainerOrders { get; set; } = new();
         public int OrderCount => ContainerOrders.Count; // geeft het totale aantal orders in de container terug
     }
@@ -26,8 +26,6 @@ namespace MatrixMobileApp.API.Models
         {
             IsExpanded = !IsExpanded; // waarde van IsExpanded wordt omgedraaid 
         }
-
-
 
         private bool _isExpanded; // private bool om de huidige waarde van de dropdown op te slaan 
         public bool IsExpanded
