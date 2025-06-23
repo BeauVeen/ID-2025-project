@@ -5,6 +5,7 @@
         public int ContainerId { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Status { get; set; } = "In behandeling";
+        public int? UserId { get; set; }
         public ICollection<ContainerOrder> ContainerOrders { get; set; } = new List<ContainerOrder>();
     }
 }
