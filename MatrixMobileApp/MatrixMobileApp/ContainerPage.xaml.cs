@@ -78,7 +78,7 @@ namespace MatrixMobileApp
                     var containerService = new ContainerService(new ApiService().Client);
                     await containerService.PatchContainerStatusAsync(Container.ContainerId, "Onderweg");
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt naar 'Onderweg'.", "OK");
-                    await Navigation.PushAsync(new RoutePage());
+                    await Shell.Current.GoToAsync("//RoutePage");
                 }
                 catch (Exception ex)
                 {

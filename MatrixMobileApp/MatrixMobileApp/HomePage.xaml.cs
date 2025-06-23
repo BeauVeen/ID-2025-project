@@ -248,10 +248,10 @@ namespace MatrixMobileApp
         private async void OnInfoTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Hoe werkt het?",
-                "1. Scan de QR-code van de container\n\n" +
-                "2. Het systeem bevestigt dat dit uw toegewezen container is\n\n" +
-                "3. Alle orders in deze container worden gemarkeerd als 'Onderweg' en zijn terug te vinden op de Actieve Orders pagina\n\n" +
-                "4. U ontvangt direct uw bezorgroute op de Route pagina.",
+                "1. Scan de QR van de container, of voer de code handmatig in\n\n" +
+                "2. Klik op 'Bezorgen' op de containerpagina\n\n" +
+                "3. U wordt direct doorverwezen naar de Route pagina waar uw bezorgroute staat\n\n" +
+                "4. Alle orders in de geselecteerde container worden gemarkeerd als 'Onderweg' en zijn terug te vinden op de Actieve Orders pagina\n\n",
                 "Begrepen");
         }
 
