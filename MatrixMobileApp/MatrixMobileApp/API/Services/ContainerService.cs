@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MatrixMobileApp.API.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using MatrixMobileApp.API.Models;
 
 namespace MatrixMobileApp.API.Services
 {
@@ -35,16 +36,27 @@ namespace MatrixMobileApp.API.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task PatchContainerStatusAsync(int containerId, string newStatus)
+        public async Task PatchContainerStatusAsync(int containerId, string newStatus, int? userId = null) // userId moet optioneel zijn
         {
-            var payload = new { status = newStatus };
-            var json = JsonSerializer.Serialize(payload);
+            var payload = new
+            {
+                status = newStatus,
+                userId = userId  
+            };
+
+            var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull // negeer null values
+            });
+
+
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var request = new HttpRequestMessage(HttpMethod.Patch, $"/api/Container/{containerId}")
             {
                 Content = content
             };
+
             request.Headers.Accept.Clear();
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
