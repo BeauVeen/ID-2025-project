@@ -20,7 +20,6 @@ namespace MatrixApi.Services
             try
             {
                 return await _context.Containers
-                    .Include(c => c.User)
                     .Include(c => c.ContainerOrders)
                         .ThenInclude(co => co.Order)
                             .ThenInclude(o => o.Orderlines)
@@ -38,7 +37,6 @@ namespace MatrixApi.Services
             try
             {
                 var container = await _context.Containers
-                    .Include(c => c.User)
                     .Include(c => c.ContainerOrders)
                         .ThenInclude(co => co.Order)
                             .ThenInclude(o => o.Orderlines)
