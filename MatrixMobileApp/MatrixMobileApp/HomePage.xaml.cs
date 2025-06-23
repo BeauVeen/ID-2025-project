@@ -133,8 +133,6 @@ namespace MatrixMobileApp
         // functie voor manual container code input
         async void OnManualContainerClicked(object sender, EventArgs e)
         {
-            ErrorLabel.IsVisible = false;
-            ErrorLabel.Text = string.Empty;
 
             var containerCode = ManualContainerEntry.Text?.Trim();
 

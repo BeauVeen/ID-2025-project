@@ -24,6 +24,13 @@ namespace MatrixMobileApp
             _ = LoadContainersAsync();
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            // Vernieuw de data wanneer de pagina opnieuw verschijnt
+            _ = LoadContainersAsync();
+        }
+
         private async Task LoadContainersAsync()
         {
             try
@@ -92,11 +99,5 @@ namespace MatrixMobileApp
             }
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            // Vernieuw de data wanneer de pagina opnieuw verschijnt
-            _ = LoadContainersAsync();
-        }
     }
 }

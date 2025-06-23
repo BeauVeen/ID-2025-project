@@ -7,7 +7,7 @@
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <!-- Container Basisinfo -->
-            <Frame CornerRadius="8" BackgroundColor="#E3F2FD" Padding="10" HasShadow="False">
+            <Frame CornerRadius="8" BackgroundColor="#bad8ee" Padding="10" HasShadow="False">
                 <VerticalStackLayout Spacing="14">
                     <Label Text="Container Details" FontSize="20" TextColor="Black" FontAttributes="Bold"/>
 
@@ -78,7 +78,7 @@
                             EmptyView="Geen orders gevonden in deze container">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame CornerRadius="8" Padding="10" HasShadow="True" BackgroundColor="White"  Margin="0,10,0,10">
+                        <Frame CornerRadius="8" Padding="10" HasShadow="True" BackgroundColor="#f1f1f1" Margin="0,10,0,10">
                             <VerticalStackLayout Spacing="8">
                                 <Grid>
                                     <Label Text="{Binding Order.OrderId, StringFormat='Ordernummer: #{0}'}" 

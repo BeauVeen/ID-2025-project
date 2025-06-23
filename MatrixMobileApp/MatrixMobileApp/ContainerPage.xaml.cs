@@ -22,7 +22,6 @@ namespace MatrixMobileApp
             BindingContext = this;
 
             Title = $"Container {container.ContainerId}";
-            Resources.Add("CountToHeightConverter", new CountToHeightConverter());
 
             // Start async initialisatie
             _ = InitializeOrderlineProductNamesAsync();
@@ -108,23 +107,4 @@ namespace MatrixMobileApp
             }
         }
     }
-
-
-    // Converter voor aantal orderlines naar hoogte
-    public class CountToHeightConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is int count)
-                return count * 30; // 30 pixels per item
-            return 0;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
 }
