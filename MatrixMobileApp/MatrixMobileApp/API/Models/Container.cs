@@ -9,6 +9,7 @@ namespace MatrixMobileApp.API.Models
         public int ContainerId { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Status { get; set; } = string.Empty;
+        public int UserId { get; set; } // wanneer een bezorger de orders van een container gaat bezorgen, wordt de userid van de bezorger gekoppeld aan de container
         public List<ContainerOrder> ContainerOrders { get; set; } = new();
         public int OrderCount => ContainerOrders.Count; // geeft het totale aantal orders in de container terug
     }
