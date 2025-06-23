@@ -1,4 +1,6 @@
-﻿namespace MatrixApi.Models
+﻿using System.Text.Json.Serialization;
+
+namespace MatrixApi.Models
 {
     public class Container
     {
