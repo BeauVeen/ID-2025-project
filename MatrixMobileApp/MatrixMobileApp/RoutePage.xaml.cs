@@ -14,6 +14,7 @@ public partial class RoutePage : ContentPage
     private List<Container> containers = new();
     private int currentContainerIndex = 0;
 
+    // Property voor de weergave van de eerste container id/status in de UI
     private string firstContainerId = "Laden...";
     public string FirstContainerId
     {
@@ -31,6 +32,7 @@ public partial class RoutePage : ContentPage
     public ICommand OptionsCommand { get; }
     public ICommand ScanCommand { get; }
 
+    // Constructor, initialisatie van commands en event subscriptions
     public RoutePage()
     {
         InitializeComponent();
@@ -40,6 +42,7 @@ public partial class RoutePage : ContentPage
 
         BindingContext = this;
 
+        // Luisteren naar berichten om naar volgende container te gaan
         MessagingCenter.Subscribe<Handtekening>(this, "NextContainer", (sender) =>
         {
             Device.BeginInvokeOnMainThread(ShowNextContainer);
@@ -50,9 +53,11 @@ public partial class RoutePage : ContentPage
             Device.BeginInvokeOnMainThread(ShowNextContainer);
         });
 
+        // Containers ophalen bij het laden van de pagina
         _ = LoadContainersAsync();
     }
 
+    // Laad alle containers van de API
     private async Task LoadContainersAsync()
     {
         try
@@ -83,6 +88,7 @@ public partial class RoutePage : ContentPage
         }
     }
 
+    // Laat de volgende container zien in de lijst
     private void ShowNextContainer()
     {
         if (containers == null || containers.Count == 0)
@@ -102,11 +108,13 @@ public partial class RoutePage : ContentPage
         FirstContainerId = $"Bestelling #{containers[currentContainerIndex].ContainerId}";
     }
 
+    // Handler voor opties-knop (bijvoorbeeld status wijzigen)
     private async void OnOptionsClicked()
     {
         await DisplayActionSheet("Meer opties", "Annuleer", null, "Afgeleverd", "Probleem melden");
     }
 
+    // Handler voor scan-knop, opent de scan pagina
     private async void OnScanClicked()
     {
         await Navigation.PushAsync(new OrderID());

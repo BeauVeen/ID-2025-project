@@ -8,6 +8,7 @@ public partial class KlantAanwezig : ContentPage
 {
     private readonly ContainerService _containerService;
 
+    // Constructor, initializeert ContainerService met HTTP client
     public KlantAanwezig()
     {
         InitializeComponent();
@@ -16,6 +17,7 @@ public partial class KlantAanwezig : ContentPage
         _containerService = new ContainerService(httpClient);
     }
 
+    // Handler voor knop 'Klant Aanwezig', status wordt op 'Afgeleverd' gezet
     private async void OnKlantAanwezigClicked(object sender, EventArgs e)
     {
         if (AppData.ContainerId.HasValue)
@@ -37,6 +39,7 @@ public partial class KlantAanwezig : ContentPage
         }
     }
 
+    // Handler voor knop 'Klant Niet Aanwezig', status wordt op 'Niet aanwezig' gezet
     private async void OnKlantNietAanwezigClicked(object sender, EventArgs e)
     {
         if (AppData.ContainerId.HasValue)

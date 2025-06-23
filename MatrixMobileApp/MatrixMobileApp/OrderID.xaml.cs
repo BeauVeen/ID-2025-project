@@ -21,6 +21,7 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
+    // Gebruiker invoer container ID
     public string SearchText
     {
         get => searchText;
@@ -34,6 +35,7 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // Gegevens van de gevonden container
     public Container ContainerData
     {
         get => containerData;
@@ -51,6 +53,7 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // Of de order checkbox is aangevinkt
     public bool IsOrderChecked
     {
         get => isOrderChecked;
@@ -74,6 +77,7 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // Lijst van orders in de container
     public List<Order> Orders
     {
         get
@@ -92,13 +96,18 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // Of de bevestig knop beschikbaar is
     public bool CanConfirmOrder => ContainerData != null && IsOrderChecked;
+
+    // Of de order sectie zichtbaar is
     public bool IsOrderCheckedVisible => ContainerData != null;
 
+    // Weergavetekst van container
     public string DisplayContainer => ContainerData == null
         ? "Geen container gevonden"
         : $"Container ID: {ContainerData.ContainerId} - Status: {ContainerData.Status}";
 
+    // Naam van gebruiker van de order
     public string UserName
     {
         get => userName;
@@ -112,6 +121,7 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // Adres van gebruiker van de order
     public string UserAddress
     {
         get => userAddress;
@@ -125,8 +135,10 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // Command om container te zoeken via API
     public ICommand SearchCommand { get; }
 
+    // Constructor: initialisatie, binding en command aanmaken
     public OrderID()
     {
         InitializeComponent();
@@ -134,6 +146,7 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         BindingContext = this;
     }
 
+    // Zoekt container via API op basis van SearchText
     private async Task SearchContainerAsync()
     {
         if (string.IsNullOrWhiteSpace(SearchText))
@@ -176,6 +189,7 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // Laadt gebruikersgegevens via API van de eerste order in de container
     private async Task LoadUserDetailsAsync()
     {
         if (Orders.Count > 0 && Orders[0]?.UserId != null)
@@ -213,12 +227,14 @@ public partial class OrderID : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // Handler voor bevestig knop: navigeert naar KlantAanwezig pagina
     private async void OnConfirmOrderClicked(object sender, EventArgs e)
     {
         await DisplayAlert("Succes", "Bestelling compleet!", "OK");
         await Navigation.PushAsync(new KlantAanwezig());
     }
 
+    // OnPropertyChanged implementatie voor data binding
     protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

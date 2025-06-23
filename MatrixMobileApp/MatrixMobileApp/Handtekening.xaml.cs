@@ -9,6 +9,7 @@ public partial class Handtekening : ContentPage
     private readonly ContainerService _containerService;
     private int scannedOrdersCount = 0;
 
+    // Constructor: initialiseert ContainerService en toont aantal gescande orders
     public Handtekening()
     {
         InitializeComponent();
@@ -20,6 +21,7 @@ public partial class Handtekening : ContentPage
         OrdersCountLabel.Text = $"Aantal gescande orders: {scannedOrdersCount}";
     }
 
+    // Handler voor annuleren knop, vraagt om bevestiging en gaat terug naar root pagina
     private async void OnAnnuleerClicked(object sender, EventArgs e)
     {
         bool confirm = await DisplayAlert("Annuleren", "Weet je zeker dat je wilt annuleren?", "Ja", "Nee");
@@ -29,6 +31,7 @@ public partial class Handtekening : ContentPage
         }
     }
 
+    // Handler voor verstuur knop, zet status op 'Afgeleverd' en toont bevestiging
     private async void OnVerstuurClicked(object sender, EventArgs e)
     {
         if (AppData.ContainerId.HasValue)
