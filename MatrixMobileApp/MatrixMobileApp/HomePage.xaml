@@ -10,52 +10,44 @@
             IconImageSource="logout3.png"
             Clicked="OnLogoutClicked" />
     </ContentPage.ToolbarItems>
-   
+
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
 
-            <!-- user begroeting 
-            <Label             
-                x:Name="UserNameLabel"
-                Text="Loading..."
-                Style="{StaticResource Headline}"
-                FontSize="20"
-                SemanticProperties.HeadingLevel="Level1" /> -->
-
-            <!-- QR scan text met info icoon -->
-            <HorizontalStackLayout
+        <!-- QR scan text met info icoon -->
+        <HorizontalStackLayout
                 HorizontalOptions="Center"
                 Spacing="8"
                 Margin="10,10,0,-120">
 
-                <Label
+            <Label
                 Text="Scan QR"
                 FontSize="20"
                 FontAttributes="Bold"
                 HorizontalOptions="Center">
-                </Label>
+            </Label>
 
-                <Image
+            <Image
                 Source="info.png"
                 HeightRequest="19"
                 WidthRequest="19"
                 VerticalOptions="Center">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnInfoTapped" NumberOfTapsRequired="1"/>
-                    </Image.GestureRecognizers>
-                </Image>
-            </HorizontalStackLayout>
-            
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnInfoTapped" NumberOfTapsRequired="1"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </HorizontalStackLayout>
 
-            <Frame HeightRequest="350"
-                Margin="0,100,0,20"
+
+        <Frame HeightRequest="350"
+                Margin="0,100,0,0"
                 Padding="0"
                 CornerRadius="32"
                 IsClippedToBounds="True">
-                <Grid>
-                    
+            <Grid>
+
             <!-- Camera window met scan functie-->
             <zxing:CameraBarcodeReaderView 
             x:Name="cameraView"
@@ -65,50 +57,48 @@
             VerticalOptions="Fill"
             BarcodesDetected="BarcodesDetected"/>
 
-
-
-
             <!-- Overlay QR image  -->
-           <Image Source="qrscan2.png"
-            HorizontalOptions="Center"
-            VerticalOptions="Center"
-            WidthRequest="400"
-            HeightRequest="300"
-            Aspect="AspectFill" 
-            IsVisible="True" />
-           </Grid>
-            </Frame>
+            <Image 
+                Source="qrscan2.png"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                WidthRequest="400"
+                HeightRequest="300"
+                Aspect="AspectFill" 
+                IsVisible="True" />
+            </Grid>
+        </Frame>
 
-            <VerticalStackLayout
+        <VerticalStackLayout
             Padding="0"
             Spacing="15"
             HorizontalOptions="Center"
             VerticalOptions="Center">
 
+
             <!-- Handmatige containercode invoer -->
             <HorizontalStackLayout
-            HorizontalOptions="Center"
-            Spacing="10">
+                HorizontalOptions="Center"
+                Spacing="5"
+                HeightRequest="40">
 
-           <Entry
-            x:Name="ManualContainerEntry"
-            Placeholder="Voer container ID in"
-            WidthRequest="200"
-            ClearButtonVisibility="WhileEditing"
-            Keyboard="Default" />
+                <Entry
+                x:Name="ManualContainerEntry"
+                Placeholder="Voer container ID in"
+                WidthRequest="220"
+                ClearButtonVisibility="WhileEditing"
+                Keyboard="Default" />
 
-            <Button
-            Text="Bevestig"
-            Clicked="OnManualContainerClicked"
-            BackgroundColor="#426373"
-            TextColor="White"
-            CornerRadius="6"
-            HeightRequest="30"
-            WidthRequest="70"
-            FontSize="12"
-            FontAttributes="Bold"
-            Padding="6"
-            VerticalOptions="Center" />
+                <!-- search icon-->
+                <Image
+                Source="search.png"
+                HeightRequest="19"
+                WidthRequest="19"
+                VerticalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnManualContainerClicked" NumberOfTapsRequired="1"/>
+                    </Image.GestureRecognizers>
+                </Image>
             </HorizontalStackLayout>
 
             <!-- Foutmelding -->
@@ -118,23 +108,25 @@
             FontSize="Small"
             IsVisible="False"
             HorizontalOptions="Center" />
-            </VerticalStackLayout>
-            
-            
-
-            <!-- Dashboard Section -->
-            <Label
+        </VerticalStackLayout>
+        
+        <!-- Dashboard Section -->
+        <Label
             x:Name="DashboardDateLabel"
             FontSize="20"
             FontAttributes="Bold"
-            Margin="0,0,0,0"
+            Margin="0,15,0,0"
             HorizontalOptions="Center" />
 
-            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
-                
-                
+            <Grid HorizontalOptions="Center" ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
                 <!-- Afgeleverde orders card -->
-                <Frame CornerRadius="12" WidthRequest="100" BackgroundColor="#E8F5E9" Padding="10" HasShadow="True">
+                <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="#E8F5E9" WidthRequest="110" HeightRequest="125" Padding="10" HasShadow="True">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnAfgeleverdCardTapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
@@ -146,7 +138,7 @@
                 </Frame>
 
                 <!-- Te bezorgen Card -->
-                <Frame CornerRadius="12" BackgroundColor="#E3F2FD"  WidthRequest="110" Padding="10" HasShadow="True">
+                <Frame Grid.Column="1" CornerRadius="10" BackgroundColor="#E3F2FD" HeightRequest="125" WidthRequest="120" Padding="10" HasShadow="True">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnTeBezorgenCardTapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
@@ -157,26 +149,19 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                
+
                 <!-- Problemen Card -->
-                <Frame CornerRadius="12" BackgroundColor="#FFF9C4" WidthRequest="110" Padding="10" HasShadow="True">
+                <Frame Grid.Column="2" CornerRadius="10" BackgroundColor="#FFF9C4" HeightRequest="125" WidthRequest="110" Padding="10" HasShadow="True">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnProblemenCardTapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Image Source="car.png" HeightRequest="32" WidthRequest="32"/>
+                        <Image Source="faileddelivery.png" HeightRequest="32" WidthRequest="32"/>
                         <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
                         <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-                        <Label 
-                            
-                            FontSize="10" 
-                            HorizontalOptions="Center"
-                            TextColor="Gray"
-                            LineBreakMode="WordWrap"
-                            MaxLines="2"/>
                     </VerticalStackLayout>
                 </Frame>
-            </HorizontalStackLayout>
+            </Grid>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
