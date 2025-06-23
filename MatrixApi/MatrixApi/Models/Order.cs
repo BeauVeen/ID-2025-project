@@ -8,7 +8,6 @@ namespace MatrixApi.Models
         public int UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Status { get; set; } = null!;
-        public byte[]? Signature { get; set; }
 
         [JsonIgnore]
         public User User { get; set; } = null!;
