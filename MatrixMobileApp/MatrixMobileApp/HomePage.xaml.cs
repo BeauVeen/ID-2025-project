@@ -102,6 +102,7 @@ namespace MatrixMobileApp
             {
                 //Vibreer de telefoon bij succesvolle detectie
                 Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200));
+
                 //Speel mp3 geluid af bij succesvolle detectie
                 var player = CrossSimpleAudioPlayer.Current;
                 player.Load("beep.mp3");
