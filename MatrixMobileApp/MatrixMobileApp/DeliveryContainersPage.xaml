@@ -1,0 +1,33 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MatrixMobileApp.ViewModels"
+             x:Class="MatrixMobileApp.DeliveryContainersPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <viewModels:StatusToColorConverter x:Key="StatusToColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout Padding="20">
+        <Label Text="Containers - Klaar voor Verzending" FontSize="24" HorizontalOptions="Center" />
+        <CollectionView x:Name="ContainersList" SelectionMode="Single" SelectionChanged="OnContainerSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10">
+                        <StackLayout Orientation="Horizontal" Padding="5">
+                            <Label Text="ID:" FontSize="18" VerticalOptions="Center" />
+                            <Label Text="{Binding ContainerId}" FontSize="20" VerticalOptions="Center" Margin="10,0,0,0" />
+                        </StackLayout>
+                        <StackLayout Orientation= "Horizontal" Padding="10">
+                            <Label Text="Orders: " FontSize="14" />
+                            <Label Text="{Binding OrderCount}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Padding="10">
+                            <Label Text="Status: " FontSize="14" />
+                            <Label Text="{Binding Status}" TextColor="{Binding Status, Converter={StaticResource StatusToColorConverter}}" />
+                        </StackLayout>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

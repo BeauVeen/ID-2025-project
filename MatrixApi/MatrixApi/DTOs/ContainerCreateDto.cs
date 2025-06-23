@@ -4,5 +4,6 @@
     {
         public string Status { get; set; } = "In behandeling";
         public List<int> OrderIds { get; set; } = new();
+        public int? UserId { get; set; }
     }
 }

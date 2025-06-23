@@ -12,7 +12,20 @@
         Title="Login"
         Route="LoginPage" 
         ContentTemplate="{DataTemplate local:LoginPage}" />
-   
+
+
+    <ShellContent 
+        Route="ContainerPage" ContentTemplate="{DataTemplate local:ContainerPage}" />
+
+
+    <ShellContent 
+    Title="Magazijn Home"
+    Route="HomePageMagazijn"
+    ContentTemplate="{DataTemplate magazijn:HomePageMagazijn}" />
+    
+
+    <!-- Tab bar voor hoofdmenu -->
+
     <TabBar>
         <Tab Title="Route" Icon="map.png">
             <ShellContent 
@@ -31,12 +44,10 @@
             Route="OrdersPage" 
             ContentTemplate="{DataTemplate local:ActiveOrdersPage}" />
         </Tab>
-
-        <Tab Title="Magazijn Home" Icon="warehouse.png">
+        <Tab Title="Klaar voor Verzending" Icon="container.png">
             <ShellContent 
-                Title="Magazijn Home"
-                Route="HomePageMagazijn"
-                ContentTemplate="{DataTemplate magazijn:HomePageMagazijn}" />
+            Route="DeliveryContainersPage" 
+            ContentTemplate="{DataTemplate local:DeliveryContainersPage}" />
         </Tab>
-    </TabBar>
-</Shell>
+    </TabBar> 
+</Shell> 

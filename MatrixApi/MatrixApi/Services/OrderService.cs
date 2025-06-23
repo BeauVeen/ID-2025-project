@@ -79,7 +79,6 @@ namespace MatrixApi.Services
 
                 existing.UserId = order.UserId;
                 existing.Status = order.Status;
-                existing.Signature = order.Signature;
 
                 await _context.SaveChangesAsync();
 

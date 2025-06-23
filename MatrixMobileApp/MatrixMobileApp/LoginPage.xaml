@@ -7,11 +7,11 @@
 
     <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="220"/>
+            <RowDefinition Height="0.4*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
-        
+
 
         <Grid Grid.Row="0">
             <Path Fill="#426373" Stroke="Transparent"
@@ -22,22 +22,32 @@
         </Grid>
 
         <!-- Avatar -->
-        <StackLayout Grid.Row="1"
-                     Margin="15,-120,0,0"
-                     HorizontalOptions="Center"
-                     VerticalOptions="Start">
-            <Frame BackgroundColor="White"
-                   HeightRequest="80"
-                   WidthRequest="80"
-                   CornerRadius="40"
+        <Grid Grid.Row="0" RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.09*"/>
+                <RowDefinition Height="0.95*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Frame Grid.Row="1"
+                   Grid.Column="0"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Start"
+                   HeightRequest="{OnIdiom Phone=100, Tablet=160}"
+                   WidthRequest="{OnIdiom Phone=100, Tablet=160}"
+                   CornerRadius="50"
                    Padding="0"
-                   HasShadow="True">
+                   HasShadow="True"
+                   BackgroundColor="White"
+                   ZIndex="1">
                 <Image Source="user.png"
                        Aspect="AspectFill" />
             </Frame>
-        </StackLayout>
+        </Grid>
 
-        <Label Grid.Row="1" Text=" Matrix Couriers" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="10"/>
+
+        <Label Grid.Row="1" Text=" Matrix Delivery" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="10"/>
         <Label Grid.Row="2" Text="Log in om te beginnen met bezorgen" HorizontalOptions="Center" FontSize="Subtitle" Margin="-460"/>
 
 
@@ -69,9 +79,9 @@
                    Margin="0,-60,5,20"
                    Aspect="AspectFit"
                    InputTransparent="False" >
-                   <Image.GestureRecognizers>
-                   <TapGestureRecognizer Tapped="TogglePasswordVisibility" NumberOfTapsRequired="1"/>
-                   </Image.GestureRecognizers>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TogglePasswordVisibility" NumberOfTapsRequired="1"/>
+                </Image.GestureRecognizers>
             </Image>
 
             <!-- Foutmelding -->
