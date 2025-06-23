@@ -54,7 +54,7 @@ namespace MatrixMobileApp
 
             // Laat huidige datum voor dashboard zien 
             var culture = new CultureInfo("nl-NL");
-            var date = DateTime.Now.ToString("dddd dd MMMM yyyy", culture);
+            var date = DateTime.Now.ToString("dddd dd MMMM", culture); 
             DashboardDateLabel.Text = char.ToUpper(date[0], culture) + date.Substring(1);
 
             var token = Preferences.Get("auth_token", string.Empty);
