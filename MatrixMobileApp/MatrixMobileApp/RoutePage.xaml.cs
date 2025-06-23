@@ -1,9 +1,9 @@
-using MatrixMobileApp.API;
+using MatrixMobileApp.API.Models;
 using MatrixMobileApp.API.Services;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using ZXing.Net.Maui;
-using ZXing.Net.Maui.Controls;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 
@@ -11,20 +11,95 @@ namespace MatrixMobileApp;
 
 public partial class RoutePage : ContentPage
 {
-    public string OrderName { get; set; }
-    public ICommand OptionsCommand { get; set; }
-    public ICommand ScanCommand { get; set; }
+    private List<Container> containers = new();
+    private int currentContainerIndex = 0;
+
+    private string firstContainerId = "Laden...";
+    public string FirstContainerId
+    {
+        get => firstContainerId;
+        set
+        {
+            if (firstContainerId != value)
+            {
+                firstContainerId = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public ICommand OptionsCommand { get; }
+    public ICommand ScanCommand { get; }
 
     public RoutePage()
     {
         InitializeComponent();
 
-        // Dummy data
-        OrderName = "Order #1001";
         OptionsCommand = new Command(OnOptionsClicked);
-        ScanCommand = new Command(OnScanClicked); // Koppel de scan-knop aan command
+        ScanCommand = new Command(OnScanClicked);
 
         BindingContext = this;
+
+        MessagingCenter.Subscribe<Handtekening>(this, "NextContainer", (sender) =>
+        {
+            Device.BeginInvokeOnMainThread(ShowNextContainer);
+        });
+
+        MessagingCenter.Subscribe<KlantAanwezig>(this, "NextContainer", (sender) =>
+        {
+            Device.BeginInvokeOnMainThread(ShowNextContainer);
+        });
+
+        _ = LoadContainersAsync();
+    }
+
+    private async Task LoadContainersAsync()
+    {
+        try
+        {
+            using HttpClient client = new()
+            {
+                BaseAddress = new Uri("http://20.86.128.95")
+            };
+            var containerService = new ContainerService(client);
+
+            containers = await containerService.GetContainersAsync();
+
+            if (containers == null || containers.Count == 0)
+            {
+                FirstContainerId = "Geen containers beschikbaar";
+            }
+            else
+            {
+                containers.Sort((a, b) => a.ContainerId.CompareTo(b.ContainerId));
+                currentContainerIndex = 0;
+                FirstContainerId = $"Bestelling #{containers[currentContainerIndex].ContainerId}";
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Fout bij laden containers: {ex}");
+            FirstContainerId = "Fout bij laden containers";
+        }
+    }
+
+    private void ShowNextContainer()
+    {
+        if (containers == null || containers.Count == 0)
+        {
+            FirstContainerId = "Geen containers beschikbaar";
+            return;
+        }
+
+        currentContainerIndex++;
+
+        if (currentContainerIndex >= containers.Count)
+        {
+            FirstContainerId = "Alle bestellingen afgehandeld";
+            return;
+        }
+
+        FirstContainerId = $"Bestelling #{containers[currentContainerIndex].ContainerId}";
     }
 
     private async void OnOptionsClicked()
@@ -34,7 +109,6 @@ public partial class RoutePage : ContentPage
 
     private async void OnScanClicked()
     {
-        // Navigeer naar de OrderIDPage (zorg dat deze pagina bestaat)
         await Navigation.PushAsync(new OrderID());
     }
 }

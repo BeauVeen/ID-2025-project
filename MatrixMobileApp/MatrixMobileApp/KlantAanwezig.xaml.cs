@@ -1,22 +1,61 @@
+using System;
+using MatrixMobileApp.API.Services;
+using System.Net.Http;
+
 namespace MatrixMobileApp;
 
 public partial class KlantAanwezig : ContentPage
 {
+    private readonly ContainerService _containerService;
+
     public KlantAanwezig()
     {
         InitializeComponent();
+
+        var httpClient = new HttpClient { BaseAddress = new Uri("http://20.86.128.95") };
+        _containerService = new ContainerService(httpClient);
     }
 
     private async void OnKlantAanwezigClicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Info", "Klant is aanwezig", "OK");
-        await Navigation.PushAsync(new Handtekening());
+        if (AppData.ContainerId.HasValue)
+        {
+            try
+            {
+                await _containerService.PatchContainerStatusAsync(AppData.ContainerId.Value, "Afgeleverd");
+                await DisplayAlert("Info", "Klant is aanwezig, status bijgewerkt.", "OK");
+                await Navigation.PushAsync(new Handtekening());
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Fout", $"Status kon niet worden bijgewerkt:\n{ex.Message}", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Fout", "Geen geldig container ID gevonden.", "OK");
+        }
     }
-
 
     private async void OnKlantNietAanwezigClicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Plaats producten terug in voertuig", "Bevestiging", "OK");
-        // Hier kun je verdere acties toevoegen voor als klant niet aanwezig is
+        if (AppData.ContainerId.HasValue)
+        {
+            try
+            {
+                await _containerService.PatchContainerStatusAsync(AppData.ContainerId.Value, "Niet aanwezig");
+                await DisplayAlert("Bevestiging", "Plaats producten terug in voertuig", "OK");
+                MessagingCenter.Send(this, "NextContainer");
+                await Navigation.PopToRootAsync();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Fout", $"Status kon niet worden bijgewerkt:\n{ex.Message}", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Fout", "Geen geldig container ID gevonden.", "OK");
+        }
     }
 }

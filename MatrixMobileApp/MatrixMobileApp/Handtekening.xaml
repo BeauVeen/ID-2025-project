@@ -12,7 +12,7 @@
 
         <BoxView HeightRequest="200" WidthRequest="300" BackgroundColor="LightGray" />
 
-        <Label Text="(nog geen functionaliteit)" 
+        <Label Text="(geen functionaliteit)" 
                FontSize="Small" 
                HorizontalOptions="Center" 
                TextColor="Gray" />

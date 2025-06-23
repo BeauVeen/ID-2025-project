@@ -8,7 +8,7 @@
         <!-- Top Bar -->
         <Grid Padding="10" ColumnDefinitions="*,Auto">
             <Label 
-                Text="{Binding OrderName}" 
+                Text="{Binding FirstContainerId}" 
                 FontSize="20" 
                 VerticalOptions="Center"
                 HorizontalOptions="Start" />

@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MatrixMobileApp.KlantAanwezig">
+             x:Class="MatrixMobileApp.KlantAanwezig"
+             Title="Aangekomen op adres">
 
-    <StackLayout Padding="20" Spacing="20">
+    <Grid Padding="20" RowDefinitions="2*,Auto,Auto,Auto,2*" RowSpacing="20">
 
+        <!-- Vraag of de klant aanwezig is -->
         <Label 
+            Grid.Row="1"
             Text="Is de klant aanwezig op het adres?" 
             FontSize="Large"
             HorizontalOptions="Center"
             HorizontalTextAlignment="Center" />
 
+        <!-- Knop 1: aanwezig -->
         <Button 
+            Grid.Row="2"
             Text="Klant is aanwezig" 
             BackgroundColor="LightGreen"
             TextColor="Black"
+            FontSize="Medium"
+            HeightRequest="60"
             Clicked="OnKlantAanwezigClicked" />
 
+        <!-- Knop 2: niet aanwezig -->
         <Button 
+            Grid.Row="3"
             Text="Klant is niet aanwezig" 
             BackgroundColor="LightCoral"
             TextColor="Black"
+            FontSize="Medium"
+            HeightRequest="60"
             Clicked="OnKlantNietAanwezigClicked" />
 
-    </StackLayout>
-
+    </Grid>
 </ContentPage>

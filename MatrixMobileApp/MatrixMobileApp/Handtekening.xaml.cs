@@ -1,13 +1,22 @@
+using System;
+using MatrixMobileApp.API.Services;
+using System.Net.Http;
+
 namespace MatrixMobileApp;
 
 public partial class Handtekening : ContentPage
 {
+    private readonly ContainerService _containerService;
     private int scannedOrdersCount = 0;
 
-    public Handtekening(int ordersCount = 0)
+    public Handtekening()
     {
         InitializeComponent();
-        scannedOrdersCount = ordersCount;
+
+        var httpClient = new HttpClient { BaseAddress = new Uri("http://20.86.128.95") };
+        _containerService = new ContainerService(httpClient);
+
+        scannedOrdersCount = AppData.OrdersCount;
         OrdersCountLabel.Text = $"Aantal gescande orders: {scannedOrdersCount}";
     }
 
@@ -22,7 +31,24 @@ public partial class Handtekening : ContentPage
 
     private async void OnVerstuurClicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Verstuurd", "De orders zijn succesvol verzonden.", "OK");
-        await Navigation.PopToRootAsync();
+        if (AppData.ContainerId.HasValue)
+        {
+            try
+            {
+                await _containerService.PatchContainerStatusAsync(AppData.ContainerId.Value, "Afgeleverd");
+                await DisplayAlert("Verstuurd", "De orders zijn succesvol geleverd.", "OK");
+                await DisplayAlert("Info", "De bevestiging van de bezorging wordt per e-mail verstuurd.", "OK");
+                MessagingCenter.Send(this, "NextContainer");
+                await Navigation.PopToRootAsync();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Fout", $"Status kon niet worden bijgewerkt:\n{ex.Message}", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Fout", "Geen geldig container ID gevonden.", "OK");
+        }
     }
 }
