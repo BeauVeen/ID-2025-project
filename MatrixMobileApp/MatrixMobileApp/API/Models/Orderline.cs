@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Maui.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MatrixMobileApp.API.Models
 {
-    public class Orderline : INotifyPropertyChanged
+    public class Orderline : INotifyPropertyChanged // INotifyPropertyChanged is nodig om ProductNaam te updaten en correct te laten zien op de Containers pagina, omdat de asynchrone functie van ProductNaam ophalen later wordt uitgevoerd dan de UI van de pagina.
     {
         public int OrderlineId { get; set; }
         public int OrderId { get; set; }
@@ -16,9 +17,12 @@ namespace MatrixMobileApp.API.Models
         public int ProductId { get; set; }
 
         private string? _productName;
-        public string? ProductName // INotifyPropertyChanged is nodig om ProductNaam te updaten en correct te laten zien op de Containers pagina, omdat de asynchrone functie van ProductNaam ophalen later wordt uitgevoerd dan de UI van de pagina.
+        public string? ProductName 
         {
-            get => _productName;
+            get
+            {
+                return _productName;
+            }
             set
             {
                 // alleen als de waarde echt verandert, voeren we de update uit.
@@ -31,8 +35,14 @@ namespace MatrixMobileApp.API.Models
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+            
     }
 }
 

@@ -13,7 +13,11 @@ namespace MatrixMobileApp.API.Services
     internal class ContainerService
     {
         private readonly HttpClient _client;
-        private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
+
+        private static readonly JsonSerializerOptions _jsonOptions = new() 
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         public ContainerService(HttpClient client)
         {
@@ -39,13 +43,19 @@ namespace MatrixMobileApp.API.Services
         // functie om alle containers op te halen die gekoppeld zijn aan een specifieke userId om ze te tonen op actieve orders pagina
         public async Task<List<Container>> GetContainersByUserIdAsync(int userId)
         {
-            // Alle containers ophalen
             var allContainers = await GetContainersAsync();
+            var filteredContainers = new List<Container>();
 
-            // Filter containers op userId EN status "Onderweg"
-            return allContainers
-                .Where(c => c.UserId == userId && c.Status == "Onderweg") // alleen containers met de status Onderweg worden getoont op Actieve Orders pagina
-                .ToList();
+            foreach (var container in allContainers)
+            {
+                if (container.UserId == userId && container.Status == "Onderweg") // alleen containers met status "Onderweg" worden getoond
+                {
+                    filteredContainers.Add(container);
+                }
+
+            }
+
+            return filteredContainers;
         }
 
         public async Task PatchContainerStatusAsync(int containerId, string newStatus, int? userId = null) // userId moet optioneel zijn

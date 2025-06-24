@@ -34,8 +34,8 @@
                    Grid.Column="0"
                    HorizontalOptions="Center"
                    VerticalOptions="Start"
-                   HeightRequest="{OnIdiom Phone=100, Tablet=160}"
-                   WidthRequest="{OnIdiom Phone=100, Tablet=160}"
+                   HeightRequest="100"
+                   WidthRequest="100"
                    CornerRadius="80"
                    Padding="5"
                    HasShadow="True"
@@ -106,10 +106,7 @@
                     TextColor="White"
                     CornerRadius="8"
                     FontAttributes="Bold" />
-
-  
-
-
+            
             <!-- Loading -->
             <ActivityIndicator x:Name="LoadingIndicator"
                                IsRunning="False"

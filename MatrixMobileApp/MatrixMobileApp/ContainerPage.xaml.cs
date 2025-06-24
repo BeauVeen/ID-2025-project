@@ -59,7 +59,6 @@ namespace MatrixMobileApp
 
             // Forceer UI update
             OnPropertyChanged(nameof(Container));
-
         }
 
         private async void OnDeliverClicked(object sender, EventArgs e)
@@ -83,6 +82,7 @@ namespace MatrixMobileApp
                     }
 
                     var containerService = new ContainerService(new ApiService().Client);
+
                     await containerService.PatchContainerStatusAsync(
                         Container.ContainerId,
                         "Onderweg",
@@ -101,7 +101,7 @@ namespace MatrixMobileApp
 
         private void OnToggleExpandClicked(object sender, EventArgs e)
         {
-            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder)
+            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder) // Duidelijk maken dat de sender een Image is en dat de BindingContext een ContainerOrder is
             {
                 containerOrder.ToggleExpand();
             }

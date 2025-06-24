@@ -12,8 +12,6 @@
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-
-
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
@@ -42,7 +40,6 @@
             </Image>
         </HorizontalStackLayout>
 
-
         <Frame HeightRequest="350"
                 Margin="0,100,0,0"
                 Padding="0"
@@ -50,7 +47,6 @@
                 IsClippedToBounds="True">
             <Grid>
                 
-
             <!-- Camera window met scan functie-->
             <zxing:CameraBarcodeReaderView 
             x:Name="cameraView"
@@ -72,41 +68,47 @@
             </Grid>
         </Frame>
 
-        <VerticalStackLayout
+            <VerticalStackLayout
             Padding="0"
             Spacing="15"
             HorizontalOptions="Center"
             VerticalOptions="Center">
 
-
-
                 <!-- Handmatige containercode invoer -->
                 <HorizontalStackLayout
                 HorizontalOptions="Center"
-                Spacing="5"
-                HeightRequest="40">
+                Spacing="10"
+                HeightRequest="30">
+
+                    <Frame
+                    Padding="10,0"
+                    CornerRadius="10"
+                    HeightRequest="35"
+                    WidthRequest="250"
+                    BackgroundColor="White"
+                    BorderColor="Black">
 
                     <Entry
-                x:Name="ManualContainerEntry"
-                Placeholder="Voer container ID in"
-                WidthRequest="220"
-                ClearButtonVisibility="WhileEditing"
-                Keyboard="Default" />
+                    x:Name="ManualContainerEntry"
+                    Placeholder="Voer container ID in"
+                    HeightRequest="50"
+                    BackgroundColor="Transparent"
+                    ClearButtonVisibility="WhileEditing"
+                    Keyboard="Default"/>
+                    </Frame>
 
-                    <!-- search icon-->
+                    <!-- Zoekicoon -->
                     <Image
-                Source="search.png"
-                HeightRequest="19"                
-                WidthRequest="19"
-                VerticalOptions="Center">
+                    Source="search.png"
+                    HeightRequest="24"
+                    WidthRequest="24"
+                    VerticalOptions="Center">
                         <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnManualContainerClicked" NumberOfTapsRequired="1"/>
+                            <TapGestureRecognizer Tapped="OnManualContainerClicked" />
                         </Image.GestureRecognizers>
                     </Image>
+
                 </HorizontalStackLayout>
-
-
-
 
                 <!-- Dashboard Section -->
                 <Label
@@ -147,7 +149,6 @@
                         </VerticalStackLayout>
                     </Frame>
 
-
                     <!-- Problemen Card -->
                     <Frame Grid.Column="2" CornerRadius="10" BackgroundColor="#787fa8" HeightRequest="125" WidthRequest="110" Padding="10" HasShadow="True">
                         <Frame.GestureRecognizers>
@@ -161,9 +162,6 @@
                     </Frame>
                 </Grid>
             </VerticalStackLayout>
-
-
-            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
