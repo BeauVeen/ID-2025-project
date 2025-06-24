@@ -75,40 +75,37 @@
             VerticalOptions="Center">
 
                 <!-- Handmatige containercode invoer -->
-                <HorizontalStackLayout
-                HorizontalOptions="Center"
-                Spacing="10"
-                HeightRequest="30">
+                <Frame
+                Padding="5"
+                CornerRadius="10"
+                HeightRequest="35"
+                WidthRequest="250"
+                BackgroundColor="White"
+                BorderColor="Black">
+                <Grid>
+                        <Entry
+                        x:Name="ManualContainerEntry"
+                        Placeholder="Voer container ID in"
+                        HeightRequest="38"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        ClearButtonVisibility="WhileEditing"
+                        Keyboard="Default"
+                        Margin="0,0,30,0"/>
 
-                    <Frame
-                    Padding="10,0"
-                    CornerRadius="10"
-                    HeightRequest="35"
-                    WidthRequest="250"
-                    BackgroundColor="White"
-                    BorderColor="Black">
-
-                    <Entry
-                    x:Name="ManualContainerEntry"
-                    Placeholder="Voer container ID in"
-                    HeightRequest="50"
-                    BackgroundColor="Transparent"
-                    ClearButtonVisibility="WhileEditing"
-                    Keyboard="Default"/>
-                    </Frame>
-
-                    <!-- Zoekicoon -->
-                    <Image
-                    Source="search.png"
-                    HeightRequest="24"
-                    WidthRequest="24"
-                    VerticalOptions="Center">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnManualContainerClicked" />
-                        </Image.GestureRecognizers>
-                    </Image>
-
-                </HorizontalStackLayout>
+                        <Image
+                        Source="search.png"
+                        HeightRequest="20"
+                        WidthRequest="20"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"
+                        Margin="0,0,5,0">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnManualContainerClicked" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                  </Grid>
+                </Frame>
 
                 <!-- Dashboard Section -->
                 <Label

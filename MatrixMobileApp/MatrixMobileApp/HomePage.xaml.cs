@@ -225,7 +225,6 @@ namespace MatrixMobileApp
             }
         }
 
-       
 
 
         // Redirect functies
