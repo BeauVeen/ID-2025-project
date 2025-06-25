@@ -13,6 +13,7 @@
         Route="LoginPage" 
         ContentTemplate="{DataTemplate local:LoginPage}" />
 
+
     <ShellContent 
         Route="ContainerPage" ContentTemplate="{DataTemplate local:ContainerPage}" />
 
@@ -24,6 +25,7 @@
     
 
     <!-- Tab bar voor hoofdmenu -->
+
     <TabBar>
         <Tab Title="Route" Icon="map.png">
             <ShellContent 

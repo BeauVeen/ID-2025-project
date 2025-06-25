@@ -1,10 +1,13 @@
 ﻿using MatrixMobileApp.API;
+using MatrixMobileApp.API.Models;   
 using MatrixMobileApp.API.Services;
+using Plugin.SimpleAudioPlayer;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
 //using Xamarin.Google.Crypto.Tink.Shaded.Protobuf;
@@ -15,7 +18,7 @@ namespace MatrixMobileApp
     public partial class HomePage : ContentPage
     {
         private readonly ManualContainerCodeService manualContainerService;
-        private readonly UserService userService; 
+        private readonly UserService userService;
 
         public HomePage()
         {
@@ -23,6 +26,7 @@ namespace MatrixMobileApp
             var api = new ApiService();
             userService = new UserService(api.Client);
             manualContainerService = new ManualContainerCodeService(api.Client);
+            
         }
 
         protected override async void OnAppearing()
@@ -52,7 +56,7 @@ namespace MatrixMobileApp
 
             // Laat huidige datum voor dashboard zien 
             var culture = new CultureInfo("nl-NL");
-            var date = DateTime.Now.ToString("dddd dd MMMM yyyy", culture);
+            var date = DateTime.Now.ToString("dddd dd MMMM", culture); 
             DashboardDateLabel.Text = char.ToUpper(date[0], culture) + date.Substring(1);
 
             var token = Preferences.Get("auth_token", string.Empty);
@@ -89,15 +93,25 @@ namespace MatrixMobileApp
 
         async void BarcodesDetected(object sender, BarcodeDetectionEventArgs e)
         {
-            var barcode = e.Results?.FirstOrDefault();
-            if (barcode is null) return;
+            var barcode = e.Results?.FirstOrDefault(); // maak het resultaat nullable voor error prevention
 
+            if (barcode is null)
+            {
+                return;
+            }
             // Stop verdere detectie tijdens verwerking
             cameraView.IsDetecting = false;
 
             try
             {
+                //Vibreer de telefoon bij succesvolle detectie
                 Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(200));
+
+                //Speel mp3 geluid af bij succesvolle detectie
+                var player = CrossSimpleAudioPlayer.Current;
+                player.Load("beep.mp3");
+                player.Play();
+
 
                 // Vul de manual entry in en activeer de click handler
                 MainThread.BeginInvokeOnMainThread(() =>
@@ -113,21 +127,21 @@ namespace MatrixMobileApp
             finally
             {
                 // Herstart detectie na verwerking
+                await Task.Delay(1800); 
                 cameraView.IsDetecting = true;
             }
         }
 
+
         // functie voor manual container code input
         async void OnManualContainerClicked(object sender, EventArgs e)
         {
-            ErrorLabel.IsVisible = false;
-            ErrorLabel.Text = string.Empty;
 
-            var containerCode = ManualContainerEntry.Text?.Trim();
+            var containerCode = ManualContainerEntry.Text?.Trim(); 
 
             if (string.IsNullOrEmpty(containerCode))
             {
-                ShowError("Voer een containernummer in");
+                await DisplayAlert("Fout", "Voer een containernummer in", "OK");
                 return;
             }
 
@@ -135,7 +149,7 @@ namespace MatrixMobileApp
             {
                 if (!int.TryParse(containerCode, out int containerId))
                 {
-                    ShowError("Ongeldig containernummer");
+                    await DisplayAlert("Fout", "Ongeldig containernummer", "OK");
                     return;
                 }
 
@@ -143,24 +157,24 @@ namespace MatrixMobileApp
 
                 if (container == null)
                 {
-                    ShowError("Geen container met dit containernummer gevonden");
+                    await DisplayAlert("Fout", "Geen container met dit containernummer gevonden", "OK");
                     return;
                 }
-
-                await Navigation.PushAsync(new ContainerPage(container));
+                if (container.Status == "Klaar voor verzending")
+                {
+                    await Navigation.PushAsync(new ContainerPage(container));
+                }
+                else
+                {
+                    await DisplayAlert("Fout", "Deze container heeft niet de benodigde status om weergegeven te worden.\n\n" +
+                        "Controlleer of de container Klaar voor verzending is", "OK");
+                }
             }
             catch (Exception ex)
             {
-                ShowError($"Kan container niet laden: {ex.Message}");
+                await DisplayAlert("Fout", $"Kan container niet laden: {ex.Message}", "OK");
             }
         }
-
-        private void ShowError(string message)
-        {
-            ErrorLabel.Text = message;
-            ErrorLabel.IsVisible = true;
-        }
-
 
         private async Task RequestCameraPermission()
         {
@@ -211,7 +225,6 @@ namespace MatrixMobileApp
             }
         }
 
-       
 
 
         // Redirect functies
@@ -244,10 +257,10 @@ namespace MatrixMobileApp
         private async void OnInfoTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Hoe werkt het?",
-                "1. Scan de QR-code van de container\n\n" +
-                "2. Het systeem bevestigt dat dit uw toegewezen container is\n\n" +
-                "3. Alle orders in deze container worden gemarkeerd als 'Onderweg' en zijn terug te vinden op de Actieve Orders pagina\n\n" +
-                "4. U ontvangt direct uw bezorgroute op de Route pagina.",
+                "1. Scan de QR van de container, of voer de code handmatig in\n\n" +
+                "2. Klik op 'Bezorgen' op de containerpagina\n\n" +
+                "3. U wordt direct doorverwezen naar de Route pagina waar uw bezorgroute staat\n\n" +
+                "4. Alle orders in de geselecteerde container worden gemarkeerd als 'Onderweg' en zijn terug te vinden op de Actieve Orders pagina\n\n",
                 "Begrepen");
         }
 
