@@ -22,7 +22,6 @@ namespace MatrixMobileApp
             BindingContext = this;
 
             Title = $"Container {container.ContainerId}";
-            Resources.Add("CountToHeightConverter", new CountToHeightConverter());
 
             // Start async initialisatie
             _ = InitializeOrderlineProductNamesAsync();
@@ -60,7 +59,6 @@ namespace MatrixMobileApp
 
             // Forceer UI update
             OnPropertyChanged(nameof(Container));
-
         }
 
         private async void OnDeliverClicked(object sender, EventArgs e)
@@ -84,6 +82,7 @@ namespace MatrixMobileApp
                     }
 
                     var containerService = new ContainerService(new ApiService().Client);
+
                     await containerService.PatchContainerStatusAsync(
                         Container.ContainerId,
                         "Onderweg",
@@ -102,29 +101,10 @@ namespace MatrixMobileApp
 
         private void OnToggleExpandClicked(object sender, EventArgs e)
         {
-            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder)
+            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder) // Duidelijk maken dat de sender een Image is en dat de BindingContext een ContainerOrder is
             {
                 containerOrder.ToggleExpand();
             }
         }
     }
-
-
-    // Converter voor aantal orderlines naar hoogte
-    public class CountToHeightConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is int count)
-                return count * 30; // 30 pixels per item
-            return 0;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
 }

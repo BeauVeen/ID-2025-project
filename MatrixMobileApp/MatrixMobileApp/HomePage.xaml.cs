@@ -93,9 +93,12 @@ namespace MatrixMobileApp
 
         async void BarcodesDetected(object sender, BarcodeDetectionEventArgs e)
         {
-            var barcode = e.Results?.FirstOrDefault();
-            if (barcode is null) return;
+            var barcode = e.Results?.FirstOrDefault(); // maak het resultaat nullable voor error prevention
 
+            if (barcode is null)
+            {
+                return;
+            }
             // Stop verdere detectie tijdens verwerking
             cameraView.IsDetecting = false;
 
@@ -133,10 +136,8 @@ namespace MatrixMobileApp
         // functie voor manual container code input
         async void OnManualContainerClicked(object sender, EventArgs e)
         {
-            ErrorLabel.IsVisible = false;
-            ErrorLabel.Text = string.Empty;
 
-            var containerCode = ManualContainerEntry.Text?.Trim();
+            var containerCode = ManualContainerEntry.Text?.Trim(); 
 
             if (string.IsNullOrEmpty(containerCode))
             {
@@ -224,7 +225,6 @@ namespace MatrixMobileApp
             }
         }
 
-       
 
 
         // Redirect functies

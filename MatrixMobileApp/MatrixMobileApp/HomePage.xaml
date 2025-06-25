@@ -16,14 +16,14 @@
             Padding="30,0"
             Spacing="25">
 
-        <!-- QR scan text met info icoon -->
+            <!-- QR scan text met info icoon -->
         <HorizontalStackLayout
                 HorizontalOptions="Center"
                 Spacing="8"
                 Margin="10,10,0,-120">
 
             <Label
-                Text="Scan QR"
+                Text="Scan code"
                 FontSize="20"
                 FontAttributes="Bold"
                 HorizontalOptions="Center">
@@ -40,14 +40,13 @@
             </Image>
         </HorizontalStackLayout>
 
-
         <Frame HeightRequest="350"
                 Margin="0,100,0,0"
                 Padding="0"
                 CornerRadius="32"
                 IsClippedToBounds="True">
             <Grid>
-
+                
             <!-- Camera window met scan functie-->
             <zxing:CameraBarcodeReaderView 
             x:Name="cameraView"
@@ -69,99 +68,97 @@
             </Grid>
         </Frame>
 
-        <VerticalStackLayout
+            <VerticalStackLayout
             Padding="0"
             Spacing="15"
             HorizontalOptions="Center"
             VerticalOptions="Center">
 
+                <!-- Handmatige containercode invoer -->
+                <Frame
+                Padding="5"
+                CornerRadius="10"
+                HeightRequest="35"
+                WidthRequest="250"
+                BackgroundColor="White"
+                BorderColor="Black">
+                <Grid>
+                        <Entry
+                        x:Name="ManualContainerEntry"
+                        Placeholder="Voer container ID in"
+                        HeightRequest="38"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        ClearButtonVisibility="WhileEditing"
+                        Keyboard="Default"
+                        Margin="0,0,30,0"/>
 
-            <!-- Handmatige containercode invoer -->
-            <HorizontalStackLayout
-                HorizontalOptions="Center"
-                Spacing="5"
-                HeightRequest="40">
+                        <Image
+                        Source="search.png"
+                        HeightRequest="20"
+                        WidthRequest="20"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"
+                        Margin="0,0,5,0">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnManualContainerClicked" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                  </Grid>
+                </Frame>
 
-                <Entry
-                x:Name="ManualContainerEntry"
-                Placeholder="Voer container ID in"
-                WidthRequest="220"
-                ClearButtonVisibility="WhileEditing"
-                Keyboard="Default" />
-
-                <!-- search icon-->
-                <Image
-                Source="search.png"
-                HeightRequest="19"                
-                WidthRequest="19"
-                VerticalOptions="Center">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnManualContainerClicked" NumberOfTapsRequired="1"/>
-                    </Image.GestureRecognizers>
-                </Image>
-            </HorizontalStackLayout>
-
-                <!-- Foutmelding -->
+                <!-- Dashboard Section -->
                 <Label
-            x:Name="ErrorLabel"
-            TextColor="Red"
-            FontSize="Small"
-            IsVisible="False"
-            HorizontalOptions="Center" />
-        </VerticalStackLayout>
-        
-        <!-- Dashboard Section -->
-        <Label
             x:Name="DashboardDateLabel"
             FontSize="20"
             FontAttributes="Bold"
             Margin="0,15,0,0"
             HorizontalOptions="Center" />
 
-            <Grid HorizontalOptions="Center" ColumnSpacing="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid HorizontalOptions="Center" ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- Afgeleverde orders card -->
-                <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="#E8F5E9" WidthRequest="110" HeightRequest="125" Padding="10" HasShadow="True">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnAfgeleverdCardTapped" NumberOfTapsRequired="1"/>
-                    </Frame.GestureRecognizers>
-                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Image Source="order2.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Afgeleverd" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
-                        <Label x:Name="AfgeleverdCountLabel" Text="12" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-                    </VerticalStackLayout>
-                </Frame>
+                    <!-- Afgeleverde orders card -->
+                    <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="#b9d8bb" WidthRequest="110" HeightRequest="125" Padding="10" HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAfgeleverdCardTapped" NumberOfTapsRequired="1"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="order2.png" HeightRequest="32" WidthRequest="32"/>
+                            <Label Text="Afgeleverd" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                            <Label x:Name="AfgeleverdCountLabel" Text="12" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+                        </VerticalStackLayout>
+                    </Frame>
 
-                <!-- Te bezorgen Card -->
-                <Frame Grid.Column="1" CornerRadius="10" BackgroundColor="#E3F2FD" HeightRequest="125" WidthRequest="120" Padding="10" HasShadow="True">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnTeBezorgenCardTapped" NumberOfTapsRequired="1"/>
-                    </Frame.GestureRecognizers>
-                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Image Source="pending.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Te bezorgen" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
-                        <Label x:Name="TeBezorgenCountLabel" Text="5" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-                    </VerticalStackLayout>
-                </Frame>
+                    <!-- Te bezorgen Card -->
+                    <Frame Grid.Column="1" CornerRadius="10" BackgroundColor="#bad8ee" HeightRequest="125" WidthRequest="110" Padding="10" HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTeBezorgenCardTapped" NumberOfTapsRequired="1"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="pending.png" HeightRequest="32" WidthRequest="32"/>
+                            <Label Text="Te bezorgen" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                            <Label x:Name="TeBezorgenCountLabel" Text="5" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+                        </VerticalStackLayout>
+                    </Frame>
 
-
-                <!-- Problemen Card -->
-                <Frame Grid.Column="2" CornerRadius="10" BackgroundColor="#FFF9C4" HeightRequest="125" WidthRequest="110" Padding="10" HasShadow="True">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnProblemenCardTapped" NumberOfTapsRequired="1"/>
-                    </Frame.GestureRecognizers>
-                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Image Source="faileddelivery.png" HeightRequest="32" WidthRequest="32"/>
-                        <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
-                        <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-                    </VerticalStackLayout>
-                </Frame>
-            </Grid>
+                    <!-- Problemen Card -->
+                    <Frame Grid.Column="2" CornerRadius="10" BackgroundColor="#787fa8" HeightRequest="125" WidthRequest="110" Padding="10" HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnProblemenCardTapped" NumberOfTapsRequired="1"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="faileddelivery.png" HeightRequest="32" WidthRequest="32"/>
+                            <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
+                            <Label x:Name="ProblemenCountLabel" Text="3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
