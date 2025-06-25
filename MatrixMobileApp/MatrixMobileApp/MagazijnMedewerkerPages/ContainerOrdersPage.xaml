@@ -24,7 +24,7 @@
                                 <HorizontalStackLayout>
                                     <Label Text="Order ID:" FontAttributes="Bold"/>
                                     <Label Text="{Binding OrderId}" />
-                                    <Label Text="✔" TextColor="Green" FontSize="Large" IsVisible="{Binding IsReady}" Margin="8,0,0,0"/>
+                                    <Label Text="✅" TextColor="Green" FontSize="Large" IsVisible="{Binding IsReady}" Margin="8,0,0,0"/>
                                 </HorizontalStackLayout>
                                 <Label Text="Status:" FontAttributes="Bold" Margin="0,8,0,0"/>
                                 <Label Text="{Binding Status}" />

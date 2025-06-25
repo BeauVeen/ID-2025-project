@@ -67,28 +67,40 @@ namespace MatrixWebApp.Pages.Admin
                 return Page();
             }
 
+            // Debugging: Log the raw Price input
+            Console.WriteLine($"Raw Price Input: {Product.Price}");
+
+            // Ensure the Price is parsed correctly using the expected culture
+            if (!decimal.TryParse(Product.Price.ToString(CultureInfo.CurrentCulture), NumberStyles.Number, new CultureInfo("nl-NL"), out var parsedPrice))
+            {
+                ModelState.AddModelError(nameof(Product.Price), "Ongeldige prijs. Gebruik een komma als decimaal scheidingsteken.");
+                Categories = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("api/Category");
+                return Page();
+            }
+
+            // Debugging: Log the parsed Price
+            Console.WriteLine($"Parsed Price: {parsedPrice}");
+
             using var content = new MultipartFormDataContent();
 
             content.Add(new StringContent(Product.ProductId.ToString()), "ProductId");
             content.Add(new StringContent(Product.CategoryId.ToString()), "CategoryId");
             content.Add(new StringContent(Product.Name ?? ""), "Name");
             content.Add(new StringContent(Product.Description ?? ""), "Description");
-            content.Add(new StringContent(Product.Price.ToString("0.00", new System.Globalization.CultureInfo("nl-NL"))), "Price");
+            // Format Price using invariant culture to ensure the API receives it correctly
+            content.Add(new StringContent(parsedPrice.ToString("0.00", CultureInfo.InvariantCulture)), "Price");
             content.Add(new StringContent(Product.Stock.ToString()), "Stock");
 
             if (Product.Picture != null && Product.Picture.Length > 0)
             {
-                // Nieuw bestand geüpload, voeg die toe
                 var streamContent = new StreamContent(Product.Picture.OpenReadStream());
                 streamContent.Headers.ContentType = new MediaTypeHeaderValue(Product.Picture.ContentType);
                 content.Add(streamContent, "Picture", Product.Picture.FileName);
             }
             else if (!string.IsNullOrEmpty(Product.ExistingPictureBase64))
             {
-                // Geen nieuw bestand, maar wel bestaande afbeelding base64 meesturen
                 var existingBytes = Convert.FromBase64String(Product.ExistingPictureBase64);
                 var existingStreamContent = new ByteArrayContent(existingBytes);
-                // Stel content type in, bijvoorbeeld image/jpeg (pas aan indien nodig)
                 existingStreamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 content.Add(existingStreamContent, "Picture", "existingImage.jpg");
             }
@@ -106,8 +118,6 @@ namespace MatrixWebApp.Pages.Admin
             TempData["SuccessMessage"] = "Product succesvol bijgewerkt";
             return RedirectToPage("/Admin/Products");
         }
-
-
 
         public class ProductInputModel
         {

@@ -14,6 +14,11 @@ namespace MatrixWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Set the default culture to "nl-NL"
+            var cultureInfo = new CultureInfo("nl-NL");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             // Session configuratie voor de shoppingcart 
             builder.Services.AddSession(options =>
             {
@@ -21,10 +26,6 @@ namespace MatrixWebApp
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-
-            var cultureInfo = new CultureInfo("nl-NL");
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
             builder.Services.AddRazorPages();
 

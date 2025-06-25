@@ -64,7 +64,7 @@ namespace MatrixMobileApp
 
                 // opslaan van gebruikersgegevens
                 Preferences.Set("auth_token", response.Token);
-                Preferences.Set("user_id", response.UserId.ToString());
+                Preferences.Set("user_id", response.UserId);
                 Preferences.Set("user_email", response.Email ?? string.Empty);
 
                 // het e-mailadres wordt opgeslagen voor sneller inlogproces
@@ -104,12 +104,8 @@ namespace MatrixMobileApp
                 LoginButton.IsEnabled = true;
             }
         }
-        //temporary method to navigate to ContainersPage
-        private async void OnGoToContainersPageClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ContainersPage());
-        }
         
+
 
         public void ResetLoginFields()
         {
