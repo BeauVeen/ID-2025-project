@@ -35,8 +35,8 @@
 
     <div class="mb-3">
         <label asp-for="Product.Price" class="form-label">Prijs</label>
-        <input asp-for="Product.Price" class="form-control" type="number" step="0.01" min="0" required />
-        <div class="invalid-feedback">Voer een geldige prijs in.</div>
+        <input asp-for="Product.Price" class="form-control" pattern="^\d+,\d{2}$" title="Gebruik een komma als decimaal scheidingsteken, bijvoorbeeld: 2,99" required />
+        <div class="invalid-feedback">Voer een geldige prijs in (bijvoorbeeld: 2,99).</div>
     </div>
 
     <div class="mb-3">
