@@ -22,7 +22,6 @@ namespace MatrixMobileApp
             BindingContext = this;
 
             Title = $"Container {container.ContainerId}";
-            Resources.Add("CountToHeightConverter", new CountToHeightConverter());
 
             // Start async initialisatie
             _ = InitializeOrderlineProductNamesAsync();
@@ -60,9 +59,7 @@ namespace MatrixMobileApp
 
             // Forceer UI update
             OnPropertyChanged(nameof(Container));
-
         }
-
 
         private async void OnDeliverClicked(object sender, EventArgs e)
         {
@@ -75,8 +72,23 @@ namespace MatrixMobileApp
             {
                 try
                 {
+                    // haal userId op uit preferences (opgeslagen na inloggen)
+                    int userId = Preferences.Get("user_id", 0);
+
+                    if (userId == 0) // Controleer op geldige ID
+                    {
+                        await DisplayAlert("Fout", "Gebruiker niet ingelogd of ongeldige ID", "OK");
+                        return;
+                    }
+
                     var containerService = new ContainerService(new ApiService().Client);
-                    await containerService.PatchContainerStatusAsync(Container.ContainerId, "Onderweg");
+
+                    await containerService.PatchContainerStatusAsync(
+                        Container.ContainerId,
+                        "Onderweg",
+                        userId // bij bezorgen van een container wordt de bezorger gekoppeld aan de container
+                    );
+
                     await DisplayAlert("Succes", "Containerstatus is bijgewerkt naar 'Onderweg'.", "OK");
                     await Shell.Current.GoToAsync("//RoutePage");
                 }
@@ -84,35 +96,15 @@ namespace MatrixMobileApp
                 {
                     await DisplayAlert("Fout", $"Status bijwerken mislukt: {ex.Message}", "OK");
                 }
-
             }
         }
 
         private void OnToggleExpandClicked(object sender, EventArgs e)
         {
-            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder)
+            if (sender is Image image && image.BindingContext is ContainerOrder containerOrder) // Duidelijk maken dat de sender een Image is en dat de BindingContext een ContainerOrder is
             {
                 containerOrder.ToggleExpand();
             }
         }
     }
-
-
-    // Converter voor aantal orderlines naar hoogte
-    public class CountToHeightConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is int count)
-                return count * 30; // 30 pixels per item
-            return 0;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
 }

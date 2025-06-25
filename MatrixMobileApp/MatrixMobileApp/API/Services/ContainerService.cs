@@ -1,18 +1,23 @@
-﻿using System;
+﻿using MatrixMobileApp.API.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using MatrixMobileApp.API.Models;
 
 namespace MatrixMobileApp.API.Services
 {
     internal class ContainerService
     {
         private readonly HttpClient _client;
-        private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
+
+        private static readonly JsonSerializerOptions _jsonOptions = new() 
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         public ContainerService(HttpClient client)
         {
@@ -35,16 +40,45 @@ namespace MatrixMobileApp.API.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task PatchContainerStatusAsync(int containerId, string newStatus)
+        // functie om alle containers op te halen die gekoppeld zijn aan een specifieke userId om ze te tonen op actieve orders pagina
+        public async Task<List<Container>> GetContainersByUserIdAsync(int userId)
         {
-            var payload = new { status = newStatus };
-            var json = JsonSerializer.Serialize(payload);
+            var allContainers = await GetContainersAsync();
+            var filteredContainers = new List<Container>();
+
+            foreach (var container in allContainers)
+            {
+                if (container.UserId == userId && container.Status == "Onderweg") // alleen containers met status "Onderweg" worden getoond
+                {
+                    filteredContainers.Add(container);
+                }
+
+            }
+
+            return filteredContainers;
+        }
+
+        public async Task PatchContainerStatusAsync(int containerId, string newStatus, int? userId = null) // userId moet optioneel zijn
+        {
+            var payload = new
+            {
+                status = newStatus,
+                userId = userId  
+            };
+
+            var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull // negeer null values
+            });
+
+
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var request = new HttpRequestMessage(HttpMethod.Patch, $"/api/Container/{containerId}")
             {
                 Content = content
             };
+
             request.Headers.Accept.Clear();
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

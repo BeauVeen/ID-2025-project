@@ -7,18 +7,20 @@
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <!-- Container Basisinfo -->
-            <Frame CornerRadius="8" BackgroundColor="#E3F2FD" Padding="10" HasShadow="False">
+            <Frame CornerRadius="8" BackgroundColor="#bad8ee" Padding="10" HasShadow="False">
                 <VerticalStackLayout Spacing="14">
-                    <Label Text="Container Details" FontSize="20" FontAttributes="Bold"/>
+                    <Label Text="Container Details" FontSize="20" TextColor="Black" FontAttributes="Bold"/>
 
                     <Grid ColumnDefinitions="0.4*, 0.7*" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="4">
 
                     <!-- Container ID -->
                     <Label Text="Container ID:" Grid.Row="0" Grid.Column="0" 
+                           TextColor="Black"
                            HorizontalOptions="Start"
                            VerticalOptions="Center"/>
 
                     <Label Text="{Binding Container.ContainerId}" Grid.Row="0" Grid.Column="1"
+                           TextColor="Black"
                            HorizontalOptions="Start"
                            FontSize="18"
                            FontAttributes="Bold"       
@@ -27,10 +29,12 @@
 
                     <!-- Totaal aantal orders-->
                     <Label Text="Aantal orders:" Grid.Row="2" Grid.Column="0" 
+                           TextColor="Black"
                            HorizontalOptions="Start" 
                            VerticalOptions="Center"/>
                         
                     <Label Text="{Binding Container.OrderCount}" Grid.Row="2" Grid.Column="2"
+                           TextColor="Black"
                            HorizontalOptions="Start"
                            FontSize="16"
                            FontAttributes="Bold"
@@ -39,10 +43,12 @@
 
                     <!-- Aangemaakt -->
                     <Label Text="Aangemaakt:" Grid.Row="1" Grid.Column="0" 
+                           TextColor="Black"
                            HorizontalOptions="Start"
                            VerticalOptions="Center"/>
 
                     <Label Text="{Binding Container.CreatedAt, StringFormat='{0:dd-MM-yyyy HH:mm}'}" Grid.Row="1" Grid.Column="1"
+                           TextColor="Black"
                            HorizontalOptions="Start"
                            FontSize="14"
                            FontAttributes="Bold" 
@@ -51,16 +57,17 @@
 
                     <!-- Status -->
                     <Label Text="Status:" Grid.Row="3" Grid.Column="0" 
-                          HorizontalOptions="Start"
-                          VerticalOptions="Center"/>
+                           TextColor="Black"
+                           HorizontalOptions="Start"
+                           VerticalOptions="Center"/>
 
                     <Label Text="{Binding Container.Status}" Grid.Row="3" Grid.Column="1"
+                           TextColor="Black"
                            HorizontalOptions="Start"
                            FontSize="16"
                            FontAttributes="Bold" 
                            VerticalOptions="Center"
                            Margin="10,0,0,0"/>
-
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
@@ -70,10 +77,11 @@
                             EmptyView="Geen orders gevonden in deze container">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame CornerRadius="8" Padding="10" HasShadow="True" Margin="0,10,0,10">
+                        <Frame CornerRadius="8" Padding="10" HasShadow="True" BackgroundColor="#f1f1f1" Margin="0,10,0,10">
                             <VerticalStackLayout Spacing="8">
                                 <Grid>
                                     <Label Text="{Binding Order.OrderId, StringFormat='Ordernummer: #{0}'}" 
+                                           TextColor="Black"
                                            FontAttributes="Bold" FontSize="16"/>
                                     <Image Source="{Binding DropdownIcon}" 
                                            WidthRequest="24"
@@ -89,9 +97,9 @@
 
                                     <!-- Kopregel -->
                                     <Grid ColumnDefinitions="*,*,*" Margin="0,5,0,0">
-                                        <Label Text="Productnaam" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Start"/>
-                                        <Label Text="Product ID" Grid.Column="0" FontAttributes="Bold" HorizontalOptions="Start"/>
-                                        <Label Text="Aantal" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                        <Label Text="Productnaam" Grid.Column="1" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start"/>
+                                        <Label Text="Product ID" Grid.Column="0" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start"/>
+                                        <Label Text="Aantal" Grid.Column="2" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
                                     </Grid>
 
                                     <BoxView HeightRequest="1" Color="LightGray" Margin="0,5"/>
@@ -104,6 +112,7 @@
 
                                                 <!-- Product ID  -->
                                                 <Label Text="{Binding ProductId, StringFormat='{0}'}"
+                                                       TextColor="Black"
                                                        Grid.Column="0"
                                                        HorizontalOptions="Start"
                                                        Margin="25,0,0,0" 
@@ -111,11 +120,13 @@
 
                                                 <!-- Product Name -->
                                                 <Label Text="{Binding ProductName, StringFormat='{0}'}"
+                                                       TextColor="Black"
                                                        Grid.Column="1"
                                                        HorizontalOptions="Start"/>
 
                                                 <!-- Aantal-->
                                                 <Label Text="{Binding Amount, StringFormat='{0}x'}"
+                                                       TextColor="Black"
                                                        Grid.Column="2"
                                                        HorizontalOptions="Center"  
                                                        HorizontalTextAlignment="Center"/>
