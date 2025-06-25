@@ -34,14 +34,14 @@ namespace MatrixWebApp.Pages.Admin
 
             if (Id == 0)
             {
-                return RedirectToPage("/Admin/AdminProducts");
+                return RedirectToPage("/Admin/Products");
             }
 
             var product = await _httpClient.GetFromJsonAsync<ProductDto>($"api/Product/{Id}");
 
             if (product == null)
             {
-                return RedirectToPage("/Admin/AdminProducts");
+                return RedirectToPage("/Admin/Products");
             }
 
             Product = new ProductInputModel
@@ -104,7 +104,7 @@ namespace MatrixWebApp.Pages.Admin
             }
 
             TempData["SuccessMessage"] = "Product succesvol bijgewerkt";
-            return RedirectToPage("/Admin/AdminProducts");
+            return RedirectToPage("/Admin/Products");
         }
 
 

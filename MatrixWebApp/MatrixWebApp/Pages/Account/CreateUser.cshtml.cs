@@ -28,7 +28,7 @@ namespace MatrixWebApp.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var response = await _httpClient.PostAsJsonAsync("https://localhost:7113/api/User", Input);
+            var response = await _httpClient.PostAsJsonAsync("http://20.86.128.95:5190/api/User", Input);
 
             if (response.IsSuccessStatusCode)
             {
