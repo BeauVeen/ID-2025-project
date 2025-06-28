@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam linetype polyline
+actor Magazijnmedewerker
+
+rectangle "Mobiele App - Magazijn" {
+  Magazijnmedewerker --> (UC401 - Inloggen als magazijnmedewerker)
+  Magazijnmedewerker --> (UC402 - Container scannen)
+  Magazijnmedewerker --> (UC403 - Order scannen en toevoegen)
+  Magazijnmedewerker --> (UC404 - Container sluiten)
+}
+
+@enduml

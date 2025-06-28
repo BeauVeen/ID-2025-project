@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+skinparam linetype polyline
+actor Medewerker
+
+rectangle "Medewerkerspagina" {
+  Medewerker --> (UC301 - Producten beheren)
+  Medewerker --> (UC302 - Categorieën bewerken)
+  Medewerker --> (UC303 - Bestellingen bekijken)
+  Medewerker --> (UC304 - Klant zoeken op naam)
+  Medewerker --> (UC305 - Gebruikers beheren)
+  Medewerker --> (UC306 - Dashboard statistieken bekijken)
+  Medewerker --> (UC307 - Voorraadwaarschuwingen bekijken)
+}
+
+@enduml
