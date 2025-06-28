@@ -25,8 +25,7 @@ namespace MatrixMobileApp
             InitializeComponent();
             var api = new ApiService();
             userService = new UserService(api.Client);
-            manualContainerService = new ManualContainerCodeService(api.Client);
-            
+            manualContainerService = new ManualContainerCodeService(api.Client);          
         }
 
         protected override async void OnAppearing()
@@ -225,35 +224,7 @@ namespace MatrixMobileApp
             }
         }
 
-
-
-        // Redirect functies
-
-        private async void OnAfgeleverdCardTapped(object sender, EventArgs e) // Redirect naar de Afgeleverde Orders Details pagina
-        {
-            await Navigation.PushAsync(new DetailsPages.AfgeleverdeOrdersDetailsPage());
-        }
-
-        private async void OnTeBezorgenCardTapped(object sender, EventArgs e) // Redirect naar de Te Bezorging Details pagina
-        {
-            await Navigation.PushAsync(new DetailsPages.TeBezorgenDetailsPage());
-        }
-
-        private async void OnProblemenCardTapped(object sender, EventArgs e) // Redirect naar de Probleem Details pagina
-        {
-            await Navigation.PushAsync(new DetailsPages.ProblemenDetailsPage());
-        }
-
-        private async void OnViewProductsClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ProductsPage());
-        }
-
-        private async void OnViewOrdersClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ActiveOrdersPage());
-        }
-
+        // info button
         private async void OnInfoTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Hoe werkt het?",

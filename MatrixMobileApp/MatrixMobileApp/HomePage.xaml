@@ -46,7 +46,7 @@
                 CornerRadius="32"
                 IsClippedToBounds="True">
             <Grid>
-                
+            
             <!-- Camera window met scan functie-->
             <zxing:CameraBarcodeReaderView 
             x:Name="cameraView"
@@ -109,11 +109,11 @@
 
                 <!-- Dashboard Section -->
                 <Label
-            x:Name="DashboardDateLabel"
-            FontSize="20"
-            FontAttributes="Bold"
-            Margin="0,15,0,0"
-            HorizontalOptions="Center" />
+                x:Name="DashboardDateLabel"
+                FontSize="20"
+                FontAttributes="Bold"
+                Margin="0,15,0,0"
+                HorizontalOptions="Center" />
 
                 <Grid HorizontalOptions="Center" ColumnSpacing="10">
                     <Grid.ColumnDefinitions>
@@ -124,9 +124,6 @@
 
                     <!-- Afgeleverde orders card -->
                     <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="#b9d8bb" WidthRequest="110" HeightRequest="125" Padding="10" HasShadow="True">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnAfgeleverdCardTapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="order2.png" HeightRequest="32" WidthRequest="32"/>
                             <Label Text="Afgeleverd" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
@@ -136,9 +133,6 @@
 
                     <!-- Te bezorgen Card -->
                     <Frame Grid.Column="1" CornerRadius="10" BackgroundColor="#bad8ee" HeightRequest="125" WidthRequest="110" Padding="10" HasShadow="True">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnTeBezorgenCardTapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="pending.png" HeightRequest="32" WidthRequest="32"/>
                             <Label Text="Te bezorgen" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>
@@ -148,9 +142,6 @@
 
                     <!-- Problemen Card -->
                     <Frame Grid.Column="2" CornerRadius="10" BackgroundColor="#787fa8" HeightRequest="125" WidthRequest="110" Padding="10" HasShadow="True">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnProblemenCardTapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="faileddelivery.png" HeightRequest="32" WidthRequest="32"/>
                             <Label Text="Mislukt" FontSize="15" HorizontalOptions="Center" TextColor="Black"/>

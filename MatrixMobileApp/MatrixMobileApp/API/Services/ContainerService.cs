@@ -92,8 +92,6 @@ namespace MatrixMobileApp.API.Services
                     $"Verzonden payload: {json}\n" +
                     $"Antwoord van server: {responseContent}"
                 );
-
-                //sponse.EnsureSuccessStatusCode();
             }          
         }
     }

@@ -10,7 +10,7 @@ namespace MatrixMobileApp
     {
         private readonly ContainerService _containerService;
         private readonly ProductService _productService;
-        public ObservableCollection<Container> Containers { get; } = new ObservableCollection<Container>();
+        public ObservableCollection<Container> Containers { get; } = new ObservableCollection<Container>(); // observablecollection zodat de data automatisch wordt bijgewerkt in de UI 
 
         public ActiveOrdersPage()
         {
@@ -33,7 +33,7 @@ namespace MatrixMobileApp
             // Vernieuw de data wanneer de pagina opnieuw verschijnt
             try
             {
-                await LoadContainersAsync(); // await wordt nu gebruikt om te garanderen dat data altijd correct geladen is wanneer gebruiker de pagina betreedt..
+                await LoadContainersAsync(); // await wordt nu gebruikt om te garanderen dat data altijd correct geladen is wanneer gebruiker de pagina betreedt.
             }  // await zorgt ervoor dat rest van de code in dezelfde methode (onAppearing in dit geval) pas wordt uitgevoerd nadat de taak is voltooid, maar in dit geval maakt dat geen verschil, omdat er sowieso geen andere methodes uitgevoerd worden na LoadContainersAsync
             catch (Exception ex) 
             {
