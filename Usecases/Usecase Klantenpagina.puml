@@ -5,16 +5,13 @@ actor Klant
 
 rectangle "Klantenpagina" {
   Klant --> (UC201 - Producten bekijken)
-  Klant --> (UC202 - Product zoeken)
-  Klant --> (UC203 - Sorteren op prijs)
-  Klant --> (UC204 - Filteren op prijsklasse)
-  Klant --> (UC205 - Registreren)
-  Klant --> (UC206 - Inloggen)
-  Klant --> (UC207 - Product aan winkelmand toevoegen)
-  Klant --> (UC208 - Winkelmand behouden)
-  Klant --> (UC209 - Afrekenen)
-  Klant --> (UC210 - Bestelgeschiedenis bekijken)
-  Klant --> (UC211 - Bestelstatus volgen)
+  Klant --> (UC202 - Sorteren op prijs)
+  Klant --> (UC203 - Filteren op prijsklasse)
+  Klant --> (UC204 - Registreren)
+  Klant --> (UC205 - Inloggen)
+  Klant --> (UC206 - Product aan winkelmand toevoegen)
+  Klant --> (UC207 - Afrekenen)
+  Klant --> (UC208 - Bestelgeschiedenis bekijken)
 }
 
 @enduml
