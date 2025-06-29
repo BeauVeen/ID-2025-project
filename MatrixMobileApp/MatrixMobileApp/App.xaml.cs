@@ -10,22 +10,22 @@ namespace MatrixMobileApp
             Routing.RegisterRoute(nameof(OfflinePage), typeof(OfflinePage));
             MainPage = new AppShell();
 
-            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+            Connectivity.ConnectivityChanged += goToOfflinePageAsync;
         }
 
-        private async void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        private async void goToOfflinePageAsync(object sender, ConnectivityChangedEventArgs e)
         {
             if (e.NetworkAccess != NetworkAccess.Internet)
             {
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                {
+                var currentPage = Shell.Current.CurrentPage;
 
-                    if (Shell.Current.CurrentPage is not OfflinePage && Shell.Current.CurrentPage is not LoginPage)
-                    {
-                        await Shell.Current.GoToAsync(nameof(OfflinePage));
-                    }
-                });
+                if (currentPage is not OfflinePage && currentPage is not LoginPage)
+                {
+                    await Shell.Current.GoToAsync(nameof(OfflinePage));
+                }
             }
         }
+
     }
 }
+    

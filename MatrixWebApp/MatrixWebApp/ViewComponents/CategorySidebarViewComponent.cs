@@ -20,7 +20,6 @@ namespace MatrixWebApp.ViewComponents
         }
     }
 
-    // <<< HIER >>> buiten de ViewComponent class
     public class CategoryDto
     {
         public int CategoryId { get; set; }

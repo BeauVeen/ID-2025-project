@@ -74,19 +74,23 @@ namespace MatrixMobileApp
                 Preferences.Set("user_name", userName);
                 Preferences.Set("user_role", response.RoleId.ToString());
 
-
-                // maak nieuwe instantie van AppShell aan om de user te redirecten naar de Homepage. In AppShell staat de LoginPage bovenaan, maar er ontstaat geen loop omdat absolute routes gebruikt worden in onderstaande code
+                // initialiseer nieuwe Apshell die de navigatie en tabbars bevat. er worden absolute routes gebruikt om de route te bepalen ipv appshell hierarchie
                 Application.Current.MainPage = new AppShell();
 
                 // Redirect naar de juiste homepage bij succesvolle login
-                if (response.RoleId == 2)
+
+                if (response.RoleId == 2) // RoleId 2 = bezorgers
                 {
-                    await Shell.Current.GoToAsync("//HomePage"); // gebruik absolute route 
+                    Shell.Current.FindByName<TabBar>("MainTabBar").IsVisible = true; // maak de tabbar zichtbaar voor bezorgers
+                    await Shell.Current.GoToAsync("//HomePage");  // gebruik absolute route 
                 }
-                else if (response.RoleId == 4)
+
+                else if (response.RoleId == 4) // RoleId 4 = magazijnmedewerkers
                 {
+                    Shell.Current.FindByName<TabBar>("MagazijnTabBar").IsVisible = true; // maak de tabbar zichtbaar voor magazijnmedewerkers
                     await Shell.Current.GoToAsync("//HomePageMagazijn"); // gebruik absolute route
                 }
+
             }
             catch (Exception ex)
             {

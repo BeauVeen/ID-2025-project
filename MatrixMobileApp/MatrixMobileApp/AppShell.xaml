@@ -5,49 +5,41 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MatrixMobileApp"
     xmlns:magazijn="clr-namespace:MatrixMobileApp.MagazijnMedewerkerPages"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Disabled" 
     Title="MatrixMobileApp">
 
+    <!-- gemeenschappelijke pagina's -->
     <ShellContent 
         Title="Login"
         Route="LoginPage" 
         ContentTemplate="{DataTemplate local:LoginPage}" />
 
-
     <ShellContent 
-        Route="ContainerPage" ContentTemplate="{DataTemplate local:ContainerPage}" />
+        Route="ContainerPage" 
+        ContentTemplate="{DataTemplate local:ContainerPage}" />
 
-
-    <ShellContent 
-    Title="Magazijn Home"
-    Route="HomePageMagazijn"
-    ContentTemplate="{DataTemplate magazijn:HomePageMagazijn}" />
-    
-
-    <!-- Tab bar voor hoofdmenu -->
-
-    <TabBar>
+    <!-- hoofdmenu voor bezorger -->
+    <TabBar x:Name="MainTabBar" IsVisible="False">
         <Tab Title="Route" Icon="map.png">
-            <ShellContent 
-            Route="RoutePage" 
-            ContentTemplate="{DataTemplate local:RoutePage}" />
+            <ShellContent Route="RoutePage" ContentTemplate="{DataTemplate local:RoutePage}" />
         </Tab>
-
         <Tab Title="Home" Icon="house.png">
-            <ShellContent 
-            Route="HomePage" 
-            ContentTemplate="{DataTemplate local:HomePage}" />
+            <ShellContent Route="HomePage" ContentTemplate="{DataTemplate local:HomePage}" />
         </Tab>
-
         <Tab Title="Actieve Orders" Icon="box2.png">
-            <ShellContent 
-            Route="OrdersPage" 
-            ContentTemplate="{DataTemplate local:ActiveOrdersPage}" />
+            <ShellContent Route="OrdersPage" ContentTemplate="{DataTemplate local:ActiveOrdersPage}" />
         </Tab>
-        <Tab Title="Klaar voor Verzending" Icon="container.png">
-            <ShellContent 
-            Route="DeliveryContainersPage" 
-            ContentTemplate="{DataTemplate local:DeliveryContainersPage}" />
+    </TabBar>
+
+    <!-- hoofdmenu voor magazijnmedewerker -->
+    <TabBar x:Name="MagazijnTabBar" IsVisible="False">
+        <Tab Title="Dashboard" Icon="warehouse.png">
+            <ShellContent Route="HomePageMagazijn" ContentTemplate="{DataTemplate magazijn:HomePageMagazijn}" />
         </Tab>
-    </TabBar> 
-</Shell> 
+    </TabBar>
+</Shell>
+        
+
+
+
+
