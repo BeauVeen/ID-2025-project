@@ -7,7 +7,6 @@ rectangle "Mobiele App - Bezorger" {
   Bezorger --> (UC405 - Inloggen als bezorger)
   Bezorger --> (UC406 - Container koppelen aan rit)
   Bezorger --> (UC407 - Producten scannen bij levering)
-  Bezorger --> (UC408 - Foutieve scan afhandelen)
 }
 
 @enduml
