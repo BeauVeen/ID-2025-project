@@ -18,7 +18,11 @@ namespace MatrixWebApp.Pages
             _cartService = cartService;
         }
 
-        public ShoppingCart Cart => _cartService.Cart;
+
+        public ShoppingCart Cart
+        {
+            get { return _cartService.Cart; }
+        }
 
         public IActionResult OnPostUpdateQuantity(int productId, int quantity)
         {
@@ -28,13 +32,18 @@ namespace MatrixWebApp.Pages
 
         public IActionResult OnPostRemoveItem(int productId)
         {
-            var (removedItem, _) = _cartService.RemoveProduct(productId);
+            var removedItem = _cartService.RemoveProduct(productId);
 
             if (removedItem != null)
             {
-                TempData["WarningMessage"] = removedItem.Quantity > 1
-                    ? $"{removedItem.Name} (x{removedItem.Quantity}) is verwijderd uit je winkelwagen."
-                    : $"{removedItem.Name} is verwijderd uit je winkelwagen.";
+                if (removedItem.Quantity > 1)
+                {
+                    TempData["WarningMessage"] = $"{removedItem.Name} (x{removedItem.Quantity}) is verwijderd uit je winkelwagen.";
+                }
+                else 
+                {
+                    TempData["WarningMessage"] = $"{removedItem.Name} is verwijderd uit je winkelwagen.";
+                }
             }
 
             return RedirectToPage();

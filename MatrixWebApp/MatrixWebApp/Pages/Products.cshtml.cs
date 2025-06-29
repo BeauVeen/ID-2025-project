@@ -17,30 +17,21 @@ namespace MatrixWebApp.Pages
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<ProductsModel> _logger;
-
         private readonly ShoppingCartService _cartService;
 
-        public List<ProductDto> Products { get; set; } = new();
+        public List<ProductDto> Products { get; set; } = new List<ProductDto>();
 
-        public List<CategoryDto> Categories { get; set; } = new();
+        public List<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
 
-        public Dictionary<int, string> CategoryNamesById { get; set; } = new();
+        public Dictionary<int, string> CategoryNamesById { get; set; } = new Dictionary<int, string>();
 
-        // Nieuwe property voor hoogste prijs
-        public decimal MaxPrice { get; set; } = 0m;
+        public decimal MaxPrice { get; set; } = 0.0m;
 
         public ProductsModel(IHttpClientFactory httpClientFactory, ILogger<ProductsModel> logger, ShoppingCartService cartService)
         {
             _httpClient = httpClientFactory.CreateClient("MatrixApi");
             _logger = logger;
             _cartService = cartService;
-        }
-
-        // Haal categorieën 1 keer op
-        private async Task<List<CategoryDto>> GetCategoriesAsync()
-        {
-            var categories = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("api/Category");
-            return categories ?? new List<CategoryDto>();
         }
 
         public async Task<IActionResult> OnPostAddToCart(int productId, int quantity)
@@ -63,36 +54,77 @@ namespace MatrixWebApp.Pages
 
             _cartService.AddProducts(item);
 
-            TempData["Message"] = quantity > 1
-            ? $"{product.Name} (x{quantity}) is toegevoegd aan je winkelwagen."
-            : $"{product.Name} is toegevoegd aan je winkelwagen.";
+            if (quantity > 1)
+            {
+                TempData["Message"] = $"{product.Name} (x{quantity}) is toegevoegd aan je winkelwagen.";
+            }
+            else
+            {
+                TempData["Message"] = $"{product.Name} is toegevoegd aan je winkelwagen.";
+            }
 
             return RedirectToPage();
         }
 
         public async Task OnGetAsync(int? categoryId)
         {
+            // haal categorieën op
             var categories = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("api/Category");
+
+            // vul dictionary met categorieën
             if (categories != null)
             {
-                CategoryNamesById = categories.ToDictionary(c => c.CategoryId, c => c.CategoryName);
+                CategoryNamesById = new Dictionary<int, string>();
+                foreach (var category in categories)
+                {
+                    CategoryNamesById.Add(category.CategoryId, category.CategoryName);
+                }
             }
 
+            // haal producten op
             var products = await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/Product");
 
             if (products != null)
             {
-                Products = categoryId.HasValue
-                    ? products.Where(p => p.CategoryId == categoryId.Value).ToList()
-                    : products;
+                // filter producten als er een categorie is geselecteerd
+                if (categoryId.HasValue)
+                {
+                    Products = new List<ProductDto>();
+                    foreach (var product in products)
+                    {
+                        if (product.CategoryId == categoryId.Value)
+                        {
+                            Products.Add(product);
+                        }
+                    }
+                }
+                else
+                {
+                    Products = products;
+                }
 
-                // Enkel deze lijn aanpassen voor foutafhandeling:
-                MaxPrice = Products.Any() ? Products.Max(p => p.Price) : 0;
+                // bereken maximale prijs
+                if (Products.Count > 0)
+                {
+                    MaxPrice = Products[0].Price;
+                    foreach (var product in Products)
+                    {
+                        if (product.Price > MaxPrice)
+                        {
+                            MaxPrice = product.Price;
+                        }
+                    }
+                }
+                else
+                {
+                    MaxPrice = 0;
+                }
+
                 ViewData["MaxPrice"] = MaxPrice;
             }
             else
             {
-                _logger.LogWarning("No products received from API.");
+                _logger.LogWarning("Geen producten gevonden vanuit de API");
             }
         }
 

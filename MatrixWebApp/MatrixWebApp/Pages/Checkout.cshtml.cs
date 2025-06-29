@@ -23,7 +23,10 @@ namespace MatrixWebApp.Pages
 
         public UserDto UserData { get; set; }
 
-        public ShoppingCart Cart => _cartService.Cart;
+        public ShoppingCart Cart
+        {
+            get { return _cartService.Cart; }
+        }
 
         public async Task OnGetAsync()
         {

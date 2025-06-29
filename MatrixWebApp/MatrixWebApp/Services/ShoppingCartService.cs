@@ -57,7 +57,7 @@ namespace MatrixWebApp.Services
             UpdateCartItemCount();
         }
 
-        public (CartItem RemovedItem, int RemainingCount) RemoveProduct(int productId)
+        public CartItem RemoveProduct(int productId)
         {
             var cart = Cart;
             var item = cart.Items.FirstOrDefault(i => i.ProductId == productId);
@@ -66,11 +66,11 @@ namespace MatrixWebApp.Services
             {
                 cart.RemoveItem(productId);
                 Cart = cart;
-                var count = UpdateCartItemCount();
-                return (item, cart.TotalItems);
+                UpdateCartItemCount(); 
+                return item;
             }
 
-            return (null, cart.TotalItems);
+            return null;
         }
 
         public void ClearCart()
