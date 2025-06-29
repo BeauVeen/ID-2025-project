@@ -57,8 +57,7 @@ namespace MatrixWebApp.Pages
             var orderDto = new OrderDto
             {
                 UserId = userId,
-                Status = "Pending",
-                Signature = null,
+                Status = "In behandeling",
                 Orderlines = Cart.Items.Select(item => new OrderlineDto
                 {
                     ProductId = item.ProductId,
@@ -101,7 +100,6 @@ namespace MatrixWebApp.Pages
     {
         public int UserId { get; set; }
         public string Status { get; set; }
-        public string? Signature { get; set; }
         public List<OrderlineDto> Orderlines { get; set; }
     }
 

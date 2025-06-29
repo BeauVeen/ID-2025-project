@@ -69,7 +69,7 @@ namespace MatrixApi.Controllers
         {
             try
             {
-                var updated = await _containerService.UpdateStatusAsync(id, dto.Status);
+                var updated = await _containerService.UpdateAsync(id, dto);
                 return Ok(updated);
             }
             catch (NotFoundException)
