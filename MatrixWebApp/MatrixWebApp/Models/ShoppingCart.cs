@@ -34,6 +34,9 @@
             Items.RemoveAll(p => p.ProductId == productId);
         }
 
-        public void Clear() => Items.Clear();
+        public void Clear()
+        {
+            Items.Clear();
+        }
     }
 }

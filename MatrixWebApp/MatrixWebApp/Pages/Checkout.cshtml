@@ -8,7 +8,7 @@
     <h2>Afrekenen</h2>
 
     <div class="checkout-grid">
-        <!-- Linkerkolom - Gebruikersgegevens -->
+        <!-- Gebruikersgegevens (links) -->
         <div class="checkout-section">
             @if (Model.UserData != null)
             {
@@ -42,7 +42,7 @@
             }
         </div>
 
-        <!-- Rechterkolom - Bestellingsoverzicht -->
+        <!-- Bestellingsoverzicht (rechts) -->
         <div class="checkout-section">
             @if (Model.Cart != null && Model.Cart.Items.Count > 0)
             {
