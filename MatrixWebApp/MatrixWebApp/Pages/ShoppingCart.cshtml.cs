@@ -18,7 +18,6 @@ namespace MatrixWebApp.Pages
             _cartService = cartService;
         }
 
-
         public ShoppingCart Cart
         {
             get { return _cartService.Cart; }
